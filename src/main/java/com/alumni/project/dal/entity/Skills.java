@@ -1,6 +1,7 @@
 package com.alumni.project.dal.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,5 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Skills extends Base {
+    private String skillDescription;
 
+    @ManyToOne
+    private User user;
 }
