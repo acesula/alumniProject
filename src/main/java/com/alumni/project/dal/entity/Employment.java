@@ -5,11 +5,17 @@ import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Entity
 @Getter
 @Setter
 public class Employment extends Base{
-    private String employer;
+    private String company;
+    private String job;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private boolean status;
 
     @ManyToOne
     private User user;

@@ -10,6 +10,13 @@ import lombok.Setter;
 @Setter
 public class ContactDetails extends Base {
     private String email;
+    private String phoneNumber;
+    private String country;
+    private String city;
+    private String zipCode;
+    private String address;
+    private String linkedIn;
+
 
     @OneToOne(mappedBy = "contactDetails")
     private User user;

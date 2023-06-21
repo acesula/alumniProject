@@ -12,10 +12,13 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class Education extends Base {
-    private String school;
+    private String institution;
+    private String degree;
+    private String fieldOfStudy;
     private LocalDate startDate;
     private LocalDate endDate;
     private boolean finished;
+
 
     @ManyToOne
     private User user;

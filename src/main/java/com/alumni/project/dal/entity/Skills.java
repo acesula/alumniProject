@@ -9,6 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Skills extends Base {
+    private String skillField;
     private String skillDescription;
 
     @ManyToOne

@@ -14,7 +14,7 @@ import java.util.Set;
 @Getter
 @Setter
 public class Role extends Base {
-    private String name;
+    private String roleName;
 
 
     @ManyToMany

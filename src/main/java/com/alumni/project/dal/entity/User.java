@@ -15,10 +15,12 @@ import java.util.Set;
 public class User extends Base {
     private String name;
     private String surname;
-    private String email;
-    private String password;
     private String gender;
     private LocalDate birthDate;
+    private String email;
+    private String username;
+    private String password;
+    private String profilePicture;
 
     @ManyToMany(mappedBy = "users")
     private Set<Role> roles;
