@@ -1,2 +1,4 @@
-package com.alumni.project.service.contactdetails;public interface ContactDetailsService {
+package com.alumni.project.service.contactdetails;
+
+public interface ContactDetailsService {
 }

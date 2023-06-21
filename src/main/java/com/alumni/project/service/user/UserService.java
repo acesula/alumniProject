@@ -1,2 +1,4 @@
-package com.alumni.project.service.user;public interface UserService {
+package com.alumni.project.service.user;
+
+public interface UserService {
 }

@@ -1,2 +1,9 @@
-package com.alumni.project.dto.employment;public class EmploymentDto {
+package com.alumni.project.dto.employment;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class EmploymentDto {
 }

@@ -1,2 +1,4 @@
-package com.alumni.project.service.employment;public interface EmploymentService {
+package com.alumni.project.service.employment;
+
+public interface EmploymentService {
 }

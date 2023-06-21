@@ -5,5 +5,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class EducationServiceIml implements EducationService {
+public class EducationServiceImpl implements EducationService {
 }
