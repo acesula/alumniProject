@@ -11,6 +11,6 @@ import java.util.UUID;
 @MappedSuperclass
 public class Base {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private UUID id;
 }
