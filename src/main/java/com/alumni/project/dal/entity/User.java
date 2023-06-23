@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -16,7 +15,7 @@ import java.util.Set;
 @Table(name = "users_table")
 @NoArgsConstructor
 @AllArgsConstructor
-public class User extends Base {
+public class User extends Base{
     private String name;
     private String surname;
     private String gender;
@@ -26,8 +25,12 @@ public class User extends Base {
     private String password;
     private String profilePicture;
 
-    @ManyToMany(mappedBy = "users")
-    private Set<Role> roles;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "users_roles", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
+    )
+    private List<Role> roles = new ArrayList<>();
+
 
     @OneToMany(mappedBy = "user")
     private List<Education> educations;
@@ -53,4 +56,5 @@ public class User extends Base {
         this.password = password;
         this.gender = gender;
     }
+
 }

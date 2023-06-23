@@ -1,4 +1,4 @@
-package com.alumni.project.controller;
+package com.alumni.project.controller.education;
 
 import com.alumni.project.service.education.EducationServiceImpl;
 import lombok.RequiredArgsConstructor;

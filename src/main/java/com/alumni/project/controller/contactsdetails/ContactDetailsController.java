@@ -1,4 +1,4 @@
-package com.alumni.project.controller;
+package com.alumni.project.controller.contactsdetails;
 
 import com.alumni.project.dal.entity.ContactDetails;
 import com.alumni.project.service.contactdetails.ContactDetailsServiceImp;

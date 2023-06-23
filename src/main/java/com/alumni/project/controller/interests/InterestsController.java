@@ -1,4 +1,4 @@
-package com.alumni.project.controller;
+package com.alumni.project.controller.interests;
 
 import com.alumni.project.dal.entity.Interests;
 import com.alumni.project.service.interests.InterestsServiceImpl;

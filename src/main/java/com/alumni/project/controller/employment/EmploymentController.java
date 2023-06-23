@@ -1,4 +1,4 @@
-package com.alumni.project.controller;
+package com.alumni.project.controller.employment;
 
 import com.alumni.project.dal.entity.Employment;
 import com.alumni.project.dto.employment.EmploymentDto;
