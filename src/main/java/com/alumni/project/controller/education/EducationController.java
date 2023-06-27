@@ -1,4 +1,4 @@
-package com.alumni.project.controller;
+package com.alumni.project.controller.education;
 
 import com.alumni.project.dal.entity.Education;
 import com.alumni.project.dal.entity.Skills;

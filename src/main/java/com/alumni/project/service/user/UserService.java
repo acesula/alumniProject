@@ -1,12 +1,14 @@
 package com.alumni.project.service.user;
 
+import com.alumni.project.dal.entity.Role;
+import com.alumni.project.dal.entity.User;
 import com.alumni.project.dto.user.GetUserDto;
 import com.alumni.project.dto.user.UserDto;
 
 import java.util.List;
 import java.util.UUID;
 
-public interface UserService {
+public interface UserService{
 
     GetUserDto save(UserDto userDto);
 
@@ -17,4 +19,7 @@ public interface UserService {
     GetUserDto update(UUID id, UserDto user);
 
     void delete(UUID id);
+
+    Role addRole(Role role);
+
 }

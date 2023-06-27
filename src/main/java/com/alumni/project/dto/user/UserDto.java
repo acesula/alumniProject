@@ -1,5 +1,6 @@
 package com.alumni.project.dto.user;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 

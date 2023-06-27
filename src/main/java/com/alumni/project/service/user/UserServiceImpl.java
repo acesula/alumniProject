@@ -1,12 +1,16 @@
 package com.alumni.project.service.user;
 
+import com.alumni.project.dal.entity.Role;
 import com.alumni.project.dal.entity.User;
+import com.alumni.project.dal.repository.RoleRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.user.GetUserDto;
 import com.alumni.project.dto.user.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -16,8 +20,25 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
-    @Override
+    public Role addRole(Role role) {
+        return roleRepository.save(role);
+    }
+
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+
+    public User findByUsernameAndPassword(String username, String password) {
+        return userRepository.findByUsernameAndPassword(username, password);
+    }
+
     public GetUserDto save(UserDto userDto) {
         var user = new User(
                 userDto.getName(),
@@ -28,6 +49,8 @@ public class UserServiceImpl implements UserService {
                 userDto.getPassword(),
                 userDto.getGender()
         );
+        Role role = roleRepository.findByName("USER");
+        user.setRoles(Arrays.asList(role));
         return map(userRepository.save(user));
     }
 
@@ -67,6 +90,7 @@ public class UserServiceImpl implements UserService {
     public void delete(UUID id) {
         userRepository.deleteById(id);
     }
+
 
     private GetUserDto map(User user) {
         var dto = new GetUserDto();
