@@ -10,6 +10,6 @@ public interface SkillsService {
     Skills save(Skills skills);
     List<Skills> findAll();
     Skills findById(UUID id);
-    Skills update(Long id, Skills dto);
+    Skills update(UUID id, Skills dto);
     void delete(UUID id);
 }
