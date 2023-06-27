@@ -23,6 +23,7 @@ public class User extends Base{
     private String email;
     private String username;
     private String password;
+    private String description;
     private String profilePicture;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -46,6 +47,12 @@ public class User extends Base{
 
     @OneToMany(mappedBy = "user")
     private List<Interests> interests;
+
+    @OneToMany(mappedBy = "user")
+    private List<Announcements> announcements;
+
+    @OneToMany(mappedBy = "user")
+    private List<Event> events;
 
     public User(String name, String surname, String email, LocalDate birthDate, String username, String password, String gender) {
         this.name = name;
