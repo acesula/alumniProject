@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public interface AnnouncementsService {
 
-    Announcements save(Announcements announcement);
+    void save(String username,Announcements announcement);
 
     List<Announcements> findAll();
 

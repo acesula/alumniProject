@@ -1,9 +1,11 @@
 package com.alumni.project.controller.employment;
 
 import com.alumni.project.dal.entity.Employment;
-import com.alumni.project.dto.employment.EmploymentDto;
+import com.alumni.project.security.ErrorResponse;
 import com.alumni.project.service.employment.EmploymentServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,9 +18,9 @@ public class EmploymentController {
 
     private final EmploymentServiceImpl employmentService;
 
-    @PostMapping
-    public Employment save(@RequestBody Employment employment){
-        return employmentService.save(employment);
+    @PostMapping("/{username}")
+    public ResponseEntity<ErrorResponse> save(@Valid @PathVariable String username, @RequestBody Employment employment){
+        return employmentService.saveEmployment(username,employment);
     }
 
     @GetMapping

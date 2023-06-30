@@ -24,47 +24,13 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<ErrorResponse> register(@Valid @RequestBody UserDto userDto) {
-        try {
-            if (userService.existsByUsername(userDto.getUsername())) {
-                ErrorResponse error = new ErrorResponse();
-                error.setMessage("Username already exists");
-                error.setErrorCode(HttpStatus.BAD_REQUEST.value());
-                return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-            }else if(userService.existsByEmail(userDto.getEmail())){
-                ErrorResponse error = new ErrorResponse();
-                error.setMessage("Email already exists");
-                error.setErrorCode(HttpStatus.BAD_REQUEST.value());
-                return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-            }
-            userService.save(userDto);
-            return new ResponseEntity<>( HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            ErrorResponse error = new ErrorResponse();
-            error.setMessage(e.getMessage());
-            error.setErrorCode(HttpStatus.BAD_REQUEST.value());
-            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-        }
+       return userService.register(userDto);
     }
 
     @PostMapping("/login")
     public ResponseEntity<ErrorResponse> login(@Valid @RequestBody UserLoginDto login) {
-        try {
-            User user = userService.findByUsernameAndPassword(login.getUsername(), login.getPassword());
-            if (user == null) {
-                ErrorResponse error = new ErrorResponse();
-                error.setMessage("Wrong credentials");
-                error.setErrorCode(HttpStatus.BAD_REQUEST.value());
-                return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-            }
-            return new ResponseEntity<>( HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            ErrorResponse error = new ErrorResponse();
-            error.setMessage(e.getMessage());
-            error.setErrorCode(HttpStatus.BAD_REQUEST.value());
-            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-        }
+        return userService.login(login);
     }
-
 
     @GetMapping
     public List<GetUserDto> findAll() {

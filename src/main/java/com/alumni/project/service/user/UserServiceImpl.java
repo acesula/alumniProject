@@ -6,7 +6,11 @@ import com.alumni.project.dal.repository.RoleRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.user.GetUserDto;
 import com.alumni.project.dto.user.UserDto;
+import com.alumni.project.dto.user.UserLoginDto;
+import com.alumni.project.security.ErrorResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
@@ -52,6 +56,47 @@ public class UserServiceImpl implements UserService {
         Role role = roleRepository.findByName("USER");
         user.setRoles(Arrays.asList(role));
         return map(userRepository.save(user));
+    }
+
+    public ResponseEntity<ErrorResponse> register(UserDto userDto) {
+        try {
+            if (existsByUsername(userDto.getUsername())) {
+                ErrorResponse error = new ErrorResponse();
+                error.setMessage("Username already exists");
+                error.setErrorCode(HttpStatus.BAD_REQUEST.value());
+                return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+            } else if (existsByEmail(userDto.getEmail())) {
+                ErrorResponse error = new ErrorResponse();
+                error.setMessage("Email already exists");
+                error.setErrorCode(HttpStatus.BAD_REQUEST.value());
+                return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+            }
+            save(userDto);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            ErrorResponse error = new ErrorResponse();
+            error.setMessage(e.getMessage());
+            error.setErrorCode(HttpStatus.BAD_REQUEST.value());
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    public ResponseEntity<ErrorResponse> login(UserLoginDto login) {
+        try {
+            User user = findByUsernameAndPassword(login.getUsername(), login.getPassword());
+            if (user == null) {
+                ErrorResponse error = new ErrorResponse();
+                error.setMessage("Wrong credentials");
+                error.setErrorCode(HttpStatus.BAD_REQUEST.value());
+                return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            ErrorResponse error = new ErrorResponse();
+            error.setMessage(e.getMessage());
+            error.setErrorCode(HttpStatus.BAD_REQUEST.value());
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @Override

@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public interface InterestService {
 
-    Interests save(Interests interests);
+    void save(String username,Interests interests);
 
     List<Interests> findAll();
 

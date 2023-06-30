@@ -54,6 +54,9 @@ public class User extends Base{
     @OneToMany(mappedBy = "user")
     private List<Event> events;
 
+    @OneToMany(mappedBy = "userConnection")
+    private List<UserConnection> userConnections;
+
     public User(String name, String surname, String email, LocalDate birthDate, String username, String password, String gender) {
         this.name = name;
         this.surname = surname;

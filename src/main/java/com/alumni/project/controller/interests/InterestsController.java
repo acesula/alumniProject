@@ -1,8 +1,11 @@
 package com.alumni.project.controller.interests;
 
 import com.alumni.project.dal.entity.Interests;
+import com.alumni.project.security.ErrorResponse;
 import com.alumni.project.service.interests.InterestsServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,9 +18,9 @@ public class InterestsController {
 
     private final InterestsServiceImpl interestsService;
 
-    @PostMapping
-    public Interests save(@RequestBody Interests interest){
-        return interestsService.save(interest);
+    @PostMapping("/{username}")
+    public ResponseEntity<ErrorResponse> save(@Valid @PathVariable String username, @RequestBody Interests interest){
+        return interestsService.saveInterest(username, interest);
     }
 
     @GetMapping

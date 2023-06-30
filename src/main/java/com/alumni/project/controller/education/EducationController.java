@@ -1,11 +1,11 @@
 package com.alumni.project.controller.education;
 
 import com.alumni.project.dal.entity.Education;
-import com.alumni.project.dal.entity.Skills;
-import com.alumni.project.dto.user.GetUserDto;
-import com.alumni.project.dto.user.UserDto;
+import com.alumni.project.security.ErrorResponse;
 import com.alumni.project.service.education.EducationServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,8 +18,8 @@ public class EducationController {
 
     private final EducationServiceImpl educationService;
     @PostMapping
-    public Education save(@RequestBody Education dto) {
-        return educationService.save(dto);
+    public ResponseEntity<ErrorResponse> save(@Valid @PathVariable String username, @RequestBody Education education) {
+        return educationService.saveEducation(username, education);
     }
     @GetMapping
     public List<Education> findAll() {
