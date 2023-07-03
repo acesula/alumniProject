@@ -15,7 +15,7 @@ import java.util.*;
 @Table(name = "users_table")
 @NoArgsConstructor
 @AllArgsConstructor
-public class User extends Base{
+public class User extends Base {
     private String name;
     private String surname;
     private String gender;
@@ -26,35 +26,35 @@ public class User extends Base{
     private String description;
     private String profilePicture;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "users_roles", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
     )
     private List<Role> roles = new ArrayList<>();
 
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Education> educations;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Skills> skills;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Employment> employments;
 
     @OneToOne
     private ContactDetails contactDetails;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Interests> interests;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Announcements> announcements;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Event> events;
 
-    @OneToMany(mappedBy = "userConnection")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userConnection")
     private List<UserConnection> userConnections;
 
     public User(String name, String surname, String email, LocalDate birthDate, String username, String password, String gender) {

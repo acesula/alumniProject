@@ -1,8 +1,12 @@
 package com.alumni.project.controller.contactsdetails;
 
 import com.alumni.project.dal.entity.ContactDetails;
+import com.alumni.project.dto.contactdetails.ContactDetailsDto;
+import com.alumni.project.security.ErrorResponse;
 import com.alumni.project.service.contactdetails.ContactDetailsServiceImp;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,28 +19,23 @@ public class ContactDetailsController {
 
     private final ContactDetailsServiceImp contactDetailsService;
 
-    @PostMapping
-    public ContactDetails save(@RequestBody ContactDetails contactDetails){
-        return contactDetailsService.save(contactDetails);
+//    @PostMapping("/{username}")
+//    public ResponseEntity<ErrorResponse> save(@Valid @PathVariable String username, @RequestBody ContactDetails contactDetails) {
+//        return contactDetailsService.saveContactDetails(username, contactDetails);
+//    }
+
+    @GetMapping("/{email}")
+    public ContactDetailsDto findById(@PathVariable String email) {
+        return contactDetailsService.findByEmail(email);
     }
 
-    @GetMapping
-    public List<ContactDetails> findAll(){
-        return contactDetailsService.findAll();
+    @DeleteMapping("/{email}")
+    public void deleteById(@PathVariable String email) {
+        contactDetailsService.deleteByEmail(email);
     }
 
-    @GetMapping("/{id}")
-    public ContactDetails findById(@PathVariable UUID id){
-        return contactDetailsService.findById(id);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable UUID id){
-        contactDetailsService.deleteById(id);
-    }
-
-    @PatchMapping("/{id}")
-    public ContactDetails update(@PathVariable UUID id, @RequestBody ContactDetails contactDetails){
-        return contactDetailsService.update(id, contactDetails);
+    @PatchMapping("/{email}")
+    public ContactDetailsDto update(@PathVariable String email, @RequestBody ContactDetailsDto contactDetailsDto) {
+        return contactDetailsService.update(email, contactDetailsDto);
     }
 }

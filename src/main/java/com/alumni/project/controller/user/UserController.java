@@ -6,6 +6,7 @@ import com.alumni.project.dto.user.UserDto;
 import com.alumni.project.dto.user.UserLoginDto;
 import com.alumni.project.security.ErrorResponse;
 import com.alumni.project.service.user.UserServiceImpl;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -47,9 +48,10 @@ public class UserController {
         return userService.update(id, dto);
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable UUID id) {
-        userService.delete(id);
+    @DeleteMapping("/{username}")
+    @Transactional
+    public void delete(@PathVariable String username) {
+        userService.delete(username);
     }
 
 

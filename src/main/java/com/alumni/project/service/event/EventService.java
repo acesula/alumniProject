@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface EventService {
 
-    Event save(Event event);
+    void save(String username, Event event);
 
     List<Event> findAll();
 

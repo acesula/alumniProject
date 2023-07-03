@@ -7,9 +7,13 @@ import java.util.List;
 import java.util.UUID;
 
 public interface SkillsService {
-    Skills save(Skills skills);
+    void save(String username, Skills skills);
+
     List<Skills> findAll();
+
     Skills findById(UUID id);
+
     Skills update(UUID id, Skills dto);
+
     void delete(UUID id);
 }

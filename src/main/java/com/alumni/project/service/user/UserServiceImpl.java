@@ -1,13 +1,16 @@
 package com.alumni.project.service.user;
 
+import com.alumni.project.dal.entity.ContactDetails;
 import com.alumni.project.dal.entity.Role;
 import com.alumni.project.dal.entity.User;
+import com.alumni.project.dal.repository.ContactDetailsRepository;
 import com.alumni.project.dal.repository.RoleRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.user.GetUserDto;
 import com.alumni.project.dto.user.UserDto;
 import com.alumni.project.dto.user.UserLoginDto;
 import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.service.contactdetails.ContactDetailsServiceImp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +28,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final ContactDetailsRepository contactDetailsRepository;
+    private final ContactDetailsServiceImp contactDetailsServiceImp;
 
     public Role addRole(Role role) {
         return roleRepository.save(role);
@@ -54,6 +59,10 @@ public class UserServiceImpl implements UserService {
                 userDto.getGender()
         );
         Role role = roleRepository.findByName("USER");
+        var contact = new ContactDetails();
+        contact.setEmail(userDto.getEmail());
+        contact.setUser(user);
+        contactDetailsRepository.save(contact);
         user.setRoles(Arrays.asList(role));
         return map(userRepository.save(user));
     }
@@ -132,8 +141,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(UUID id) {
-        userRepository.deleteById(id);
+    public void delete(String username) {
+        userRepository.deleteByUsername(username);
     }
 
 

@@ -18,7 +18,7 @@ public interface UserService{
 
     GetUserDto update(UUID id, UserDto user);
 
-    void delete(UUID id);
+    void delete(String username);
 
     Role addRole(Role role);
 

@@ -1,5 +1,6 @@
 package com.alumni.project.dal.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,6 @@ public class ContactDetails extends Base {
     private String linkedIn;
 
 
-    @OneToOne(mappedBy = "contactDetails")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "contactDetails")
     private User user;
 }

@@ -34,7 +34,7 @@ public class EducationServiceImpl implements EducationService {
     public ResponseEntity<ErrorResponse> saveEducation(String username, Education education) {
         try {
             if (userRepository.existsByUsername(username)) {
-                if (educationRepository.existsByEducation(education.getInstitution(),
+                if (educationRepository.existsByInstitutionAndDegreeAndFieldOfStudy(education.getInstitution(),
                         education.getDegree(),
                         education.getFieldOfStudy())) {
                     ErrorResponse errorResponse = new ErrorResponse();

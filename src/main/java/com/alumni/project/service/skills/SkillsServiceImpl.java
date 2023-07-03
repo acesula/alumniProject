@@ -3,8 +3,12 @@ package com.alumni.project.service.skills;
 import com.alumni.project.dal.entity.Skills;
 import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.SkillsRepository;
+import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.user.GetUserDto;
+import com.alumni.project.security.ErrorResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,19 +19,34 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SkillsServiceImpl implements SkillsService{
     private final SkillsRepository skillsRepository;
+    private final UserRepository userRepository;
 
 
     @Override
-    public Skills save(Skills skills) {
-            var skill = new Skills(
-                    skills.getSkillField(),
-                    skills.getSkillDescription()
+    public void save(String username, Skills skills) {
+        var user = userRepository.findByUsername(username);
+        skills.setUser(user);
+        user.getSkills().add(skills);
+        skillsRepository.save(skills);
+    }
 
-            );
-
-            var saved = skillsRepository.save(skill);
-            return map(saved);
-
+    public ResponseEntity<ErrorResponse> saveSkill(String username, Skills skills){
+        try{
+            if (userRepository.existsByUsername(username)) {
+                save(username, skills);
+                return new ResponseEntity<>(HttpStatus.OK);
+            } else {
+                ErrorResponse errorResponse = new ErrorResponse();
+                errorResponse.setMessage("User could not be found!");
+                errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
+                return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+            }
+        }catch (IllegalArgumentException e){
+            ErrorResponse error = new ErrorResponse();
+            error.setMessage(e.getMessage());
+            error.setErrorCode(HttpStatus.BAD_REQUEST.value());
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @Override

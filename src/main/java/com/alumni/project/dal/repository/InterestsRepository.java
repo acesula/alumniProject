@@ -9,4 +9,5 @@ import java.util.UUID;
 @Repository
 public interface InterestsRepository extends JpaRepository<Interests, UUID> {
 
+
 }

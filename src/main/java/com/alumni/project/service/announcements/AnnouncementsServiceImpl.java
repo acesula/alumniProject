@@ -1,8 +1,11 @@
 package com.alumni.project.service.announcements;
 
 import com.alumni.project.dal.entity.Announcements;
+import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.AnnouncementsRepository;
 import com.alumni.project.dal.repository.UserRepository;
+import com.alumni.project.dto.announcements.AnnouncementsDto;
+import com.alumni.project.dto.user.GetUserDto;
 import com.alumni.project.security.ErrorResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +31,7 @@ public class AnnouncementsServiceImpl implements AnnouncementsService {
         announcementsRepository.save(announcement);
     }
 
-    public ResponseEntity<ErrorResponse> saveAnnouncement(String username,Announcements announcements){
+    public ResponseEntity<ErrorResponse> saveAnnouncement(String username, Announcements announcements) {
         try {
             if (userRepository.existsByUsername(username)) {
                 save(username, announcements);
@@ -47,8 +51,11 @@ public class AnnouncementsServiceImpl implements AnnouncementsService {
     }
 
     @Override
-    public List<Announcements> findAll() {
-        return announcementsRepository.findAll();
+    public List<AnnouncementsDto> findAll() {
+        return announcementsRepository.findAll()
+                .stream()
+                .map(this::map)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -62,5 +69,11 @@ public class AnnouncementsServiceImpl implements AnnouncementsService {
         announc.setAnnouncementDescription(announcement.getAnnouncementDescription());
 
         return announcementsRepository.save(announc);
+    }
+
+    private AnnouncementsDto map(Announcements announcements) {
+        var dto = new AnnouncementsDto();
+        dto.setAnnouncementDescription(announcements.getAnnouncementDescription());
+        return dto;
     }
 }

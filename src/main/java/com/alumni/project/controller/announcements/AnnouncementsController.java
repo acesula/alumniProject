@@ -1,6 +1,7 @@
 package com.alumni.project.controller.announcements;
 
 import com.alumni.project.dal.entity.Announcements;
+import com.alumni.project.dto.announcements.AnnouncementsDto;
 import com.alumni.project.security.ErrorResponse;
 import com.alumni.project.service.announcements.AnnouncementsServiceImpl;
 import jakarta.validation.Valid;
@@ -24,7 +25,7 @@ public class AnnouncementsController {
     }
 
     @GetMapping
-    public List<Announcements> findAll() {
+    public List<AnnouncementsDto> findAll() {
         return announcementService.findAll();
     }
 

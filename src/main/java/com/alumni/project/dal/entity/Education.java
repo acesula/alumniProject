@@ -3,10 +3,7 @@ package com.alumni.project.dal.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
@@ -14,7 +11,7 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Setter
-
+@RequiredArgsConstructor
 @AllArgsConstructor
 public class Education extends Base {
     private String institution;
@@ -38,7 +35,4 @@ public class Education extends Base {
 
     }
 
-    public Education() {
-
-    }
 }

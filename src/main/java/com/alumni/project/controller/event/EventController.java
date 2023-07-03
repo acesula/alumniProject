@@ -1,8 +1,11 @@
 package com.alumni.project.controller.event;
 
 import com.alumni.project.dal.entity.Event;
+import com.alumni.project.security.ErrorResponse;
 import com.alumni.project.service.event.EventServiceImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,9 +18,9 @@ public class EventController {
 
     private final EventServiceImpl eventService;
 
-    @PostMapping
-    public Event save(@RequestBody Event event) {
-        return eventService.save(event);
+    @PostMapping("/{username}")
+    public ResponseEntity<ErrorResponse> save(@Valid @PathVariable String username, @RequestBody Event event) {
+        return eventService.saveEvent(username, event);
     }
 
     @GetMapping
