@@ -1,6 +1,7 @@
 package com.alumni.project.controller.education;
 
 import com.alumni.project.dal.entity.Education;
+import com.alumni.project.dto.education.EducationDto;
 import com.alumni.project.security.ErrorResponse;
 import com.alumni.project.service.education.EducationServiceImpl;
 import jakarta.validation.Valid;
@@ -17,23 +18,32 @@ import java.util.UUID;
 public class EducationController {
 
     private final EducationServiceImpl educationService;
-    @PostMapping
+
+    @PostMapping("/{username}")
     public ResponseEntity<ErrorResponse> save(@Valid @PathVariable String username, @RequestBody Education education) {
         return educationService.saveEducation(username, education);
     }
+
     @GetMapping
-    public List<Education> findAll() {
+    public List<EducationDto> findAll() {
         return educationService.findAll();
     }
 
+    @GetMapping("/{username}")
+    public List<EducationDto> findByUser(@PathVariable String username) {
+        return educationService.findByUser(username);
+    }
+
     @GetMapping("/{id}")
-    public Education findById(@PathVariable UUID id) {
+    public EducationDto findById(@PathVariable UUID id) {
         return educationService.findById(id);
     }
+
     @PatchMapping("/{id}")
     public Education update(@PathVariable UUID id, @RequestBody Education dto) {
-        return educationService.update(id,dto);
+        return educationService.update(id, dto);
     }
+
     @DeleteMapping("/{id}")
     public void delete(@PathVariable UUID id) {
         educationService.delete(id);

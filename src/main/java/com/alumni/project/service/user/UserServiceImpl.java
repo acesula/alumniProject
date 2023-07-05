@@ -29,7 +29,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final ContactDetailsRepository contactDetailsRepository;
-    private final ContactDetailsServiceImp contactDetailsServiceImp;
 
     public Role addRole(Role role) {
         return roleRepository.save(role);
@@ -48,7 +47,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsernameAndPassword(username, password);
     }
 
-    public GetUserDto save(UserDto userDto) {
+    public void save(UserDto userDto) {
         var user = new User(
                 userDto.getName(),
                 userDto.getSurname(),
@@ -59,12 +58,14 @@ public class UserServiceImpl implements UserService {
                 userDto.getGender()
         );
         Role role = roleRepository.findByName("USER");
+        user.setRoles(Arrays.asList(role));
+        map(userRepository.save(user));
+
         var contact = new ContactDetails();
         contact.setEmail(userDto.getEmail());
         contact.setUser(user);
         contactDetailsRepository.save(contact);
-        user.setRoles(Arrays.asList(role));
-        return map(userRepository.save(user));
+
     }
 
     public ResponseEntity<ErrorResponse> register(UserDto userDto) {

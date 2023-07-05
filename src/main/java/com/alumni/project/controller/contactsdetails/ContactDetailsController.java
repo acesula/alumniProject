@@ -29,6 +29,11 @@ public class ContactDetailsController {
         return contactDetailsService.findByEmail(email);
     }
 
+    @GetMapping("/{username}")
+    public List<ContactDetailsDto> findByUser(@PathVariable String username) {
+        return contactDetailsService.findByUser(username);
+    }
+
     @DeleteMapping("/{email}")
     public void deleteById(@PathVariable String email) {
         contactDetailsService.deleteByEmail(email);

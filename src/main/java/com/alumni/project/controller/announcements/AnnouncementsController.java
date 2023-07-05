@@ -21,7 +21,7 @@ public class AnnouncementsController {
 
     @PostMapping("/{username}")
     public ResponseEntity<ErrorResponse> save(@Valid @PathVariable String username, @RequestBody Announcements announcement) {
-        return announcementService.saveAnnouncement(username,announcement);
+        return announcementService.saveAnnouncement(username, announcement);
     }
 
     @GetMapping
@@ -29,8 +29,13 @@ public class AnnouncementsController {
         return announcementService.findAll();
     }
 
+    @GetMapping("/{username}")
+    public List<AnnouncementsDto> findAnnouncementsByUser(@Valid @PathVariable String username) {
+        return announcementService.findByUser(username);
+    }
+
     @PatchMapping("/{id}")
-    public Announcements update(@PathVariable UUID id, @RequestBody Announcements announcement){
+    public Announcements update(@PathVariable UUID id, @RequestBody Announcements announcement) {
         return announcementService.update(id, announcement);
     }
 

@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -61,6 +63,14 @@ public class ContactDetailsServiceImp implements ContactDetailsService {
             return map(optional.get());
         }
         throw new RuntimeException("Could not find contact details");
+    }
+
+    @Override
+    public List<ContactDetailsDto> findByUser(String username) {
+        return contactDetailsRepository.findByUser_Username(username)
+                .stream()
+                .map(this::map)
+                .collect(Collectors.toList());
     }
 
     @Override

@@ -23,6 +23,6 @@ public class ContactDetails extends Base {
     private String linkedIn;
 
 
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "contactDetails")
+    @OneToOne(cascade = CascadeType.ALL)
     private User user;
 }

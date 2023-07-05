@@ -2,6 +2,7 @@ package com.alumni.project.service.skills;
 
 import com.alumni.project.dal.entity.Skills;
 import com.alumni.project.dal.entity.User;
+import com.alumni.project.dto.skills.SkillsDto;
 
 import java.util.List;
 import java.util.UUID;
@@ -9,11 +10,13 @@ import java.util.UUID;
 public interface SkillsService {
     void save(String username, Skills skills);
 
-    List<Skills> findAll();
+    List<SkillsDto> findAll();
 
-    Skills findById(UUID id);
+    List<SkillsDto> findByUser(String username);
 
-    Skills update(UUID id, Skills dto);
+    SkillsDto findById(UUID id);
+
+    SkillsDto update(UUID id, Skills dto);
 
     void delete(UUID id);
 }

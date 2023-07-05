@@ -5,6 +5,7 @@ import com.alumni.project.dto.connection.UserConnectionDto;
 import com.alumni.project.security.ErrorResponse;
 import com.alumni.project.service.connection.UserConnectionServiceImpl;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,11 @@ public class UserConnectionController {
     @GetMapping
     public List<UserConnectionDto> findAll() {
         return userConnectionService.findAll();
+    }
+
+    @GetMapping("/{username}")
+    public List<UserConnectionDto> findByUser(@Valid @PathVariable String username) {
+        return userConnectionService.findByUser(username);
     }
 
     @DeleteMapping("/{username}")

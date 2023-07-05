@@ -3,6 +3,7 @@ package com.alumni.project.service.event;
 import com.alumni.project.dal.entity.Event;
 import com.alumni.project.dal.repository.EventRepository;
 import com.alumni.project.dal.repository.UserRepository;
+import com.alumni.project.dto.event.EventDto;
 import com.alumni.project.security.ErrorResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -47,8 +49,19 @@ public class EventServiceImpl implements EventService{
     }
 
     @Override
-    public List<Event> findAll() {
-        return eventRepository.findAll();
+    public List<EventDto> findAll() {
+        return eventRepository.findAll()
+                .stream()
+                .map(this::map)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<EventDto> findByUser(String username) {
+        return eventRepository.findByUser_Username(username)
+                .stream()
+                .map(this::map)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -65,5 +78,15 @@ public class EventServiceImpl implements EventService{
         e.setLocation(event.getLocation());
 
         return eventRepository.save(e);
+    }
+
+    public EventDto map(Event event){
+        var dto = new EventDto();
+        dto.setEventDescription(event.getEventDescription());
+        dto.setDate(event.getDate());
+        dto.setTime(event.getTime());
+        dto.setLocation(event.getLocation());
+
+        return dto;
     }
 }

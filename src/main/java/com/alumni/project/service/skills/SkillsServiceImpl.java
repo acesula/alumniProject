@@ -4,6 +4,7 @@ import com.alumni.project.dal.entity.Skills;
 import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.SkillsRepository;
 import com.alumni.project.dal.repository.UserRepository;
+import com.alumni.project.dto.skills.SkillsDto;
 import com.alumni.project.dto.user.GetUserDto;
 import com.alumni.project.security.ErrorResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class SkillsServiceImpl implements SkillsService{
+public class SkillsServiceImpl implements SkillsService {
     private final SkillsRepository skillsRepository;
     private final UserRepository userRepository;
 
@@ -30,8 +31,8 @@ public class SkillsServiceImpl implements SkillsService{
         skillsRepository.save(skills);
     }
 
-    public ResponseEntity<ErrorResponse> saveSkill(String username, Skills skills){
-        try{
+    public ResponseEntity<ErrorResponse> saveSkill(String username, Skills skills) {
+        try {
             if (userRepository.existsByUsername(username)) {
                 save(username, skills);
                 return new ResponseEntity<>(HttpStatus.OK);
@@ -41,7 +42,7 @@ public class SkillsServiceImpl implements SkillsService{
                 errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
                 return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
             }
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             ErrorResponse error = new ErrorResponse();
             error.setMessage(e.getMessage());
             error.setErrorCode(HttpStatus.BAD_REQUEST.value());
@@ -50,7 +51,7 @@ public class SkillsServiceImpl implements SkillsService{
     }
 
     @Override
-    public List<Skills> findAll() {
+    public List<SkillsDto> findAll() {
 
         return skillsRepository.findAll()
                 .stream()
@@ -59,7 +60,15 @@ public class SkillsServiceImpl implements SkillsService{
     }
 
     @Override
-    public Skills findById(UUID id) {
+    public List<SkillsDto> findByUser(String username) {
+        return skillsRepository.findByUser_Username(username)
+                .stream()
+                .map(this::map)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public SkillsDto findById(UUID id) {
 
         var optional = skillsRepository.findById(id);
         if (optional.isPresent()) {
@@ -70,7 +79,7 @@ public class SkillsServiceImpl implements SkillsService{
 
 
     @Override
-    public Skills update(UUID id, Skills skillDto) {
+    public SkillsDto update(UUID id, Skills skillDto) {
 
         var skill = skillsRepository.findById(id).orElseThrow(RuntimeException::new);
         skill.setSkillField(skillDto.getSkillField());
@@ -84,11 +93,11 @@ public class SkillsServiceImpl implements SkillsService{
     public void delete(UUID id) {
         skillsRepository.deleteById(id);
     }
-    private Skills map(Skills skills) {
-        var dto = new Skills();
-        dto.setId(skills.getId());
-        dto.setSkillField(skills.getSkillField());
+
+    private SkillsDto map(Skills skills) {
+        var dto = new SkillsDto();
         dto.setSkillDescription(skills.getSkillDescription());
+        dto.setSkillField(skills.getSkillField());
 
         return dto;
     }

@@ -6,6 +6,7 @@ import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.EducationRepository;
 import com.alumni.project.dal.repository.SkillsRepository;
 import com.alumni.project.dal.repository.UserRepository;
+import com.alumni.project.dto.education.EducationDto;
 import com.alumni.project.dto.user.GetUserDto;
 import com.alumni.project.security.ErrorResponse;
 import lombok.RequiredArgsConstructor;
@@ -59,17 +60,28 @@ public class EducationServiceImpl implements EducationService {
     }
 
     @Override
-    public List<Education> findAll() {
-        return educationRepository.findAll();
+    public List<EducationDto> findAll() {
+        return educationRepository.findAll()
+                .stream()
+                .map(this::map)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Education findById(UUID id) {
+    public EducationDto findById(UUID id) {
         var optional = educationRepository.findById(id);
         if (optional.isPresent()) {
-            return optional.get();
+            return map(optional.get());
         }
         throw new RuntimeException("Education not found");
+    }
+
+    @Override
+    public List<EducationDto> findByUser(String username) {
+        return educationRepository.findByUser_Username(username)
+                .stream()
+                .map(this::map)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -89,6 +101,18 @@ public class EducationServiceImpl implements EducationService {
     @Override
     public void delete(UUID id) {
         educationRepository.deleteById(id);
+
+    }
+    private EducationDto map(Education education) {
+        var dto = new EducationDto();
+        dto.setInstitution(education.getInstitution());
+        dto.setDegree(education.getDegree());
+        dto.setFieldOfStudy(education.getFieldOfStudy());
+        dto.setStartDate(education.getStartDate());
+        dto.setEndDate(education.getEndDate());
+        dto.setFinished(education.isFinished());
+
+        return dto;
 
     }
 }

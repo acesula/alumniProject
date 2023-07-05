@@ -42,7 +42,7 @@ public class User extends Base {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Employment> employments;
 
-    @OneToOne
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private ContactDetails contactDetails;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")

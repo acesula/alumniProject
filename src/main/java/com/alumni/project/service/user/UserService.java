@@ -1,7 +1,6 @@
 package com.alumni.project.service.user;
 
 import com.alumni.project.dal.entity.Role;
-import com.alumni.project.dal.entity.User;
 import com.alumni.project.dto.user.GetUserDto;
 import com.alumni.project.dto.user.UserDto;
 
@@ -10,7 +9,7 @@ import java.util.UUID;
 
 public interface UserService{
 
-    GetUserDto save(UserDto userDto);
+    void save(UserDto userDto);
 
     List<GetUserDto> findAll();
 

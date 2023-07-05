@@ -3,6 +3,7 @@ package com.alumni.project.service.interests;
 import com.alumni.project.dal.entity.Interests;
 import com.alumni.project.dal.repository.InterestsRepository;
 import com.alumni.project.dal.repository.UserRepository;
+import com.alumni.project.dto.interests.InterestsDto;
 import com.alumni.project.security.ErrorResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +29,7 @@ public class InterestsServiceImpl implements InterestService {
         interestsRepository.save(interests);
     }
 
-    public ResponseEntity<ErrorResponse> saveInterest(String username,Interests interests){
+    public ResponseEntity<ErrorResponse> saveInterest(String username, Interests interests) {
         try {
             if (userRepository.existsByUsername(username)) {
                 save(username, interests);
@@ -47,15 +49,26 @@ public class InterestsServiceImpl implements InterestService {
     }
 
     @Override
-    public List<Interests> findAll() {
-        return interestsRepository.findAll();
+    public List<InterestsDto> findAll() {
+        return interestsRepository.findAll()
+                .stream()
+                .map(this::map)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Interests findById(UUID id) {
+    public List<InterestsDto> findByUser(String username) {
+        return interestsRepository.findByUser_Username(username)
+                .stream()
+                .map(this::map)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public InterestsDto findById(UUID id) {
         var optional = interestsRepository.findById(id);
         if (optional.isPresent()) {
-            return optional.get();
+            return map(optional.get());
         }
         throw new RuntimeException("No interest found");
     }
@@ -71,5 +84,12 @@ public class InterestsServiceImpl implements InterestService {
         interest.setInterestDescription(interests.getInterestDescription());
 
         return interestsRepository.save(interest);
+    }
+
+    public InterestsDto map(Interests interests) {
+        var dto = new InterestsDto();
+        dto.setInterestDescription(interests.getInterestDescription());
+
+        return dto;
     }
 }

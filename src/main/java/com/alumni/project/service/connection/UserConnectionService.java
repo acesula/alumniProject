@@ -12,6 +12,7 @@ public interface UserConnectionService {
 
     List<UserConnectionDto> findAll();
 
+    List<UserConnectionDto> findByUser(String username);
     UserConnection findById(UUID uuid);
 
     void delete(String username);

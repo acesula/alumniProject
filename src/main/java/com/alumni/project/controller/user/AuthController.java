@@ -16,10 +16,10 @@ public class AuthController {
 
     private final UserServiceImpl userService;
 
-//    @PostMapping
-//    public Role addRole(@RequestBody Role role){
-//        return userService.addRole(role);
-//    }
+    @PostMapping
+    public Role addRole(@RequestBody Role role){
+        return userService.addRole(role);
+    }
 
 
 }

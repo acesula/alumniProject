@@ -59,6 +59,14 @@ public class AnnouncementsServiceImpl implements AnnouncementsService {
     }
 
     @Override
+    public List<AnnouncementsDto> findByUser(String username) {
+        return announcementsRepository.findByUser_Username(username)
+                .stream()
+                .map(this::map)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void delete(UUID uuid) {
         announcementsRepository.deleteById(uuid);
     }

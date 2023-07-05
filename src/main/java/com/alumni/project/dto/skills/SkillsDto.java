@@ -6,4 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SkillsDto {
+    private String skillField;
+    private String skillDescription;
 }

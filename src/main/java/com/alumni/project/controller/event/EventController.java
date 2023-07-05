@@ -1,6 +1,7 @@
 package com.alumni.project.controller.event;
 
 import com.alumni.project.dal.entity.Event;
+import com.alumni.project.dto.event.EventDto;
 import com.alumni.project.security.ErrorResponse;
 import com.alumni.project.service.event.EventServiceImpl;
 import jakarta.validation.Valid;
@@ -24,8 +25,13 @@ public class EventController {
     }
 
     @GetMapping
-    public List<Event> findAll() {
+    public List<EventDto> findAll() {
         return eventService.findAll();
+    }
+
+    @GetMapping("/{username}")
+    public List<EventDto> findByUser(@PathVariable String username) {
+        return eventService.findByUser(username);
     }
 
     @PatchMapping("/{id}")

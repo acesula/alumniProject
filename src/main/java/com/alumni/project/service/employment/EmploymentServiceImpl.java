@@ -4,6 +4,7 @@ import com.alumni.project.dal.entity.Employment;
 import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.EmploymentRepository;
 import com.alumni.project.dal.repository.UserRepository;
+import com.alumni.project.dto.employment.EmploymentDto;
 import com.alumni.project.security.ErrorResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -54,17 +56,28 @@ public class EmploymentServiceImpl implements EmploymentService {
     }
 
     @Override
-    public List<Employment> findAll() {
-        return employmentRepository.findAll();
+    public List<EmploymentDto> findAll() {
+        return employmentRepository.findAll()
+                .stream()
+                .map(this::map)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Employment findById(UUID id) {
+    public EmploymentDto findById(UUID id) {
         var optional = employmentRepository.findById(id);
         if (optional.isPresent()) {
-            return optional.get();
+            return map(optional.get());
         }
         throw new RuntimeException("Employment not found");
+    }
+
+    @Override
+    public List<EmploymentDto> findByUser(String username) {
+        return employmentRepository.findByUser_Username(username)
+                .stream()
+                .map(this::map)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -84,5 +97,15 @@ public class EmploymentServiceImpl implements EmploymentService {
         employmentRepository.deleteById(id);
     }
 
+    public EmploymentDto map(Employment employment){
+        var dto = new EmploymentDto();
+        dto.setCompany(employment.getCompany());
+        dto.setJob(employment.getJob());
+        dto.setStartDate(employment.getStartDate());
+        dto.setEndDate(employment.getEndDate());
+        dto.setStatus(employment.isStatus());
+
+        return dto;
+    }
 }
 

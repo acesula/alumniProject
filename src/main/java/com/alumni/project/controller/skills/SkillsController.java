@@ -1,6 +1,7 @@
 package com.alumni.project.controller.skills;
 
 import com.alumni.project.dal.entity.Skills;
+import com.alumni.project.dto.skills.SkillsDto;
 import com.alumni.project.dto.user.GetUserDto;
 import com.alumni.project.dto.user.UserDto;
 import com.alumni.project.security.ErrorResponse;
@@ -25,17 +26,22 @@ public class SkillsController {
         return skillsService.saveSkill(username, skill);
     }
     @GetMapping
-    public List<Skills> findAll() {
+    public List<SkillsDto> findAll() {
         return skillsService.findAll();
     }
 
     @GetMapping("/{id}")
-    public Skills findById(@PathVariable UUID id) {
+    public SkillsDto findById(@PathVariable UUID id) {
         return skillsService.findById(id);
     }
 
+    @GetMapping("/{username}")
+    public List<SkillsDto> findByUser(@PathVariable String username){
+        return skillsService.findByUser(username);
+    }
+
     @PatchMapping("/{id}")
-    public Skills update(@PathVariable UUID id, @RequestBody Skills dto) {
+    public SkillsDto update(@PathVariable UUID id, @RequestBody Skills dto) {
         return skillsService.update(id, dto);
     }
 

@@ -1,6 +1,5 @@
 package com.alumni.project.controller.user;
 
-import com.alumni.project.dal.entity.User;
 import com.alumni.project.dto.user.GetUserDto;
 import com.alumni.project.dto.user.UserDto;
 import com.alumni.project.dto.user.UserLoginDto;
@@ -9,7 +8,6 @@ import com.alumni.project.service.user.UserServiceImpl;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

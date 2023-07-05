@@ -1,6 +1,7 @@
 package com.alumni.project.controller.interests;
 
 import com.alumni.project.dal.entity.Interests;
+import com.alumni.project.dto.interests.InterestsDto;
 import com.alumni.project.security.ErrorResponse;
 import com.alumni.project.service.interests.InterestsServiceImpl;
 import jakarta.validation.Valid;
@@ -24,12 +25,17 @@ public class InterestsController {
     }
 
     @GetMapping
-    public List<Interests> findAll(){
+    public List<InterestsDto> findAll(){
         return interestsService.findAll();
     }
 
+    @GetMapping("/{username}")
+    public List<InterestsDto> findByUser(@PathVariable String username){
+        return interestsService.findByUser(username);
+    }
+
     @GetMapping("/{id}")
-    public Interests findById(@PathVariable UUID id){
+    public InterestsDto findById(@PathVariable UUID id){
         return interestsService.findById(id);
     }
 

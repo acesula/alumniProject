@@ -12,6 +12,7 @@ public interface AnnouncementsService {
 
     List<AnnouncementsDto> findAll();
 
+    List<AnnouncementsDto> findByUser(String username);
     void delete(UUID uuid);
 
     Announcements update(UUID uuid,Announcements announcement);

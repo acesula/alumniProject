@@ -72,6 +72,14 @@ public class UserConnectionServiceImpl implements UserConnectionService {
     }
 
     @Override
+    public List<UserConnectionDto> findByUser(String username) {
+        return userConnectionRepository.findByUserConnection_Username(username)
+                .stream()
+                .map(this::map)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public UserConnection findById(UUID uuid) {
         var optional = userConnectionRepository.findById(uuid);
         if (optional.isPresent()) {
