@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/connection")
 @RequiredArgsConstructor
-public class UserConnectionController {
+public class gUserConnectionController {
 
     private final UserConnectionServiceImpl userConnectionService;
 

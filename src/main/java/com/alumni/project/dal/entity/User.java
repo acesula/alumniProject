@@ -57,6 +57,22 @@ public class User extends Base {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userConnection")
     private List<UserConnection> userConnections;
 
+    @OneToMany(mappedBy="senderUser", fetch = FetchType.EAGER)
+    private Collection<ChatRoom> senders;
+
+    @OneToMany(mappedBy="receiverUser", fetch = FetchType.EAGER)
+    private Collection<ChatRoom> receivers;
+    @OneToMany(mappedBy="senderUser", fetch = FetchType.EAGER)
+    private Collection<Chat> sender;
+
+    @OneToMany(mappedBy="receiverUser", fetch = FetchType.EAGER)
+    private Collection<Chat> receiver;
+    @OneToMany(mappedBy="user_id", fetch = FetchType.EAGER)
+    private Collection<Chat> owner;
+
+    @OneToMany(mappedBy="user_id", fetch = FetchType.EAGER)
+    private Collection<Chat> friends;
+
     public User(String name, String surname, String email, LocalDate birthDate, String username, String password, String gender) {
         this.name = name;
         this.surname = surname;
