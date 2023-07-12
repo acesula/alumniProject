@@ -7,6 +7,7 @@ import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.skills.SkillsDto;
 import com.alumni.project.dto.user.GetUserDto;
 import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.service.user.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 public class SkillsServiceImpl implements SkillsService {
     private final SkillsRepository skillsRepository;
     private final UserRepository userRepository;
+    private final UserServiceImpl userService;
 
 
     @Override
@@ -60,8 +62,9 @@ public class SkillsServiceImpl implements SkillsService {
     }
 
     @Override
-    public List<SkillsDto> findByUser(String username) {
-        return skillsRepository.findByUser_Username(username)
+    public List<SkillsDto> findByUser(UUID id, String username) {
+        GetUserDto user = this.userService.findById(id);
+        return skillsRepository.findByUser_Username(user.getUsername())
                 .stream()
                 .map(this::map)
                 .collect(Collectors.toList());

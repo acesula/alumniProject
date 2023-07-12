@@ -1,8 +1,6 @@
 package com.alumni.project.service.education;
 
 import com.alumni.project.dal.entity.Education;
-import com.alumni.project.dal.entity.Skills;
-import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.EducationRepository;
 import com.alumni.project.dal.repository.SkillsRepository;
 import com.alumni.project.dal.repository.UserRepository;

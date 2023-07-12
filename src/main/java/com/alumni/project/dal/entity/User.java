@@ -57,6 +57,12 @@ public class User extends Base {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userConnection", fetch = FetchType.LAZY)
     private List<UserConnection> userConnections;
 
+
+    @OneToMany(mappedBy="user1", fetch = FetchType.EAGER)
+    private Collection<Friends> friends;
+    @OneToMany(mappedBy="friend", fetch = FetchType.EAGER)
+    private Collection<Friends> friend;
+
     public User(String name, String surname, String email, LocalDate birthDate, String username, String password, String gender) {
         this.name = name;
         this.surname = surname;

@@ -36,8 +36,8 @@ public class SkillsController {
     }
 
     @GetMapping("/{username}")
-    public List<SkillsDto> findByUser(@PathVariable String username){
-        return skillsService.findByUser(username);
+    public List<SkillsDto> findByUser(@PathVariable UUID id, String username){
+        return skillsService.findByUser(id,username);
     }
 
     @PatchMapping("/{id}")
