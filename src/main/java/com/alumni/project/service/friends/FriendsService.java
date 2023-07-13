@@ -1,7 +1,6 @@
-package com.alumni.project.service.Friends;
+package com.alumni.project.service.friends;
 
 import com.alumni.project.dal.entity.Friends;
-import com.alumni.project.dal.entity.Request;
 
 import java.util.List;
 import java.util.UUID;

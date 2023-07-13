@@ -1,12 +1,9 @@
-package com.alumni.project.service.Friends;
+package com.alumni.project.service.friends;
 
 import com.alumni.project.dal.entity.Friends;
-import com.alumni.project.dal.entity.Request;
 import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.FriendsRepository;
-import com.alumni.project.dal.repository.RequestRepository;
 import com.alumni.project.dal.repository.UserRepository;
-import com.alumni.project.dto.user.GetUserDto;
 import com.alumni.project.service.user.UserServiceImpl;
 import org.springframework.stereotype.Service;
 
