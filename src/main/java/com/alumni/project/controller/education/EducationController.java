@@ -40,7 +40,7 @@ public class EducationController {
     }
 
     @PatchMapping("/{id}")
-    public Education update(@PathVariable UUID id, @RequestBody Education dto) {
+    public EducationDto update(@PathVariable UUID id, @RequestBody EducationDto dto) {
         return educationService.update(id, dto);
     }
 

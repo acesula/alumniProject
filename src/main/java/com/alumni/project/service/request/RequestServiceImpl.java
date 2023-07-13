@@ -5,6 +5,7 @@ import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.RequestRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.user.GetUserDto;
+import com.alumni.project.dto.user.UserDto;
 import com.alumni.project.service.friends.FriendsServiceImpl;
 import com.alumni.project.service.user.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -93,7 +94,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public void deleteByUsername(UUID id) {
-        GetUserDto user = this.userService.findById(id);
+        UserDto user = this.userService.findById(id);
         this.userService.delete(user.getUsername());
     }
 
@@ -121,4 +122,6 @@ public class RequestServiceImpl implements RequestService {
     }
 
 
+//    public List<Request> findAll() {
+//    }
 }

@@ -6,7 +6,9 @@ import com.alumni.project.dal.repository.SkillsRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.skills.SkillsDto;
 import com.alumni.project.dto.user.GetUserDto;
+import com.alumni.project.dto.user.UserDto;
 import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.service.mapping.MappingServiceImpl;
 import com.alumni.project.service.user.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,7 @@ public class SkillsServiceImpl implements SkillsService {
     private final SkillsRepository skillsRepository;
     private final UserRepository userRepository;
     private final UserServiceImpl userService;
+    private final MappingServiceImpl mappingService;
 
 
     @Override
@@ -57,16 +60,16 @@ public class SkillsServiceImpl implements SkillsService {
 
         return skillsRepository.findAll()
                 .stream()
-                .map(this::map)
+                .map(mappingService::convertToSkillsDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<SkillsDto> findByUser(UUID id, String username) {
-        GetUserDto user = this.userService.findById(id);
+        UserDto user = this.userService.findById(id);
         return skillsRepository.findByUser_Username(user.getUsername())
                 .stream()
-                .map(this::map)
+                .map(mappingService::convertToSkillsDto)
                 .collect(Collectors.toList());
     }
 
@@ -75,7 +78,7 @@ public class SkillsServiceImpl implements SkillsService {
 
         var optional = skillsRepository.findById(id);
         if (optional.isPresent()) {
-            return map(optional.get());
+            return mappingService.convertToSkillsDto(optional.get());
         }
         throw new RuntimeException("Skill not found");
     }
@@ -89,7 +92,7 @@ public class SkillsServiceImpl implements SkillsService {
         skill.setSkillField(skillDto.getSkillField());
 
 
-        return map(skillsRepository.save(skill));
+        return mappingService.convertToSkillsDto(skillsRepository.save(skill));
     }
 
     @Override
@@ -97,11 +100,4 @@ public class SkillsServiceImpl implements SkillsService {
         skillsRepository.deleteById(id);
     }
 
-    private SkillsDto map(Skills skills) {
-        var dto = new SkillsDto();
-        dto.setSkillDescription(skills.getSkillDescription());
-        dto.setSkillField(skills.getSkillField());
-
-        return dto;
-    }
 }

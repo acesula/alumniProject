@@ -6,11 +6,10 @@ import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.ContactDetailsRepository;
 import com.alumni.project.dal.repository.RoleRepository;
 import com.alumni.project.dal.repository.UserRepository;
-import com.alumni.project.dto.user.GetUserDto;
 import com.alumni.project.dto.user.UserDto;
 import com.alumni.project.dto.user.UserLoginDto;
 import com.alumni.project.security.ErrorResponse;
-import com.alumni.project.service.contactdetails.ContactDetailsServiceImp;
+import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -29,6 +29,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final ContactDetailsRepository contactDetailsRepository;
+    private final MappingServiceImpl mappingService;
 
     public Role addRole(Role role) {
         return roleRepository.save(role);
@@ -58,8 +59,8 @@ public class UserServiceImpl implements UserService {
                 userDto.getGender()
         );
         Role role = roleRepository.findByName("USER");
-        user.setRoles(Arrays.asList(role));
-        map(userRepository.save(user));
+        user.setRoles(Collections.singletonList(role));
+        mappingService.convertToUserDto(userRepository.save(user));
 
         var contact = new ContactDetails();
         contact.setEmail(userDto.getEmail());
@@ -110,25 +111,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<GetUserDto> findAll() {
+    public List<UserDto> findAll() {
         return userRepository.findAll()
                 .stream()
-                .map(this::map)
+                .map(mappingService::convertToUserDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public GetUserDto findById(UUID id) {
+    public UserDto findById(UUID id) {
         var optional = userRepository.findById(id);
         if (optional.isPresent()) {
-            return map(optional.get());
+            return mappingService.convertToUserDto(optional.get());
         }
         throw new RuntimeException("User not found");
     }
 
     @Override
-    public GetUserDto update(UUID id, UserDto userDto) {
-        var user = userRepository.findById(id).orElseThrow(RuntimeException::new);
+    public UserDto update(UUID id, UserDto userDto) {
+        User user = userRepository.findById(id).orElseThrow(RuntimeException::new);
         user.setName(userDto.getName());
         user.setSurname(userDto.getSurname());
         user.setEmail(userDto.getEmail());
@@ -137,8 +138,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(userDto.getPassword());
         user.setGender(userDto.getGender());
 
-        return map(userRepository.save(user));
-
+        return mappingService.convertToUserDto(userRepository.save(user));
     }
 
     @Override
@@ -146,17 +146,4 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteByUsername(username);
     }
 
-
-    private GetUserDto map(User user) {
-        var dto = new GetUserDto();
-        dto.setUserId(user.getId());
-        dto.setName(user.getName());
-        dto.setSurname(user.getSurname());
-        dto.setGender(user.getGender());
-        dto.setEmail(user.getEmail());
-        dto.setBirthDate(user.getBirthDate());
-        dto.setUsername(user.getUsername());
-        dto.setPassword(user.getPassword());
-        return dto;
-    }
 }

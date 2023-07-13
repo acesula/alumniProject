@@ -35,8 +35,8 @@ public class EventController {
     }
 
     @PatchMapping("/{id}")
-    public Event update(@PathVariable UUID id, @RequestBody Event event) {
-        return eventService.update(id, event);
+    public EventDto update(@PathVariable UUID id, @RequestBody EventDto eventDto) {
+        return eventService.update(id, eventDto);
     }
 
     @DeleteMapping("/{id}")

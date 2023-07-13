@@ -5,6 +5,7 @@ import com.alumni.project.dal.repository.EventRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.event.EventDto;
 import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ public class EventServiceImpl implements EventService{
 
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
+    private final MappingServiceImpl mappingService;
 
     @Override
     public void save(String username,Event event) {
@@ -52,7 +54,7 @@ public class EventServiceImpl implements EventService{
     public List<EventDto> findAll() {
         return eventRepository.findAll()
                 .stream()
-                .map(this::map)
+                .map(mappingService::convertToEventDto)
                 .collect(Collectors.toList());
     }
 
@@ -60,7 +62,7 @@ public class EventServiceImpl implements EventService{
     public List<EventDto> findByUser(String username) {
         return eventRepository.findByUser_Username(username)
                 .stream()
-                .map(this::map)
+                .map(mappingService::convertToEventDto)
                 .collect(Collectors.toList());
     }
 
@@ -70,23 +72,13 @@ public class EventServiceImpl implements EventService{
     }
 
     @Override
-    public Event update(UUID uuid, Event event) {
+    public EventDto update(UUID uuid, EventDto event) {
         var e = eventRepository.findById(uuid).orElseThrow(RuntimeException::new);
         e.setEventDescription(event.getEventDescription());
         e.setDate(event.getDate());
         e.setTime(event.getTime());
         e.setLocation(event.getLocation());
 
-        return eventRepository.save(e);
-    }
-
-    public EventDto map(Event event){
-        var dto = new EventDto();
-        dto.setEventDescription(event.getEventDescription());
-        dto.setDate(event.getDate());
-        dto.setTime(event.getTime());
-        dto.setLocation(event.getLocation());
-
-        return dto;
+        return mappingService.convertToEventDto(eventRepository.save(e));
     }
 }
