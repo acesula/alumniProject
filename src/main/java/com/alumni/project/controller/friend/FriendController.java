@@ -1,6 +1,6 @@
-package com.alumni.project.controller.Friend;
+package com.alumni.project.controller.friend;
 import com.alumni.project.dal.entity.Friends;
-import com.alumni.project.service.Friends.FriendsServiceImpl;
+import com.alumni.project.service.friends.FriendsServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

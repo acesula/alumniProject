@@ -5,7 +5,7 @@ import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.RequestRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.user.GetUserDto;
-import com.alumni.project.service.Friends.FriendsServiceImpl;
+import com.alumni.project.service.friends.FriendsServiceImpl;
 import com.alumni.project.service.user.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
