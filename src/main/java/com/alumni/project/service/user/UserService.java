@@ -1,6 +1,5 @@
 package com.alumni.project.service.user;
 
-import com.alumni.project.dal.entity.Role;
 import com.alumni.project.dto.user.UserDto;
 
 import java.util.List;
@@ -18,6 +17,5 @@ public interface UserService{
 
     void delete(String username);
 
-    Role addRole(Role role);
 
 }

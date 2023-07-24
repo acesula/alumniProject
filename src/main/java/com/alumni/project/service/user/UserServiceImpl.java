@@ -1,10 +1,8 @@
 package com.alumni.project.service.user;
 
 import com.alumni.project.dal.entity.ContactDetails;
-import com.alumni.project.dal.entity.Role;
 import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.ContactDetailsRepository;
-import com.alumni.project.dal.repository.RoleRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.user.UserDto;
 import com.alumni.project.dto.user.UserLoginDto;
@@ -13,11 +11,10 @@ import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -27,13 +24,10 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
     private final ContactDetailsRepository contactDetailsRepository;
     private final MappingServiceImpl mappingService;
+    private final PasswordEncoder passwordEncoder;
 
-    public Role addRole(Role role) {
-        return roleRepository.save(role);
-    }
 
     public boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
@@ -49,19 +43,8 @@ public class UserServiceImpl implements UserService {
     }
 
     public void save(UserDto userDto) {
-        var user = new User(
-                userDto.getName(),
-                userDto.getSurname(),
-                userDto.getEmail(),
-                userDto.getBirthDate(),
-                userDto.getUsername(),
-                userDto.getPassword(),
-                userDto.getGender()
-        );
-        Role role = roleRepository.findByName("USER");
-        user.setRoles(Collections.singletonList(role));
-        mappingService.convertToUserDto(userRepository.save(user));
-
+        var user = mappingService.convertToUser(userDto);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         var contact = new ContactDetails();
         contact.setEmail(userDto.getEmail());
         contact.setUser(user);
