@@ -31,8 +31,7 @@ public class User extends Base {
 
     private String role;
     private String profilePicture;
-    @Column(nullable = false, columnDefinition = "boolean default true")
-    private boolean enabled;
+    private boolean enabled = true;
 
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
