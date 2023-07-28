@@ -1,7 +1,9 @@
 package com.alumni.project.controller.user;
 
+import com.alumni.project.dal.entity.User;
 import com.alumni.project.dto.user.GetUserDto;
 import com.alumni.project.dto.user.UserDto;
+import com.alumni.project.dto.user.UserInfoDto;
 import com.alumni.project.dto.user.UserLoginDto;
 import com.alumni.project.security.ErrorResponse;
 import com.alumni.project.service.user.UserServiceImpl;
@@ -41,6 +43,11 @@ public class UserController {
         return userService.findById(id);
     }
 
+    @GetMapping("/user-info/{username}")
+    public List<UserInfoDto> findUserInfoByUsername(@PathVariable String username) {
+        return userService.getUserInfoByUsername(username);
+    }
+
     @PatchMapping("/{id}")
     public UserDto update(@PathVariable UUID id, @RequestBody UserDto dto) {
         return userService.update(id, dto);
@@ -50,6 +57,11 @@ public class UserController {
     @Transactional
     public void delete(@PathVariable String username) {
         userService.delete(username);
+    }
+
+    @GetMapping("/users/{username}")
+    public List<UserInfoDto> getUserInfoByUsername(@PathVariable String username) {
+        return userService.getUserInfoByUsername(username);
     }
 
 

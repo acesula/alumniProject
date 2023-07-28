@@ -20,4 +20,12 @@ public class Chat extends Base {
     private String sender;
 
     private String receiver;
+
+    public Chat(String sender, String receiverUser) {
+        this.sender = sender;
+        this.receiver = receiver;
+    }
+    public Chat(){
+
+    }
 }

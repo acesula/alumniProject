@@ -30,10 +30,7 @@ public class SkillsController {
         return skillsService.findAll();
     }
 
-    @GetMapping("/{id}")
-    public SkillsDto findById(@PathVariable UUID id) {
-        return skillsService.findById(id);
-    }
+
 
     @GetMapping("/{username}")
     public List<SkillsDto> findByUser(@PathVariable UUID id, String username){

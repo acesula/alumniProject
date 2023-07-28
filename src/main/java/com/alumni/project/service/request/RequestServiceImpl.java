@@ -67,10 +67,9 @@ public class RequestServiceImpl implements RequestService {
     }
     @Override
     public List<Request> findAllByUsername(String username) {
-        return requestRepository.findAll()
-                .stream()
-                .map(this::map)
-                .collect(Collectors.toList());
+
+        User user = userRepository.findByUsername(username);
+        return requestRepository.findAllByUsername(user.getUsername());
     }
 
     @Override

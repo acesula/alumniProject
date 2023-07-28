@@ -1,11 +1,9 @@
 package com.alumni.project.service.skills;
 
 import com.alumni.project.dal.entity.Skills;
-import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.SkillsRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.skills.SkillsDto;
-import com.alumni.project.dto.user.GetUserDto;
 import com.alumni.project.dto.user.UserDto;
 import com.alumni.project.security.ErrorResponse;
 import com.alumni.project.service.mapping.MappingServiceImpl;
@@ -73,15 +71,7 @@ public class SkillsServiceImpl implements SkillsService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public SkillsDto findById(UUID id) {
 
-        var optional = skillsRepository.findById(id);
-        if (optional.isPresent()) {
-            return mappingService.convertToSkillsDto(optional.get());
-        }
-        throw new RuntimeException("Skill not found");
-    }
 
 
     @Override
@@ -89,7 +79,7 @@ public class SkillsServiceImpl implements SkillsService {
 
         var skill = skillsRepository.findById(id).orElseThrow(RuntimeException::new);
         skill.setSkillField(skillDto.getSkillField());
-        skill.setSkillField(skillDto.getSkillField());
+        skill.setSkillDescription(skillDto.getSkillDescription());
 
 
         return mappingService.convertToSkillsDto(skillsRepository.save(skill));

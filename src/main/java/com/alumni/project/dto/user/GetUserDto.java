@@ -15,3 +15,7 @@ public class GetUserDto extends UserDto {
         super(name, surname, email, gender, birthDate, username, role, password);
     }
 }
+
+
+
+

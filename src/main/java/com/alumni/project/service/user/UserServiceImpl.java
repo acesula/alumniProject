@@ -4,7 +4,9 @@ import com.alumni.project.dal.entity.ContactDetails;
 import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.ContactDetailsRepository;
 import com.alumni.project.dal.repository.UserRepository;
+import com.alumni.project.dto.user.GetUserDto;
 import com.alumni.project.dto.user.UserDto;
+import com.alumni.project.dto.user.UserInfoDto;
 import com.alumni.project.dto.user.UserLoginDto;
 import com.alumni.project.security.ErrorResponse;
 import com.alumni.project.service.mapping.MappingServiceImpl;
@@ -110,6 +112,19 @@ public class UserServiceImpl implements UserService {
         throw new RuntimeException("User not found");
     }
 
+
+    public List<UserInfoDto> getUserInfoByUsername(String username){
+
+        try {
+            List<UserInfoDto> result = this.userRepository.getUserInfoByUsername(username).stream().toList();
+            if(!result.isEmpty()){
+                return  result;
+            }
+        } catch (Exception e){
+            System.out.println("----error in getting user info"+ e.getMessage());
+        }
+        return null;
+    }
     @Override
     public UserDto update(UUID id, UserDto userDto) {
         User user = userRepository.findById(id).orElseThrow(RuntimeException::new);
