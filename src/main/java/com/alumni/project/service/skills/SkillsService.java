@@ -15,7 +15,7 @@ public interface SkillsService {
 
     List<SkillsDto> findByUser(UUID id,String username);
 
-    SkillsDto findById(UUID id);
+
 
     SkillsDto update(UUID id, Skills dto);
 

@@ -28,14 +28,15 @@ public class SkillsServiceImpl implements SkillsService {
     @Override
     public void save(String username, Skills skills) {
         var user = userRepository.findByUsername(username);
-        skills.setUser(user);
         user.getSkills().add(skills);
+        skills.setUser(user);
         skillsRepository.save(skills);
     }
 
     public ResponseEntity<ErrorResponse> saveSkill(String username, Skills skills) {
         try {
-            if (userRepository.existsByUsername(username)) {
+            User user = userRepository.findByUsername(username);
+            if (user != null) {
                 save(username, skills);
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {
@@ -70,15 +71,7 @@ public class SkillsServiceImpl implements SkillsService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public SkillsDto findById(UUID id) {
 
-        var optional = skillsRepository.findById(id);
-        if (optional.isPresent()) {
-            return map(optional.get());
-        }
-        throw new RuntimeException("Skill not found");
-    }
 
 
     @Override
@@ -86,7 +79,7 @@ public class SkillsServiceImpl implements SkillsService {
 
         var skill = skillsRepository.findById(id).orElseThrow(RuntimeException::new);
         skill.setSkillField(skillDto.getSkillField());
-        skill.setSkillField(skillDto.getSkillField());
+        skill.setSkillDescription(skillDto.getSkillDescription());
 
 
         return map(skillsRepository.save(skill));

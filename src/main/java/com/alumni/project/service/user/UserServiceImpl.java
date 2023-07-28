@@ -8,9 +8,9 @@ import com.alumni.project.dal.repository.RoleRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.user.GetUserDto;
 import com.alumni.project.dto.user.UserDto;
+import com.alumni.project.dto.user.UserInfoDto;
 import com.alumni.project.dto.user.UserLoginDto;
 import com.alumni.project.security.ErrorResponse;
-import com.alumni.project.service.contactdetails.ContactDetailsServiceImp;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +46,10 @@ public class UserServiceImpl implements UserService {
     public User findByUsernameAndPassword(String username, String password) {
         return userRepository.findByUsernameAndPassword(username, password);
     }
+
+//    public List<UserInfoDto> getUsersWithSkillsByUsername(String username) {
+//        return userRepository.getUserInfoByUsername(username);
+//    }
 
     public void save(UserDto userDto) {
         var user = new User(
@@ -122,10 +126,26 @@ public class UserServiceImpl implements UserService {
         var optional = userRepository.findById(id);
         if (optional.isPresent()) {
             return map(optional.get());
+
         }
         throw new RuntimeException("User not found");
     }
 
+
+    public List<UserInfoDto> getUserInfoByUsername(String username){
+
+        try {
+            List<UserInfoDto> result = this.userRepository.getUserInfoByUsername(username).stream().toList();
+//            UserInfoDto result = this.userRepository.getUserInfoByUsername(username);
+
+            if(!result.isEmpty()){
+                return  result;
+            }
+        } catch (Exception e){
+            System.out.println("----error in getting user info"+ e.getMessage());
+        }
+        return null;
+    }
     @Override
     public GetUserDto update(UUID id, UserDto userDto) {
         var user = userRepository.findById(id).orElseThrow(RuntimeException::new);
@@ -145,6 +165,7 @@ public class UserServiceImpl implements UserService {
     public void delete(String username) {
         userRepository.deleteByUsername(username);
     }
+
 
 
     private GetUserDto map(User user) {

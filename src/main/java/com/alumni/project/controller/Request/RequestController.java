@@ -28,9 +28,9 @@ public class RequestController {
     public void save(@Valid @PathVariable String sender,@Valid @PathVariable String receiver) {
         requestsService.sendRequest(sender,receiver);
     }
-    @GetMapping("/{username}")
-    public List<Request> findAll(@PathVariable String username) {
-        return requestsService.findAll();
+    @GetMapping("find-by-username/{username}")
+    public List<Request> findByUsername(@PathVariable String username) {
+        return requestsService.findAllByUsername(username);
     }
 
     @GetMapping("/{id}")
