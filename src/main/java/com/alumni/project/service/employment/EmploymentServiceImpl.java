@@ -6,6 +6,7 @@ import com.alumni.project.dal.repository.EmploymentRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.employment.EmploymentDto;
 import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ public class EmploymentServiceImpl implements EmploymentService {
 
     private final EmploymentRepository employmentRepository;
     private final UserRepository userRepository;
+    private final MappingServiceImpl mappingService;
 
     @Override
     public void save(String username, Employment employment) {
@@ -59,7 +61,7 @@ public class EmploymentServiceImpl implements EmploymentService {
     public List<EmploymentDto> findAll() {
         return employmentRepository.findAll()
                 .stream()
-                .map(this::map)
+                .map(mappingService::convertToEmploymentDto)
                 .collect(Collectors.toList());
     }
 
@@ -67,7 +69,7 @@ public class EmploymentServiceImpl implements EmploymentService {
     public EmploymentDto findById(UUID id) {
         var optional = employmentRepository.findById(id);
         if (optional.isPresent()) {
-            return map(optional.get());
+            return mappingService.convertToEmploymentDto(optional.get());
         }
         throw new RuntimeException("Employment not found");
     }
@@ -76,12 +78,12 @@ public class EmploymentServiceImpl implements EmploymentService {
     public List<EmploymentDto> findByUser(String username) {
         return employmentRepository.findByUser_Username(username)
                 .stream()
-                .map(this::map)
+                .map(mappingService::convertToEmploymentDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Employment update(UUID id, Employment employmentNew) {
+    public EmploymentDto update(UUID id, EmploymentDto employmentNew) {
         var employment = employmentRepository.findById(id).orElseThrow(RuntimeException::new);
         employment.setCompany(employmentNew.getCompany());
         employment.setJob(employmentNew.getJob());
@@ -89,7 +91,7 @@ public class EmploymentServiceImpl implements EmploymentService {
         employment.setEndDate(employmentNew.getEndDate());
         employment.setStatus(employmentNew.isStatus());
 
-        return employmentRepository.save(employment);
+        return mappingService.convertToEmploymentDto(employmentRepository.save(employment));
     }
 
     @Override
@@ -97,15 +99,5 @@ public class EmploymentServiceImpl implements EmploymentService {
         employmentRepository.deleteById(id);
     }
 
-    public EmploymentDto map(Employment employment){
-        var dto = new EmploymentDto();
-        dto.setCompany(employment.getCompany());
-        dto.setJob(employment.getJob());
-        dto.setStartDate(employment.getStartDate());
-        dto.setEndDate(employment.getEndDate());
-        dto.setStatus(employment.isStatus());
-
-        return dto;
-    }
 }
 

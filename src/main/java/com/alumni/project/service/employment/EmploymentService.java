@@ -16,7 +16,7 @@ public interface EmploymentService {
 
     List<EmploymentDto> findByUser(String username);
 
-    Employment update(UUID uuid,Employment employment);
+    EmploymentDto update(UUID uuid,EmploymentDto employment);
 
     void delete(UUID id);
 

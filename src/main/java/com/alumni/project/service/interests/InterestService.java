@@ -18,5 +18,5 @@ public interface InterestService {
 
     void deleteById(UUID id);
 
-    Interests update(UUID id, Interests interests);
+    InterestsDto update(UUID id, InterestsDto interests);
 }

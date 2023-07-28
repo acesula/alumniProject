@@ -17,6 +17,7 @@ public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificat
     long deleteByUsername(String username);
     boolean existsByEmail(String email);
 
+    Optional<User> findByEmail(String email);
 
     boolean existsByUsername(String username);
 

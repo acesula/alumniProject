@@ -16,5 +16,5 @@ public interface EventService {
 
     void delete(UUID uuid);
 
-    Event update(UUID uuid, Event event);
+    EventDto update(UUID uuid, EventDto eventDto);
 }

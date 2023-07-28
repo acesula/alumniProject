@@ -40,8 +40,8 @@ public class EmploymentController {
     }
 
     @PatchMapping("/{id}")
-    public Employment update(@PathVariable UUID id,@RequestBody Employment employment){
-        return employmentService.update(id, employment);
+    public EmploymentDto update(@PathVariable UUID id,@RequestBody EmploymentDto employmentDto){
+        return employmentService.update(id, employmentDto);
     }
 
     @DeleteMapping("/{id}")

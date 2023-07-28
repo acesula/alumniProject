@@ -25,7 +25,7 @@ public class ContactDetailsController {
 //    }
 
     @GetMapping("/{email}")
-    public ContactDetailsDto findById(@PathVariable String email) {
+    public ContactDetailsDto findByEmail(@PathVariable String email) {
         return contactDetailsService.findByEmail(email);
     }
 
@@ -35,7 +35,7 @@ public class ContactDetailsController {
     }
 
     @DeleteMapping("/{email}")
-    public void deleteById(@PathVariable String email) {
+    public void deleteByEmail(@PathVariable String email) {
         contactDetailsService.deleteByEmail(email);
     }
 

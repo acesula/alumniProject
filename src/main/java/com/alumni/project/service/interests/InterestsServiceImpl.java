@@ -5,6 +5,7 @@ import com.alumni.project.dal.repository.InterestsRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.interests.InterestsDto;
 import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ public class InterestsServiceImpl implements InterestService {
 
     private final InterestsRepository interestsRepository;
     private final UserRepository userRepository;
+    private final MappingServiceImpl mappingService;
 
     @Override
     public void save(String username, Interests interests) {
@@ -52,7 +54,7 @@ public class InterestsServiceImpl implements InterestService {
     public List<InterestsDto> findAll() {
         return interestsRepository.findAll()
                 .stream()
-                .map(this::map)
+                .map(mappingService::convertToInterestsDto)
                 .collect(Collectors.toList());
     }
 
@@ -60,7 +62,7 @@ public class InterestsServiceImpl implements InterestService {
     public List<InterestsDto> findByUser(String username) {
         return interestsRepository.findByUser_Username(username)
                 .stream()
-                .map(this::map)
+                .map(mappingService::convertToInterestsDto)
                 .collect(Collectors.toList());
     }
 
@@ -68,7 +70,7 @@ public class InterestsServiceImpl implements InterestService {
     public InterestsDto findById(UUID id) {
         var optional = interestsRepository.findById(id);
         if (optional.isPresent()) {
-            return map(optional.get());
+            return mappingService.convertToInterestsDto(optional.get());
         }
         throw new RuntimeException("No interest found");
     }
@@ -79,17 +81,10 @@ public class InterestsServiceImpl implements InterestService {
     }
 
     @Override
-    public Interests update(UUID id, Interests interests) {
+    public InterestsDto update(UUID id, InterestsDto interests) {
         var interest = interestsRepository.findById(id).orElseThrow(RuntimeException::new);
         interest.setInterestDescription(interests.getInterestDescription());
 
-        return interestsRepository.save(interest);
-    }
-
-    public InterestsDto map(Interests interests) {
-        var dto = new InterestsDto();
-        dto.setInterestDescription(interests.getInterestDescription());
-
-        return dto;
+        return mappingService.convertToInterestsDto(interestsRepository.save(interest));
     }
 }

@@ -45,7 +45,7 @@ public class InterestsController {
     }
 
     @PatchMapping("/{id}")
-    public Interests update(@PathVariable UUID id, @RequestBody Interests interest){
+    public InterestsDto update(@PathVariable UUID id, @RequestBody InterestsDto interest){
         return interestsService.update(id, interest);
     }
 

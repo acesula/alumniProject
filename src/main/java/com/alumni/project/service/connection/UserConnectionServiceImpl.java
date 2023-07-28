@@ -5,6 +5,7 @@ import com.alumni.project.dal.repository.UserConnectionRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.connection.UserConnectionDto;
 import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ public class UserConnectionServiceImpl implements UserConnectionService {
 
     private final UserConnectionRepository userConnectionRepository;
     private final UserRepository userRepository;
+    private final MappingServiceImpl mappingService;
 
     @Override
     public void save(String username, UserConnection userConnection) {
@@ -67,7 +69,7 @@ public class UserConnectionServiceImpl implements UserConnectionService {
     public List<UserConnectionDto> findAll() {
         return userConnectionRepository.findAll()
                 .stream()
-                .map(this::map)
+                .map(mappingService::convertToUserConnectionDto)
                 .collect(Collectors.toList());
     }
 
@@ -75,15 +77,15 @@ public class UserConnectionServiceImpl implements UserConnectionService {
     public List<UserConnectionDto> findByUser(String username) {
         return userConnectionRepository.findByUserConnection_Username(username)
                 .stream()
-                .map(this::map)
+                .map(mappingService::convertToUserConnectionDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public UserConnection findById(UUID uuid) {
+    public UserConnectionDto findById(UUID uuid) {
         var optional = userConnectionRepository.findById(uuid);
         if (optional.isPresent()) {
-            return optional.get();
+            return mappingService.convertToUserConnectionDto(optional.get());
         }
         throw new RuntimeException("Connection not found");
     }
@@ -93,10 +95,5 @@ public class UserConnectionServiceImpl implements UserConnectionService {
         userConnectionRepository.deleteByFriend(username);
     }
 
-    public UserConnectionDto map(UserConnection userConnection) {
-        var dto = new UserConnectionDto();
-        dto.setFriend(userConnection.getFriend());
-        dto.setStatus(userConnection.isStatus());
-        return dto;
-    }
+
 }

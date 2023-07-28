@@ -11,7 +11,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-
+@NoArgsConstructor
 @AllArgsConstructor
 public class Skills extends Base {
     private String skillField;

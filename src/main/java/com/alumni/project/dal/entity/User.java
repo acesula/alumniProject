@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -16,6 +19,7 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User extends Base {
+
     private String name;
     private String surname;
     private String gender;
@@ -24,13 +28,11 @@ public class User extends Base {
     private String username;
     private String password;
     private String description;
-    private String profilePicture;
 
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinTable(name = "users_roles", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
-    )
-    private List<Role> roles = new ArrayList<>();
+    private String role;
+    private String profilePicture;
+    @Column(nullable = false, columnDefinition = "boolean default true")
+    private boolean enabled;
 
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
@@ -64,13 +66,6 @@ public class User extends Base {
     private Collection<Friends> friend;
 
     public User(String name, String surname, String email, LocalDate birthDate, String username, String password, String gender) {
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.birthDate = birthDate;
-        this.username = username;
-        this.password = password;
-        this.gender = gender;
+        super();
     }
-
 }

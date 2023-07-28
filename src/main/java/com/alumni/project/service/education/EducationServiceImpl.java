@@ -7,6 +7,7 @@ import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.education.EducationDto;
 import com.alumni.project.dto.user.GetUserDto;
 import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 public class EducationServiceImpl implements EducationService {
     private final EducationRepository educationRepository;
     private final UserRepository userRepository;
+    private final MappingServiceImpl mappingService;
 
     @Override
     public void save(String username, Education education) {
@@ -61,7 +63,7 @@ public class EducationServiceImpl implements EducationService {
     public List<EducationDto> findAll() {
         return educationRepository.findAll()
                 .stream()
-                .map(this::map)
+                .map(mappingService::convertToEducationDto)
                 .collect(Collectors.toList());
     }
 
@@ -69,7 +71,7 @@ public class EducationServiceImpl implements EducationService {
     public EducationDto findById(UUID id) {
         var optional = educationRepository.findById(id);
         if (optional.isPresent()) {
-            return map(optional.get());
+            return mappingService.convertToEducationDto(optional.get());
         }
         throw new RuntimeException("Education not found");
     }
@@ -78,12 +80,12 @@ public class EducationServiceImpl implements EducationService {
     public List<EducationDto> findByUser(String username) {
         return educationRepository.findByUser_Username(username)
                 .stream()
-                .map(this::map)
+                .map(mappingService::convertToEducationDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Education update(UUID id, Education education) {
+    public EducationDto update(UUID id, EducationDto education) {
         var ed = educationRepository.findById(id).orElseThrow(RuntimeException::new);
         ed.setInstitution(education.getInstitution());
         ed.setDegree(education.getDegree());
@@ -92,25 +94,11 @@ public class EducationServiceImpl implements EducationService {
         ed.setEndDate(education.getEndDate());
         ed.setFinished(education.isFinished());
 
-
-        return educationRepository.save(education);
+        return mappingService.convertToEducationDto(educationRepository.save(ed));
     }
 
     @Override
     public void delete(UUID id) {
         educationRepository.deleteById(id);
-
-    }
-    private EducationDto map(Education education) {
-        var dto = new EducationDto();
-        dto.setInstitution(education.getInstitution());
-        dto.setDegree(education.getDegree());
-        dto.setFieldOfStudy(education.getFieldOfStudy());
-        dto.setStartDate(education.getStartDate());
-        dto.setEndDate(education.getEndDate());
-        dto.setFinished(education.isFinished());
-
-        return dto;
-
     }
 }

@@ -5,6 +5,7 @@ import com.alumni.project.dal.repository.ContactDetailsRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.contactdetails.ContactDetailsDto;
 import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ public class ContactDetailsServiceImp implements ContactDetailsService {
 
     private final ContactDetailsRepository contactDetailsRepository;
     private final UserRepository userRepository;
+    private final MappingServiceImpl mappingService;
 
 //    @Override
 //    public void save(String username, ContactDetails contactDetails) {
@@ -60,7 +62,7 @@ public class ContactDetailsServiceImp implements ContactDetailsService {
     public ContactDetailsDto findByEmail(String email) {
         var optional = contactDetailsRepository.findByEmail(email);
         if(optional.isPresent()){
-            return map(optional.get());
+            return mappingService.convertToContactDetailsDto(optional.get());
         }
         throw new RuntimeException("Could not find contact details");
     }
@@ -69,7 +71,7 @@ public class ContactDetailsServiceImp implements ContactDetailsService {
     public List<ContactDetailsDto> findByUser(String username) {
         return contactDetailsRepository.findByUser_Username(username)
                 .stream()
-                .map(this::map)
+                .map(mappingService::convertToContactDetailsDto)
                 .collect(Collectors.toList());
     }
 
@@ -89,18 +91,6 @@ public class ContactDetailsServiceImp implements ContactDetailsService {
         contact.setLinkedIn(contactDetailsDto.getLinkedIn());
         contact.setZipCode(contactDetailsDto.getZipCode());
 
-        return map(contactDetailsRepository.save(contact));
-    }
-
-    public ContactDetailsDto map(ContactDetails contactDetails){
-        var dto = new ContactDetailsDto();
-        dto.setEmail(contactDetails.getEmail());
-        dto.setAddress(contactDetails.getAddress());
-        dto.setCity(contactDetails.getCity());
-        dto.setCountry(contactDetails.getCountry());
-        dto.setZipCode(contactDetails.getZipCode());
-        dto.setLinkedIn(contactDetails.getLinkedIn());
-
-        return dto;
+        return mappingService.convertToContactDetailsDto(contactDetailsRepository.save(contact));
     }
 }

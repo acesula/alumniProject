@@ -34,12 +34,12 @@ public class UserController {
     }
 
     @GetMapping
-    public List<GetUserDto> findAll() {
+    public List<UserDto> findAll() {
         return userService.findAll();
     }
 
     @GetMapping("/{id}")
-    public GetUserDto findById(@PathVariable UUID id) {
+    public UserDto findById(@PathVariable UUID id) {
         return userService.findById(id);
     }
 
@@ -49,7 +49,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public GetUserDto update(@PathVariable UUID id, @RequestBody UserDto dto) {
+    public UserDto update(@PathVariable UUID id, @RequestBody UserDto dto) {
         return userService.update(id, dto);
     }
 

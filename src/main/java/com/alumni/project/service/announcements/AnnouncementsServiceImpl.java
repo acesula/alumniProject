@@ -7,6 +7,7 @@ import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.announcements.AnnouncementsDto;
 import com.alumni.project.dto.user.GetUserDto;
 import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ public class AnnouncementsServiceImpl implements AnnouncementsService {
 
     private final AnnouncementsRepository announcementsRepository;
     private final UserRepository userRepository;
+    private final MappingServiceImpl mappingService;
 
     @Override
     public void save(String username, Announcements announcement) {
@@ -54,7 +56,7 @@ public class AnnouncementsServiceImpl implements AnnouncementsService {
     public List<AnnouncementsDto> findAll() {
         return announcementsRepository.findAll()
                 .stream()
-                .map(this::map)
+                .map(mappingService::convertToAnnouncementsDto)
                 .collect(Collectors.toList());
     }
 
@@ -62,7 +64,7 @@ public class AnnouncementsServiceImpl implements AnnouncementsService {
     public List<AnnouncementsDto> findByUser(String username) {
         return announcementsRepository.findByUser_Username(username)
                 .stream()
-                .map(this::map)
+                .map(mappingService::convertToAnnouncementsDto)
                 .collect(Collectors.toList());
     }
 
@@ -77,11 +79,5 @@ public class AnnouncementsServiceImpl implements AnnouncementsService {
         announc.setAnnouncementDescription(announcement.getAnnouncementDescription());
 
         return announcementsRepository.save(announc);
-    }
-
-    private AnnouncementsDto map(Announcements announcements) {
-        var dto = new AnnouncementsDto();
-        dto.setAnnouncementDescription(announcements.getAnnouncementDescription());
-        return dto;
     }
 }

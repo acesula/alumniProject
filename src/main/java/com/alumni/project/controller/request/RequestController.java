@@ -1,17 +1,9 @@
-package com.alumni.project.controller.Request;
+package com.alumni.project.controller.request;
 
 import com.alumni.project.dal.entity.Request;
-import com.alumni.project.dal.entity.Skills;
-import com.alumni.project.dto.skills.SkillsDto;
-import com.alumni.project.dto.user.GetUserDto;
-import com.alumni.project.dto.user.UserDto;
-import com.alumni.project.security.ErrorResponse;
 import com.alumni.project.service.request.RequestServiceImpl;
-import com.alumni.project.service.skills.SkillsServiceImpl;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,10 +20,10 @@ public class RequestController {
     public void save(@Valid @PathVariable String sender,@Valid @PathVariable String receiver) {
         requestsService.sendRequest(sender,receiver);
     }
-    @GetMapping("find-by-username/{username}")
-    public List<Request> findByUsername(@PathVariable String username) {
-        return requestsService.findAllByUsername(username);
-    }
+//    @GetMapping("/{username}")
+//    public List<Request> findAll(@PathVariable String username) {
+//        return requestsService.findAll();
+//    }
 
     @GetMapping("/{id}")
     public Request findById(@PathVariable UUID id) {

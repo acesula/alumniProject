@@ -1,12 +1,12 @@
 package com.alumni.project.service.skills;
 
 import com.alumni.project.dal.entity.Skills;
-import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.SkillsRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.skills.SkillsDto;
-import com.alumni.project.dto.user.GetUserDto;
+import com.alumni.project.dto.user.UserDto;
 import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.service.mapping.MappingServiceImpl;
 import com.alumni.project.service.user.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,20 +23,20 @@ public class SkillsServiceImpl implements SkillsService {
     private final SkillsRepository skillsRepository;
     private final UserRepository userRepository;
     private final UserServiceImpl userService;
+    private final MappingServiceImpl mappingService;
 
 
     @Override
     public void save(String username, Skills skills) {
         var user = userRepository.findByUsername(username);
-        user.getSkills().add(skills);
         skills.setUser(user);
+        user.getSkills().add(skills);
         skillsRepository.save(skills);
     }
 
     public ResponseEntity<ErrorResponse> saveSkill(String username, Skills skills) {
         try {
-            User user = userRepository.findByUsername(username);
-            if (user != null) {
+            if (userRepository.existsByUsername(username)) {
                 save(username, skills);
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {
@@ -58,16 +58,16 @@ public class SkillsServiceImpl implements SkillsService {
 
         return skillsRepository.findAll()
                 .stream()
-                .map(this::map)
+                .map(mappingService::convertToSkillsDto)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<SkillsDto> findByUser(UUID id, String username) {
-        GetUserDto user = this.userService.findById(id);
+        UserDto user = this.userService.findById(id);
         return skillsRepository.findByUser_Username(user.getUsername())
                 .stream()
-                .map(this::map)
+                .map(mappingService::convertToSkillsDto)
                 .collect(Collectors.toList());
     }
 
@@ -82,7 +82,7 @@ public class SkillsServiceImpl implements SkillsService {
         skill.setSkillDescription(skillDto.getSkillDescription());
 
 
-        return map(skillsRepository.save(skill));
+        return mappingService.convertToSkillsDto(skillsRepository.save(skill));
     }
 
     @Override
@@ -90,11 +90,4 @@ public class SkillsServiceImpl implements SkillsService {
         skillsRepository.deleteById(id);
     }
 
-    private SkillsDto map(Skills skills) {
-        var dto = new SkillsDto();
-        dto.setSkillDescription(skills.getSkillDescription());
-        dto.setSkillField(skills.getSkillField());
-
-        return dto;
-    }
 }
