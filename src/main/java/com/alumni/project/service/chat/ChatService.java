@@ -1,9 +1,6 @@
 package com.alumni.project.service.chat;
 
 import com.alumni.project.dal.entity.Chat;
-import com.alumni.project.dal.entity.Event;
-import com.alumni.project.dal.entity.UserConnection;
-import com.alumni.project.dto.event.EventDto;
 
 import java.util.List;
 import java.util.UUID;

@@ -42,16 +42,6 @@ public class MappingServiceImpl implements MappingService {
     }
 
     @Override
-    public UserConnectionDto convertToUserConnectionDto(UserConnection userConnection) {
-        return modelMapper.map(userConnection, UserConnectionDto.class);
-    }
-
-    @Override
-    public UserConnection convertToUserConnection(UserConnectionDto userConnectionDto) {
-        return modelMapper.map(userConnectionDto, UserConnection.class);
-    }
-
-    @Override
     public ContactDetailsDto convertToContactDetailsDto(ContactDetails contactDetails) {
         return modelMapper.map(contactDetails, ContactDetailsDto.class);
     }

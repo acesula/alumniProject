@@ -23,11 +23,6 @@ public interface MappingService {
 
     Announcements convertToAnnouncements(AnnouncementsDto announcementsDto);
 
-    //Connection
-    UserConnectionDto convertToUserConnectionDto(UserConnection userConnection);
-
-    UserConnection convertToUserConnection(UserConnectionDto userConnectionDto);
-
     //ContactDetails
     ContactDetailsDto convertToContactDetailsDto(ContactDetails contactDetails);
 

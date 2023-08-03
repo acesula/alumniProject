@@ -55,10 +55,6 @@ public class User extends Base {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private List<Event> events;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userConnection", fetch = FetchType.LAZY)
-    private List<UserConnection> userConnections;
-
-
     @OneToMany(mappedBy="user1", fetch = FetchType.EAGER)
     private Collection<Friends> friends;
     @OneToMany(mappedBy="friend", fetch = FetchType.EAGER)
