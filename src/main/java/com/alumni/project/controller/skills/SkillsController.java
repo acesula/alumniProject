@@ -2,10 +2,8 @@ package com.alumni.project.controller.skills;
 
 import com.alumni.project.dal.entity.Skills;
 import com.alumni.project.dto.skills.SkillsDto;
-import com.alumni.project.dto.user.GetUserDto;
-import com.alumni.project.dto.user.UserDto;
 import com.alumni.project.security.ErrorResponse;
-import com.alumni.project.service.skills.SkillsServiceImpl;
+import com.alumni.project.service.skills.SkillsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +17,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class SkillsController {
 
-    private final SkillsServiceImpl skillsService;
+    private final SkillsService skillsService;
 
-    @PostMapping("/{username}")
-    public ResponseEntity<ErrorResponse> save(@Valid @PathVariable String username, @RequestBody Skills skill) {
-        return skillsService.saveSkill(username, skill);
+    @PostMapping("/{id}")
+    public ResponseEntity<ErrorResponse> save(@Valid @PathVariable UUID id, @RequestBody Skills skill) {
+        return skillsService.saveSkill(id, skill);
     }
     @GetMapping
     public List<SkillsDto> findAll() {
@@ -32,9 +30,9 @@ public class SkillsController {
 
 
 
-    @GetMapping("/{username}")
-    public List<SkillsDto> findByUser(@PathVariable UUID id, String username){
-        return skillsService.findByUser(id,username);
+    @GetMapping("/{id}")
+    public List<SkillsDto> findByUser(@PathVariable UUID id){
+        return skillsService.findById(id);
     }
 
     @PatchMapping("/{id}")

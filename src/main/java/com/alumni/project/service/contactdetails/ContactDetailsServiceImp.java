@@ -59,8 +59,8 @@ public class ContactDetailsServiceImp implements ContactDetailsService {
 //    }
 
     @Override
-    public ContactDetailsDto findByEmail(String email) {
-        var optional = contactDetailsRepository.findByEmail(email);
+    public ContactDetailsDto findByUserId(UUID uuid) {
+        var optional = contactDetailsRepository.findByUser_Id(uuid);
         if(optional.isPresent()){
             return mappingService.convertToContactDetailsDto(optional.get());
         }
@@ -81,8 +81,8 @@ public class ContactDetailsServiceImp implements ContactDetailsService {
     }
 
     @Override
-    public ContactDetailsDto update(String email, ContactDetailsDto contactDetailsDto) {
-        var contact = contactDetailsRepository.findByEmail(email).orElseThrow(RuntimeException::new);
+    public ContactDetailsDto update(UUID uuid, ContactDetailsDto contactDetailsDto) {
+        var contact = contactDetailsRepository.findByUser_Id(uuid).orElseThrow(RuntimeException::new);
         contact.setAddress(contactDetailsDto.getAddress());
         contact.setEmail(contactDetailsDto.getEmail());
         contact.setCountry(contactDetailsDto.getCountry());

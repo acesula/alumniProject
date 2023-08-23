@@ -25,23 +25,23 @@ public class EmploymentServiceImpl implements EmploymentService {
     private final MappingServiceImpl mappingService;
 
     @Override
-    public void save(String username, Employment employment) {
-        var user = userRepository.findByUsername(username);
+    public void save(UUID uuid, Employment employment) {
+        var user = userRepository.findById(uuid).orElseThrow(RuntimeException::new);
         employment.setUser(user);
         user.getEmployments().add(employment);
         employmentRepository.save(employment);
     }
 
-    public ResponseEntity<ErrorResponse> saveEmployment(String username, Employment employment) {
+    public ResponseEntity<ErrorResponse> saveEmployment(UUID uuid, Employment employment) {
         try {
-            if (userRepository.existsByUsername(username)) {
+            if (userRepository.existsById(uuid)) {
                 if (employmentRepository.existsByCompanyAndJob(employment.getCompany(), employment.getJob())) {
                     ErrorResponse errorResponse = new ErrorResponse();
                     errorResponse.setMessage("Employment already exists!");
                     errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
                     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                 }
-                save(username, employment);
+                save(uuid, employment);
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {
                 ErrorResponse errorResponse = new ErrorResponse();
@@ -66,12 +66,11 @@ public class EmploymentServiceImpl implements EmploymentService {
     }
 
     @Override
-    public EmploymentDto findById(UUID id) {
-        var optional = employmentRepository.findById(id);
-        if (optional.isPresent()) {
-            return mappingService.convertToEmploymentDto(optional.get());
-        }
-        throw new RuntimeException("Employment not found");
+    public List<EmploymentDto> findById(UUID id) {
+        return employmentRepository.findByUser_Id(id)
+                .stream()
+                .map(mappingService::convertToEmploymentDto)
+                .collect(Collectors.toList());
     }
 
     @Override

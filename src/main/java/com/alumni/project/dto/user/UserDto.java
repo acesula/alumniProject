@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 public class UserDto {
+    private UUID id;
     private String name;
     private String surname;
     private String email;
@@ -19,4 +21,6 @@ public class UserDto {
     private String username;
     private String role;
     private String password;
+    private String profilePicture;
+    private String description;
 }

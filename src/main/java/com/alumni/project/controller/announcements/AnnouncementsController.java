@@ -3,7 +3,7 @@ package com.alumni.project.controller.announcements;
 import com.alumni.project.dal.entity.Announcements;
 import com.alumni.project.dto.announcements.AnnouncementsDto;
 import com.alumni.project.security.ErrorResponse;
-import com.alumni.project.service.announcements.AnnouncementsServiceImpl;
+import com.alumni.project.service.announcements.AnnouncementsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AnnouncementsController {
 
-    private final AnnouncementsServiceImpl announcementService;
+    private final AnnouncementsService announcementService;
 
     @PostMapping("/{username}")
     public ResponseEntity<ErrorResponse> save(@Valid @PathVariable String username, @RequestBody Announcements announcement) {

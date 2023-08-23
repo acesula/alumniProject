@@ -4,22 +4,32 @@ import com.alumni.project.dal.entity.ContactDetails;
 import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.ContactDetailsRepository;
 import com.alumni.project.dal.repository.UserRepository;
-import com.alumni.project.dto.user.GetUserDto;
-import com.alumni.project.dto.user.UserDto;
-import com.alumni.project.dto.user.UserInfoDto;
-import com.alumni.project.dto.user.UserLoginDto;
+import com.alumni.project.dto.user.*;
 import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.security.exception.AuthServerException;
 import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.Base64;
 
 @Service
 @RequiredArgsConstructor
@@ -39,9 +49,8 @@ public class UserServiceImpl implements UserService {
         return userRepository.existsByEmail(email);
     }
 
-
-    public User findByUsernameAndPassword(String username, String password) {
-        return userRepository.findByUsernameAndPassword(username, password);
+    public User findEntity(UUID id) {
+        return userRepository.findById(id).orElseThrow(RuntimeException::new);
     }
 
     public void save(UserDto userDto) {
@@ -77,23 +86,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public ResponseEntity<ErrorResponse> login(UserLoginDto login) {
-        try {
-            User user = findByUsernameAndPassword(login.getUsername(), login.getPassword());
-            if (user == null) {
-                ErrorResponse error = new ErrorResponse();
-                error.setMessage("Wrong credentials");
-                error.setErrorCode(HttpStatus.BAD_REQUEST.value());
-                return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-            }
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            ErrorResponse error = new ErrorResponse();
-            error.setMessage(e.getMessage());
-            error.setErrorCode(HttpStatus.BAD_REQUEST.value());
-            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-        }
-    }
+
 
     @Override
     public List<UserDto> findAll() {
@@ -116,7 +109,7 @@ public class UserServiceImpl implements UserService {
     public List<UserInfoDto> getUserInfoByUsername(String username){
 
         try {
-            List<UserInfoDto> result = this.userRepository.getUserInfoByUsername(username).stream().toList();
+            var result = this.userRepository.getUserInfoByUsername(username).stream().toList();
             if(!result.isEmpty()){
                 return  result;
             }
@@ -127,7 +120,7 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public UserDto update(UUID id, UserDto userDto) {
-        User user = userRepository.findById(id).orElseThrow(RuntimeException::new);
+        var user = findEntity(id);
         user.setName(userDto.getName());
         user.setSurname(userDto.getSurname());
         user.setEmail(userDto.getEmail());
@@ -144,4 +137,51 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteByUsername(username);
     }
 
+    @Override
+    public void uploadProfilePicture(MultipartFile multipartFile, UUID uuid) throws IOException {
+            var user = findEntity(uuid);
+            if (user.getProfilePicture() != null) {
+                String previousFilePath = "C:/Users/acesu/Desktop/3iSolutions/front/ProjectFront/src/assets/images/" + user.getProfilePicture();
+                Files.deleteIfExists(Paths.get(previousFilePath));
+            }
+            String uploadDir = "C:/Users/acesu/Desktop/3iSolutions/front/ProjectFront/src/assets/images/";
+            String fileName = uuid.toString() + "_" + multipartFile.getOriginalFilename();
+            Path filePath = Paths.get(uploadDir + fileName);
+            Files.copy(multipartFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+            user.setProfilePicture(fileName);
+            userRepository.save(user);
+
+
+    }
+
+    public void updateBio(UUID id, String bio) {
+        var user = findEntity(id);
+        user.setDescription(bio);
+        userRepository.save(user);
+    }
+
+    public void updateUsername(UUID id, String username) {
+        var user = findEntity(id);
+        user.setUsername(username);
+        userRepository.save(user);
+    }
+
+    public void updateEmail(UUID id, String email) {
+        var user = findEntity(id);
+        var contactDetails = contactDetailsRepository.findByUser_Id(id).orElseThrow(RuntimeException::new);
+        contactDetails.setEmail(email);
+        contactDetailsRepository.save(contactDetails);
+        user.setContactDetails(contactDetails);
+        user.setEmail(email);
+        userRepository.save(user);
+    }
+
+    public void updatePassword(UUID id, ChangePasswordDto changePasswordDto) {
+        var user = findEntity(id);
+        if (!passwordEncoder.matches(changePasswordDto.getOldPassword(), user.getPassword())) {
+            throw new AuthServerException("Password does not match");
+        }
+        user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
+        userRepository.save(user);
+    }
 }

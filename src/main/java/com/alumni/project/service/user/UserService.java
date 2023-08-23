@@ -1,13 +1,21 @@
 package com.alumni.project.service.user;
 
+import com.alumni.project.dto.user.ChangePasswordDto;
 import com.alumni.project.dto.user.UserDto;
+import com.alumni.project.dto.user.UserInfoDto;
+import com.alumni.project.security.ErrorResponse;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
 public interface UserService{
 
     void save(UserDto userDto);
+
+    ResponseEntity<ErrorResponse> register(UserDto userDto);
 
     List<UserDto> findAll();
 
@@ -17,6 +25,15 @@ public interface UserService{
 
     void delete(String username);
 
+    void uploadProfilePicture(MultipartFile multipartFile, UUID id) throws IOException;
 
+    void updateBio(UUID id, String bio);
 
+    void updateUsername(UUID id, String username);
+
+    void updateEmail(UUID id, String email);
+
+    void updatePassword(UUID id, ChangePasswordDto password);
+
+    List<UserInfoDto> getUserInfoByUsername(String username);
 }

@@ -3,8 +3,7 @@ package com.alumni.project.controller.education;
 import com.alumni.project.dal.entity.Education;
 import com.alumni.project.dto.education.EducationDto;
 import com.alumni.project.security.ErrorResponse;
-import com.alumni.project.service.education.EducationServiceImpl;
-import jakarta.validation.Valid;
+import com.alumni.project.service.education.EducationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +16,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class EducationController {
 
-    private final EducationServiceImpl educationService;
+    private final EducationService educationService;
 
-    @PostMapping("/{username}")
-    public ResponseEntity<ErrorResponse> save(@Valid @PathVariable String username, @RequestBody Education education) {
-        return educationService.saveEducation(username, education);
+    @PostMapping("/{id}")
+    public ResponseEntity<ErrorResponse> save(@PathVariable UUID id, @RequestBody Education education) {
+        return educationService.saveEducation(id, education);
     }
 
     @GetMapping
@@ -29,13 +28,13 @@ public class EducationController {
         return educationService.findAll();
     }
 
-    @GetMapping("/{username}")
-    public List<EducationDto> findByUser(@PathVariable String username) {
-        return educationService.findByUser(username);
-    }
+//    @GetMapping("/{username}")
+//    public List<EducationDto> findByUser(@PathVariable String username) {
+//        return educationService.findByUser(username);
+//    }
 
     @GetMapping("/{id}")
-    public EducationDto findById(@PathVariable UUID id) {
+    public List<EducationDto> findById(@PathVariable UUID id) {
         return educationService.findById(id);
     }
 

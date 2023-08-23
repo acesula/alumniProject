@@ -8,6 +8,7 @@ import com.alumni.project.dto.user.UserDto;
 import com.alumni.project.security.ErrorResponse;
 import com.alumni.project.service.mapping.MappingServiceImpl;
 import com.alumni.project.service.user.UserServiceImpl;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,17 +28,17 @@ public class SkillsServiceImpl implements SkillsService {
 
 
     @Override
-    public void save(String username, Skills skills) {
-        var user = userRepository.findByUsername(username);
+    public void save(UUID uuid, Skills skills) {
+        var user = userRepository.findById(uuid).orElseThrow(RuntimeException::new);
         skills.setUser(user);
         user.getSkills().add(skills);
         skillsRepository.save(skills);
     }
 
-    public ResponseEntity<ErrorResponse> saveSkill(String username, Skills skills) {
+    public ResponseEntity<ErrorResponse> saveSkill(UUID uuid, Skills skills) {
         try {
-            if (userRepository.existsByUsername(username)) {
-                save(username, skills);
+            if (userRepository.existsById(uuid)) {
+                save(uuid, skills);
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {
                 ErrorResponse errorResponse = new ErrorResponse();
@@ -63,9 +64,9 @@ public class SkillsServiceImpl implements SkillsService {
     }
 
     @Override
-    public List<SkillsDto> findByUser(UUID id, String username) {
-        UserDto user = this.userService.findById(id);
-        return skillsRepository.findByUser_Username(user.getUsername())
+    @Transactional
+    public List<SkillsDto> findById(UUID id) {
+        return skillsRepository.findByUser_Id(id)
                 .stream()
                 .map(mappingService::convertToSkillsDto)
                 .collect(Collectors.toList());

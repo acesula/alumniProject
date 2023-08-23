@@ -17,24 +17,24 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class InterestsServiceImpl implements InterestService {
+public class InterestsServiceImpl implements InterestsService {
 
     private final InterestsRepository interestsRepository;
     private final UserRepository userRepository;
     private final MappingServiceImpl mappingService;
 
     @Override
-    public void save(String username, Interests interests) {
-        var user = userRepository.findByUsername(username);
+    public void save(UUID uuid, Interests interests) {
+        var user = userRepository.findById(uuid).orElseThrow(RuntimeException::new);
         interests.setUser(user);
         user.getInterests().add(interests);
         interestsRepository.save(interests);
     }
 
-    public ResponseEntity<ErrorResponse> saveInterest(String username, Interests interests) {
+    public ResponseEntity<ErrorResponse> saveInterest(UUID uuid, Interests interests) {
         try {
-            if (userRepository.existsByUsername(username)) {
-                save(username, interests);
+            if (userRepository.existsById(uuid)) {
+                save(uuid, interests);
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {
                 ErrorResponse errorResponse = new ErrorResponse();
@@ -59,8 +59,8 @@ public class InterestsServiceImpl implements InterestService {
     }
 
     @Override
-    public List<InterestsDto> findByUser(String username) {
-        return interestsRepository.findByUser_Username(username)
+    public List<InterestsDto> findByUser(UUID id) {
+        return interestsRepository.findByUser_Id(id)
                 .stream()
                 .map(mappingService::convertToInterestsDto)
                 .collect(Collectors.toList());

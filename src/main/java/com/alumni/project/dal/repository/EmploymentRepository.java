@@ -14,5 +14,6 @@ public interface EmploymentRepository extends JpaRepository<Employment, UUID> {
 
     List<Employment> findByUser_Username(String username);
 
+    List<Employment> findByUser_Id(UUID id);
 
 }

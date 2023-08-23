@@ -3,7 +3,7 @@ package com.alumni.project.controller.interests;
 import com.alumni.project.dal.entity.Interests;
 import com.alumni.project.dto.interests.InterestsDto;
 import com.alumni.project.security.ErrorResponse;
-import com.alumni.project.service.interests.InterestsServiceImpl;
+import com.alumni.project.service.interests.InterestsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +17,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class InterestsController {
 
-    private final InterestsServiceImpl interestsService;
+    private final InterestsService interestsService;
 
-    @PostMapping("/{username}")
-    public ResponseEntity<ErrorResponse> save(@Valid @PathVariable String username, @RequestBody Interests interest){
-        return interestsService.saveInterest(username, interest);
+    @PostMapping("/{id}")
+    public ResponseEntity<ErrorResponse> save(@Valid @PathVariable UUID id, @RequestBody Interests interest){
+        return interestsService.saveInterest(id, interest);
     }
 
     @GetMapping
@@ -29,15 +29,11 @@ public class InterestsController {
         return interestsService.findAll();
     }
 
-    @GetMapping("/{username}")
-    public List<InterestsDto> findByUser(@PathVariable String username){
-        return interestsService.findByUser(username);
+    @GetMapping("/{id}")
+    public List<InterestsDto> findByUser(@PathVariable UUID id){
+        return interestsService.findByUser(id);
     }
 
-    @GetMapping("/{id}")
-    public InterestsDto findById(@PathVariable UUID id){
-        return interestsService.findById(id);
-    }
 
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable UUID id){

@@ -1,5 +1,6 @@
 package com.alumni.project.controller.friend;
 import com.alumni.project.dal.entity.Friends;
+import com.alumni.project.service.friends.FriendsService;
 import com.alumni.project.service.friends.FriendsServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.UUID;
 @RequestMapping("api/v1/friends")
 @RequiredArgsConstructor
 public class FriendController {
-    private final FriendsServiceImpl friendsService;
+    private final FriendsService friendsService;
 
     @PostMapping("/{sender}/{receiver}")
     public void save(@Valid @PathVariable String sender,@Valid @PathVariable String receiver) {

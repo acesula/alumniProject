@@ -3,7 +3,7 @@ package com.alumni.project.controller.event;
 import com.alumni.project.dal.entity.Event;
 import com.alumni.project.dto.event.EventDto;
 import com.alumni.project.security.ErrorResponse;
-import com.alumni.project.service.event.EventServiceImpl;
+import com.alumni.project.service.event.EventService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class EventController {
 
-    private final EventServiceImpl eventService;
+    private final EventService eventService;
 
     @PostMapping("/{username}")
     public ResponseEntity<ErrorResponse> save(@Valid @PathVariable String username, @RequestBody Event event) {

@@ -3,8 +3,7 @@ package com.alumni.project.controller.employment;
 import com.alumni.project.dal.entity.Employment;
 import com.alumni.project.dto.employment.EmploymentDto;
 import com.alumni.project.security.ErrorResponse;
-import com.alumni.project.service.employment.EmploymentServiceImpl;
-import jakarta.validation.Valid;
+import com.alumni.project.service.employment.EmploymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,15 +12,15 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/v1/employment")
+@RequestMapping("/api/v1/employment")
 @RequiredArgsConstructor
 public class EmploymentController {
 
-    private final EmploymentServiceImpl employmentService;
+    private final EmploymentService employmentService;
 
-    @PostMapping("/{username}")
-    public ResponseEntity<ErrorResponse> save(@Valid @PathVariable String username, @RequestBody Employment employment){
-        return employmentService.saveEmployment(username,employment);
+    @PostMapping("/{id}")
+    public ResponseEntity<ErrorResponse> save(@PathVariable UUID id, @RequestBody Employment employment){
+        return employmentService.saveEmployment(id,employment);
     }
 
     @GetMapping
@@ -30,14 +29,10 @@ public class EmploymentController {
     }
 
     @GetMapping("/{id}")
-    public EmploymentDto findById(@PathVariable UUID id){
+    public List<EmploymentDto> findById(@PathVariable UUID id){
         return employmentService.findById(id);
     }
 
-    @GetMapping("/{username}")
-    public List<EmploymentDto> findByUser(@PathVariable String username){
-        return employmentService.findByUser(username);
-    }
 
     @PatchMapping("/{id}")
     public EmploymentDto update(@PathVariable UUID id,@RequestBody EmploymentDto employmentDto){

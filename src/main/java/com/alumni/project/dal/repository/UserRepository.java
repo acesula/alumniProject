@@ -5,8 +5,10 @@ import com.alumni.project.dto.user.UserDto;
 import com.alumni.project.dto.user.UserInfoDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +16,10 @@ import java.util.UUID;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificationExecutor<User> {
+    @Transactional
+    @Modifying
+    @Query("update User u set u.profilePicture = ?1 where u.id = ?2")
+    void updateProfilePictureById(String profilePicture, UUID id);
     long deleteByUsername(String username);
     boolean existsByEmail(String email);
 
