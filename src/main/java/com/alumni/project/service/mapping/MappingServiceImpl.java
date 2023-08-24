@@ -9,6 +9,8 @@ import com.alumni.project.dto.employment.EmploymentDto;
 import com.alumni.project.dto.event.EventDto;
 import com.alumni.project.dto.interests.InterestsDto;
 import com.alumni.project.dto.skills.SkillsDto;
+import com.alumni.project.dto.user.RegisterDto;
+import com.alumni.project.dto.user.UpdatePersonalInfoDto;
 import com.alumni.project.dto.user.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -100,4 +102,21 @@ public class MappingServiceImpl implements MappingService {
     public Interests convertToInterests(InterestsDto interestsDto) {
         return modelMapper.map(interestsDto, Interests.class);
     }
+
+    @Override
+    public UpdatePersonalInfoDto convertToUpdatePersonalInfoDto(User user) {
+        return modelMapper.map(user, UpdatePersonalInfoDto.class);
+    }
+
+    @Override
+    public RegisterDto convertToRegisterDto(User user) {
+        return modelMapper.map(user, RegisterDto.class);
+    }
+
+    @Override
+    public User convertToUser(RegisterDto registerDto) {
+        return modelMapper.map(registerDto, User.class);
+    }
+
+
 }

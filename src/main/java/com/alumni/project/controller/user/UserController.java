@@ -23,8 +23,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<ErrorResponse> register(@Valid @RequestBody UserDto userDto) {
-       return userService.register(userDto);
+    public ResponseEntity<ErrorResponse> register(@Valid @RequestBody RegisterDto registerDto) {
+       return userService.register(registerDto);
     }
 
 
@@ -70,7 +70,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public UserDto update(@PathVariable UUID id, @RequestBody UserDto dto) {
+    public UpdatePersonalInfoDto update(@PathVariable UUID id, @RequestBody UpdatePersonalInfoDto dto) {
         return userService.update(id, dto);
     }
 

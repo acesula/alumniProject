@@ -9,6 +9,8 @@ import com.alumni.project.dto.employment.EmploymentDto;
 import com.alumni.project.dto.event.EventDto;
 import com.alumni.project.dto.interests.InterestsDto;
 import com.alumni.project.dto.skills.SkillsDto;
+import com.alumni.project.dto.user.RegisterDto;
+import com.alumni.project.dto.user.UpdatePersonalInfoDto;
 import com.alumni.project.dto.user.UserDto;
 
 public interface MappingService {
@@ -52,6 +54,12 @@ public interface MappingService {
     InterestsDto convertToInterestsDto(Interests interests);
 
     Interests convertToInterests(InterestsDto interestsDto);
+
+    UpdatePersonalInfoDto convertToUpdatePersonalInfoDto(User user);
+
+    RegisterDto convertToRegisterDto(User user);
+
+    User convertToUser(RegisterDto registerDto);
 
 
 }

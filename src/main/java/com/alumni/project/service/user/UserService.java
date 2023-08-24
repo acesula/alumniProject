@@ -1,8 +1,6 @@
 package com.alumni.project.service.user;
 
-import com.alumni.project.dto.user.ChangePasswordDto;
-import com.alumni.project.dto.user.UserDto;
-import com.alumni.project.dto.user.UserInfoDto;
+import com.alumni.project.dto.user.*;
 import com.alumni.project.security.ErrorResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,15 +11,15 @@ import java.util.UUID;
 
 public interface UserService{
 
-    void save(UserDto userDto);
+    void save(RegisterDto registerDto);
 
-    ResponseEntity<ErrorResponse> register(UserDto userDto);
+    ResponseEntity<ErrorResponse> register(RegisterDto registerDto);
 
     List<UserDto> findAll();
 
     UserDto findById(UUID id);
 
-    UserDto update(UUID id, UserDto user);
+    UpdatePersonalInfoDto update(UUID id, UpdatePersonalInfoDto user);
 
     void delete(String username);
 

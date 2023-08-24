@@ -7,7 +7,7 @@ import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.user.*;
 import com.alumni.project.security.ErrorResponse;
 import com.alumni.project.security.exception.AuthServerException;
-import com.alumni.project.service.mapping.MappingServiceImpl;
+import com.alumni.project.service.mapping.MappingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -29,7 +23,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import java.util.Base64;
+
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +31,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final ContactDetailsRepository contactDetailsRepository;
-    private final MappingServiceImpl mappingService;
+    private final MappingService mappingService;
     private final PasswordEncoder passwordEncoder;
 
 
@@ -53,30 +47,30 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id).orElseThrow(RuntimeException::new);
     }
 
-    public void save(UserDto userDto) {
-        var user = mappingService.convertToUser(userDto);
+    public void save(RegisterDto registerDto) {
+        var user = mappingService.convertToUser(registerDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         var contact = new ContactDetails();
-        contact.setEmail(userDto.getEmail());
+        contact.setEmail(registerDto.getEmail());
         contact.setUser(user);
         contactDetailsRepository.save(contact);
 
     }
 
-    public ResponseEntity<ErrorResponse> register(UserDto userDto) {
+    public ResponseEntity<ErrorResponse> register(RegisterDto registerDto) {
         try {
-            if (existsByUsername(userDto.getUsername())) {
+            if (existsByUsername(registerDto.getUsername())) {
                 ErrorResponse error = new ErrorResponse();
                 error.setMessage("Username already exists");
                 error.setErrorCode(HttpStatus.BAD_REQUEST.value());
                 return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-            } else if (existsByEmail(userDto.getEmail())) {
+            } else if (existsByEmail(registerDto.getEmail())) {
                 ErrorResponse error = new ErrorResponse();
                 error.setMessage("Email already exists");
                 error.setErrorCode(HttpStatus.BAD_REQUEST.value());
                 return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
             }
-            save(userDto);
+            save(registerDto);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             ErrorResponse error = new ErrorResponse();
@@ -119,17 +113,14 @@ public class UserServiceImpl implements UserService {
         return null;
     }
     @Override
-    public UserDto update(UUID id, UserDto userDto) {
+    public UpdatePersonalInfoDto update(UUID id, UpdatePersonalInfoDto userDto) {
         var user = findEntity(id);
         user.setName(userDto.getName());
         user.setSurname(userDto.getSurname());
-        user.setEmail(userDto.getEmail());
         user.setBirthDate(userDto.getBirthDate());
-        user.setUsername(userDto.getUsername());
-        user.setPassword(userDto.getPassword());
         user.setGender(userDto.getGender());
 
-        return mappingService.convertToUserDto(userRepository.save(user));
+        return mappingService.convertToUpdatePersonalInfoDto(userRepository.save(user));
     }
 
     @Override
