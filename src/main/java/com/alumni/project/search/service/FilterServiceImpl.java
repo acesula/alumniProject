@@ -5,6 +5,7 @@ import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.user.UserDto;
 import com.alumni.project.search.dto.SearchCriteria;
 import com.alumni.project.search.dto.SearchRequestDto;
+import com.alumni.project.service.mapping.MappingService;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
@@ -20,6 +21,7 @@ import java.util.Objects;
 public class FilterServiceImpl implements FilterService {
 
     private final UserRepository userRepository;
+    private final MappingService mappingService;
 
     public Specification<User> getSearchSpecification(SearchCriteria searchCriteria) {
         return (root, query, criteriaBuilder) -> {
@@ -70,21 +72,11 @@ public class FilterServiceImpl implements FilterService {
         // Convert User entities to UserDto objects
         List<UserDto> userDtos = new ArrayList<>();
         for (User user : users) {
-            UserDto userDto = convertToDto(user);
+            var userDto = mappingService.convertToUserDto(user);
             userDtos.add(userDto);
         }
 
         return userDtos;
     }
-    private UserDto convertToDto(User user) {
-        UserDto userDto = new UserDto();
-        userDto.setName(user.getName());
-        userDto.setSurname(user.getSurname());
-        userDto.setGender(user.getGender());
-        userDto.setBirthDate(user.getBirthDate());
-        userDto.setEmail(user.getEmail());
-        // Set other fields as needed
 
-        return userDto;
-    }
 }
