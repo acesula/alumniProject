@@ -1,5 +1,6 @@
 package com.alumni.project.dal.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
@@ -17,7 +18,9 @@ public class Education extends Base {
     private String institution;
     private String degree;
     private String fieldOfStudy;
+    @JsonFormat(pattern = "yyyy-MM-dd" , shape = JsonFormat.Shape.STRING)
     private LocalDate startDate;
+    @JsonFormat(pattern = "yyyy-MM-dd" , shape = JsonFormat.Shape.STRING)
     private LocalDate endDate;
     private boolean finished;
 

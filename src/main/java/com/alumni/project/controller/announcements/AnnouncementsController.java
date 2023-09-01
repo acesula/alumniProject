@@ -3,10 +3,12 @@ package com.alumni.project.controller.announcements;
 import com.alumni.project.dal.entity.Announcements;
 import com.alumni.project.dto.announcements.AnnouncementsDto;
 import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.announcements.AnnouncementsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +23,7 @@ public class AnnouncementsController {
 
     @PostMapping("/{username}")
     public ResponseEntity<ErrorResponse> save(@Valid @PathVariable String username, @RequestBody Announcements announcement) {
+//        var authenticatedUser = (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return announcementService.saveAnnouncement(username, announcement);
     }
 

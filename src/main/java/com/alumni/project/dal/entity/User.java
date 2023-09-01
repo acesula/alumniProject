@@ -31,6 +31,7 @@ public class User extends Base {
     private String description;
 
     private String role;
+    @Column(columnDefinition = "TEXT")
     private String profilePicture;
     private boolean enabled = true;
 

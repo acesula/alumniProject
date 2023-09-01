@@ -5,11 +5,13 @@ import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.user.UserDto;
 import com.alumni.project.search.dto.SearchCriteria;
 import com.alumni.project.search.dto.SearchRequestDto;
+import com.alumni.project.service.mapping.MappingService;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +22,7 @@ import java.util.Objects;
 public class FilterServiceImpl implements FilterService {
 
     private final UserRepository userRepository;
+    private final MappingService mappingService;
 
     public Specification<User> getSearchSpecification(SearchCriteria searchCriteria) {
         return (root, query, criteriaBuilder) -> {
@@ -28,16 +31,21 @@ public class FilterServiceImpl implements FilterService {
             } else if (Objects.equals(searchCriteria.getOperation(), SearchCriteria.Operation.LIKE)) {
                 return criteriaBuilder.like(root.get(searchCriteria.getKey()), "%" + searchCriteria.getValue() + "%");
             } else if (Objects.equals(searchCriteria.getOperation(), SearchCriteria.Operation.IN)) {
-                String[] split = searchCriteria.getValue().split(",");
-                return root.get(searchCriteria.getKey()).in(Arrays.asList(split));
+//                String[] split = searchCriteria.getValue().split(",");
+//                return root.get(searchCriteria.getKey()).in(Arrays.asList(split));
+                return null;
             } else if (Objects.equals(searchCriteria.getOperation(), SearchCriteria.Operation.GREATER_THAN)) {
-                return criteriaBuilder.greaterThan(root.get(searchCriteria.getKey()), searchCriteria.getValue());
+//                return criteriaBuilder.greaterThan(root.get(searchCriteria.getKey()), searchCriteria.getValue());
+                return null;
             } else if (Objects.equals(searchCriteria.getOperation(), SearchCriteria.Operation.LESS_THAN)) {
-                return criteriaBuilder.lessThan(root.get(searchCriteria.getKey()), searchCriteria.getValue());
+//                return criteriaBuilder.lessThan(root.get(searchCriteria.getKey()), searchCriteria.getValue());
+                return null;
             } else if (Objects.equals(searchCriteria.getOperation(), SearchCriteria.Operation.BETWEEN)) {
-                String[] split = searchCriteria.getValue().split(",");
-                return criteriaBuilder.between(root.get(searchCriteria.getKey()), split[0], split[1]);
+//                String[] split = searchCriteria.getValue().split(",");
+//                return criteriaBuilder.between(root.get(searchCriteria.getKey()), split[0], split[1]);
+                return null;
             } else if (Objects.equals(searchCriteria.getOperation(), SearchCriteria.Operation.JOIN)) {
+//                LocalDate date = LocalDate.parse(searchCriteria.getValue().toString());
                 return criteriaBuilder.equal(root.get(searchCriteria.getJoinTable()).get(searchCriteria.getKey()), searchCriteria.getValue());
             }else {
                 throw new IllegalArgumentException("Unexpected operation: " + searchCriteria.getOperation());
@@ -70,21 +78,12 @@ public class FilterServiceImpl implements FilterService {
         // Convert User entities to UserDto objects
         List<UserDto> userDtos = new ArrayList<>();
         for (User user : users) {
-            UserDto userDto = convertToDto(user);
+            var userDto = mappingService.convertToUserDto(user);
             userDtos.add(userDto);
         }
 
         return userDtos;
     }
-    private UserDto convertToDto(User user) {
-        UserDto userDto = new UserDto();
-        userDto.setName(user.getName());
-        userDto.setSurname(user.getSurname());
-        userDto.setGender(user.getGender());
-        userDto.setBirthDate(user.getBirthDate());
-        userDto.setEmail(user.getEmail());
-        // Set other fields as needed
 
-        return userDto;
-    }
+
 }

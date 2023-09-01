@@ -20,6 +20,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -130,17 +131,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void uploadProfilePicture(MultipartFile multipartFile, UUID uuid) throws IOException {
-            var user = findEntity(uuid);
-            if (user.getProfilePicture() != null) {
-                String previousFilePath = "C:/Users/acesu/Desktop/3iSolutions/front/ProjectFront/src/assets/images/" + user.getProfilePicture();
-                Files.deleteIfExists(Paths.get(previousFilePath));
-            }
-            String uploadDir = "C:/Users/acesu/Desktop/3iSolutions/front/ProjectFront/src/assets/images/";
-            String fileName = uuid.toString() + "_" + multipartFile.getOriginalFilename();
-            Path filePath = Paths.get(uploadDir + fileName);
-            Files.copy(multipartFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-            user.setProfilePicture(fileName);
-            userRepository.save(user);
+        var user = findEntity(uuid);
+        byte[] imageBytes = multipartFile.getBytes();
+        String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+        user.setProfilePicture(base64Image);
+
+        userRepository.save(user);
 
 
     }

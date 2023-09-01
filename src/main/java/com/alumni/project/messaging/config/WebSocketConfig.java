@@ -24,7 +24,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(@NotNull final StompEndpointRegistry registry) {
         registry.addEndpoint("/webSocket")
                 .setHandshakeHandler(new UserHandshakeHandler())
-                .withSockJS();
+                ;
+        registry.addEndpoint("/webSocketjs")
+                .setHandshakeHandler(new UserHandshakeHandler())
+                .withSockJS()
+        ;
     }
 
 }
