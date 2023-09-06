@@ -3,6 +3,7 @@ package com.alumni.project.dto.announcements;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -10,4 +11,5 @@ import java.util.UUID;
 public class AnnouncementsDto {
     private UUID id;
     private String announcementDescription;
+    private String announcementDate;
 }

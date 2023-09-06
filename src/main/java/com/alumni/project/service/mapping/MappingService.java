@@ -6,6 +6,7 @@ import com.alumni.project.dto.connection.UserConnectionDto;
 import com.alumni.project.dto.contactdetails.ContactDetailsDto;
 import com.alumni.project.dto.education.EducationDto;
 import com.alumni.project.dto.employment.EmploymentDto;
+import com.alumni.project.dto.event.AttendeesDto;
 import com.alumni.project.dto.event.EventDto;
 import com.alumni.project.dto.interests.InterestsDto;
 import com.alumni.project.dto.skills.SkillsDto;
@@ -60,6 +61,10 @@ public interface MappingService {
     RegisterDto convertToRegisterDto(User user);
 
     User convertToUser(RegisterDto registerDto);
+
+    AttendeesDto convertToAttendeesDto(Attendees attendees);
+
+    Attendees convertToAttendees(AttendeesDto attendeesDto);
 
 
 }

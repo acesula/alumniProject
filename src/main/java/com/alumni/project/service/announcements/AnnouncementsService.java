@@ -10,16 +10,16 @@ import java.util.UUID;
 
 public interface AnnouncementsService {
 
-    void save(String username,Announcements announcement);
+    void save(UUID uuid,Announcements announcement);
 
-    ResponseEntity<ErrorResponse> saveAnnouncement(String username, Announcements announcements);
+    ResponseEntity<ErrorResponse> saveAnnouncement(UUID uuid, Announcements announcements);
 
     List<AnnouncementsDto> findAll();
 
-    List<AnnouncementsDto> findByUser(String username);
+    List<AnnouncementsDto> findByUser(UUID uuid);
     void delete(UUID uuid);
 
-    Announcements update(UUID uuid,Announcements announcement);
+    AnnouncementsDto update(UUID uuid,AnnouncementsDto announcement);
 
 
 }

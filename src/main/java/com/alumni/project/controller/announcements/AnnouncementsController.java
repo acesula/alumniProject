@@ -21,10 +21,13 @@ public class AnnouncementsController {
 
     private final AnnouncementsService announcementService;
 
-    @PostMapping("/{username}")
-    public ResponseEntity<ErrorResponse> save(@Valid @PathVariable String username, @RequestBody Announcements announcement) {
-//        var authenticatedUser = (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return announcementService.saveAnnouncement(username, announcement);
+    public AuthUserDetail authenticatedUser() {
+        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+    @PostMapping()
+    public ResponseEntity<ErrorResponse> save(@RequestBody Announcements announcement) {
+        return announcementService.saveAnnouncement(authenticatedUser().getId(), announcement);
     }
 
     @GetMapping
@@ -32,13 +35,14 @@ public class AnnouncementsController {
         return announcementService.findAll();
     }
 
-    @GetMapping("/{username}")
-    public List<AnnouncementsDto> findAnnouncementsByUser(@Valid @PathVariable String username) {
-        return announcementService.findByUser(username);
+    @GetMapping("/announcementsByUser")
+    public List<AnnouncementsDto> findAnnouncementsByUser() {
+
+        return announcementService.findByUser(authenticatedUser().getId());
     }
 
     @PatchMapping("/{id}")
-    public Announcements update(@PathVariable UUID id, @RequestBody Announcements announcement) {
+    public AnnouncementsDto update(@PathVariable UUID id,@RequestBody AnnouncementsDto announcement) {
         return announcementService.update(id, announcement);
     }
 

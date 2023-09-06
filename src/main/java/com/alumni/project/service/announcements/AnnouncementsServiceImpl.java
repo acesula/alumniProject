@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,17 +27,24 @@ public class AnnouncementsServiceImpl implements AnnouncementsService {
     private final MappingServiceImpl mappingService;
 
     @Override
-    public void save(String username, Announcements announcement) {
-        var user = userRepository.findByUsername(username);
+    public void save(UUID uuid, Announcements announcement) {
+        var user = userRepository.findById(uuid).orElseThrow(RuntimeException::new);
         announcement.setUser(user);
+        announcement.setAnnouncementDate(LocalDateTime.of(
+                LocalDateTime.now().getYear(),
+                LocalDateTime.now().getMonth(),
+                LocalDateTime.now().getDayOfMonth(),
+                LocalDateTime.now().getHour(),
+                LocalDateTime.now().getMinute()).toString());
+
         user.getAnnouncements().add(announcement);
         announcementsRepository.save(announcement);
     }
 
-    public ResponseEntity<ErrorResponse> saveAnnouncement(String username, Announcements announcements) {
+    public ResponseEntity<ErrorResponse> saveAnnouncement(UUID uuid, Announcements announcements) {
         try {
-            if (userRepository.existsByUsername(username)) {
-                save(username, announcements);
+            if (userRepository.existsById(uuid)) {
+                save(uuid, announcements);
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {
                 ErrorResponse errorResponse = new ErrorResponse();
@@ -61,8 +69,8 @@ public class AnnouncementsServiceImpl implements AnnouncementsService {
     }
 
     @Override
-    public List<AnnouncementsDto> findByUser(String username) {
-        return announcementsRepository.findByUser_Username(username)
+    public List<AnnouncementsDto> findByUser(UUID uuid) {
+        return announcementsRepository.findByUser_Id(uuid)
                 .stream()
                 .map(mappingService::convertToAnnouncementsDto)
                 .collect(Collectors.toList());
@@ -74,10 +82,10 @@ public class AnnouncementsServiceImpl implements AnnouncementsService {
     }
 
     @Override
-    public Announcements update(UUID uuid, Announcements announcement) {
+    public AnnouncementsDto update(UUID uuid, AnnouncementsDto announcement) {
         var announc = announcementsRepository.findById(uuid).orElseThrow(RuntimeException::new);
         announc.setAnnouncementDescription(announcement.getAnnouncementDescription());
 
-        return announcementsRepository.save(announc);
+        return mappingService.convertToAnnouncementsDto(announcementsRepository.save(announc));
     }
 }

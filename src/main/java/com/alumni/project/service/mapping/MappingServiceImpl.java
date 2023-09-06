@@ -6,6 +6,7 @@ import com.alumni.project.dto.connection.UserConnectionDto;
 import com.alumni.project.dto.contactdetails.ContactDetailsDto;
 import com.alumni.project.dto.education.EducationDto;
 import com.alumni.project.dto.employment.EmploymentDto;
+import com.alumni.project.dto.event.AttendeesDto;
 import com.alumni.project.dto.event.EventDto;
 import com.alumni.project.dto.interests.InterestsDto;
 import com.alumni.project.dto.skills.SkillsDto;
@@ -116,6 +117,16 @@ public class MappingServiceImpl implements MappingService {
     @Override
     public User convertToUser(RegisterDto registerDto) {
         return modelMapper.map(registerDto, User.class);
+    }
+
+    @Override
+    public AttendeesDto convertToAttendeesDto(Attendees attendees) {
+        return modelMapper.map(attendees, AttendeesDto.class);
+    }
+
+    @Override
+    public Attendees convertToAttendees(AttendeesDto attendeesDto) {
+        return modelMapper.map(attendeesDto, Attendees.class);
     }
 
 

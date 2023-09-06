@@ -1,25 +1,21 @@
 package com.alumni.project.dal.entity;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
-
 @Entity
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class Announcements extends Base {
+public class Attendees extends Base{
 
-    private String announcementDescription;
-    private String announcementDate;
+    private String attendeeName;
+    private String attendeeSurname;
+    private String attendeeEmail;
 
     @ManyToOne
-    private User user;
-
+    private Event event;
 }
