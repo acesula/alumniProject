@@ -12,4 +12,5 @@ public class AnnouncementsDto {
     private UUID id;
     private String announcementDescription;
     private String announcementDate;
+    private UUID userId;
 }
