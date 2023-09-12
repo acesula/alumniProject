@@ -16,7 +16,7 @@ public interface EducationService {
 
     List<EducationDto> findAll();
 
-    List<EducationDto> findById(UUID id);
+    List<EducationDto> findByUserId(UUID id);
 
     List<EducationDto> findByUser(String username);
     EducationDto update(UUID id, EducationDto dto);

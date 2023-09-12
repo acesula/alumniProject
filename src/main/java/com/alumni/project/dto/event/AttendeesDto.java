@@ -12,4 +12,5 @@ public class AttendeesDto {
     private String attendeeName;
     private String attendeeSurname;
     private String attendeeEmail;
+    private UUID eventId;
 }

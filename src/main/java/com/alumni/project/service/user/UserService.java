@@ -21,7 +21,8 @@ public interface UserService{
 
     UpdatePersonalInfoDto update(UUID id, UpdatePersonalInfoDto user);
 
-    void delete(String username);
+    ResponseEntity<ErrorResponse> checkPassword(UUID id, String password);
+    void delete(UUID id);
 
     void uploadProfilePicture(MultipartFile multipartFile, UUID id) throws IOException;
 

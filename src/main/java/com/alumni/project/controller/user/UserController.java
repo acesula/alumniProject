@@ -2,11 +2,13 @@ package com.alumni.project.controller.user;
 
 import com.alumni.project.dto.user.*;
 import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.user.UserService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,12 +24,14 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/register")
+    public AuthUserDetail authenticatedUser() {
+        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+    @PostMapping
     public ResponseEntity<ErrorResponse> register(@Valid @RequestBody RegisterDto registerDto) {
        return userService.register(registerDto);
     }
-
-
 
     @GetMapping
     public List<UserDto> findAll() {
@@ -39,51 +43,55 @@ public class UserController {
         return userService.findById(id);
     }
 
-    @GetMapping("/user-info/{username}")
-    public List<UserInfoDto> findUserInfoByUsername(@PathVariable String username) {
-        return userService.getUserInfoByUsername(username);
+//    @GetMapping("/user-info/{username}")
+//    public List<UserInfoDto> findUserInfoByUsername(@PathVariable String username) {
+//        return userService.getUserInfoByUsername(username);
+//    }
+
+    @PatchMapping("/uploadImage")
+    public void updateProfilePicture(@RequestParam("profilePicture") MultipartFile multipartFile) throws IOException {
+        userService.uploadProfilePicture(multipartFile, authenticatedUser().getId());
     }
 
-    @PatchMapping("/uploadImage/{id}")
-    public void updateProfilePicture(@RequestParam("profilePicture") MultipartFile multipartFile, @PathVariable UUID id) throws IOException {
-        userService.uploadProfilePicture(multipartFile, id);
+    @PatchMapping("/updateBio")
+    public void updateBio(@RequestParam("bio") String bio)  {
+        userService.updateBio(authenticatedUser().getId(), bio);
     }
 
-    @PatchMapping("/updateBio/{id}")
-    public void updateBio(@PathVariable UUID id, @RequestParam("bio") String bio)  {
-        userService.updateBio(id, bio);
+    @PatchMapping("/updateUsername")
+    public void updateUsername(@RequestParam("username") String username)  {
+        userService.updateUsername(authenticatedUser().getId(), username);
     }
 
-    @PatchMapping("/updateUsername/{id}")
-    public void updateUsername(@PathVariable UUID id, @RequestParam("username") String username)  {
-        userService.updateUsername(id, username);
+    @PatchMapping("/updateEmail")
+    public void updateEmail(@RequestParam("email") String email)  {
+        userService.updateEmail(authenticatedUser().getId(), email);
     }
 
-    @PatchMapping("/updateEmail/{id}")
-    public void updateEmail(@PathVariable UUID id, @RequestParam("email") String email)  {
-        userService.updateEmail(id, email);
+    @PatchMapping("/updatePassword")
+    public void updatePassword(@RequestBody ChangePasswordDto password) {
+        userService.updatePassword(authenticatedUser().getId(), password);
     }
 
-    @PatchMapping("/updatePassword/{id}")
-    public void updatePassword(@PathVariable UUID id,@RequestBody ChangePasswordDto password) {
-        userService.updatePassword(id, password);
+    @PatchMapping
+    public UpdatePersonalInfoDto update(@RequestBody UpdatePersonalInfoDto dto) {
+        return userService.update(authenticatedUser().getId(), dto);
     }
 
-    @PatchMapping("/{id}")
-    public UpdatePersonalInfoDto update(@PathVariable UUID id, @RequestBody UpdatePersonalInfoDto dto) {
-        return userService.update(id, dto);
+    @DeleteMapping
+    public void delete() {
+        userService.delete(authenticatedUser().getId());
     }
 
-    @DeleteMapping("/{username}")
-    @Transactional
-    public void delete(@PathVariable String username) {
-        userService.delete(username);
+    @PostMapping("/checkPassword")
+    public ResponseEntity<ErrorResponse> checkPassword(@RequestParam("password") String password) {
+        return userService.checkPassword(authenticatedUser().getId(), password);
     }
 
-    @GetMapping("/users/{username}")
-    public List<UserInfoDto> getUserInfoByUsername(@PathVariable String username) {
-        return userService.getUserInfoByUsername(username);
-    }
+//    @GetMapping("/users/{username}")
+//    public List<UserInfoDto> getUserInfoByUsername(@PathVariable String username) {
+//        return userService.getUserInfoByUsername(username);
+//    }
 
 
 }

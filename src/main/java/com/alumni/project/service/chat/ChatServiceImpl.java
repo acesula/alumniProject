@@ -6,19 +6,20 @@ import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.ChatRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.service.request.RequestStatus;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@Service
+@RequiredArgsConstructor
 public class ChatServiceImpl implements ChatService{
     private final ChatRepository chatRepository;
     private final UserRepository userRepository;
 
-    public ChatServiceImpl(ChatRepository chatRepository, UserRepository userRepository) {
-        this.chatRepository = chatRepository;
-        this.userRepository = userRepository;
-    }
+
 
 //    @Override
 //    public void save(String sender, String receiver) {

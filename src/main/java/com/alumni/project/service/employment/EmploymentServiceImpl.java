@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,6 +26,7 @@ public class EmploymentServiceImpl implements EmploymentService {
     private final MappingServiceImpl mappingService;
 
     @Override
+    @Transactional
     public void save(UUID uuid, Employment employment) {
         var user = userRepository.findById(uuid).orElseThrow(RuntimeException::new);
         employment.setUser(user);
@@ -35,7 +37,7 @@ public class EmploymentServiceImpl implements EmploymentService {
     public ResponseEntity<ErrorResponse> saveEmployment(UUID uuid, Employment employment) {
         try {
             if (userRepository.existsById(uuid)) {
-                if (employmentRepository.existsByCompanyAndJob(employment.getCompany(), employment.getJob())) {
+                if (employmentRepository.existsByCompanyAndJobAndUser_Id(employment.getCompany(), employment.getJob(), uuid)) {
                     ErrorResponse errorResponse = new ErrorResponse();
                     errorResponse.setMessage("Employment already exists!");
                     errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
@@ -66,7 +68,7 @@ public class EmploymentServiceImpl implements EmploymentService {
     }
 
     @Override
-    public List<EmploymentDto> findById(UUID id) {
+    public List<EmploymentDto> findByUserId(UUID id) {
         return employmentRepository.findByUser_Id(id)
                 .stream()
                 .map(mappingService::convertToEmploymentDto)
@@ -82,6 +84,7 @@ public class EmploymentServiceImpl implements EmploymentService {
     }
 
     @Override
+    @Transactional
     public EmploymentDto update(UUID id, EmploymentDto employmentNew) {
         var employment = employmentRepository.findById(id).orElseThrow(RuntimeException::new);
         employment.setCompany(employmentNew.getCompany());

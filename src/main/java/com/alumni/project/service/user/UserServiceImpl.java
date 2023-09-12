@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -124,9 +126,20 @@ public class UserServiceImpl implements UserService {
         return mappingService.convertToUpdatePersonalInfoDto(userRepository.save(user));
     }
 
+    public ResponseEntity<ErrorResponse> checkPassword(UUID id, String password) {
+        var user = findEntity(id);
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            ErrorResponse error = new ErrorResponse();
+            error.setMessage("Password does not match");
+            error.setErrorCode(HttpStatus.BAD_REQUEST.value());
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @Override
-    public void delete(String username) {
-        userRepository.deleteByUsername(username);
+    public void delete(UUID id) {
+        userRepository.deleteById(id);
     }
 
     @Override

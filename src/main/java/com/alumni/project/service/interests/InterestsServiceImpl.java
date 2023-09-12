@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,6 +25,7 @@ public class InterestsServiceImpl implements InterestsService {
     private final MappingServiceImpl mappingService;
 
     @Override
+    @Transactional
     public void save(UUID uuid, Interests interests) {
         var user = userRepository.findById(uuid).orElseThrow(RuntimeException::new);
         interests.setUser(user);
@@ -81,6 +83,7 @@ public class InterestsServiceImpl implements InterestsService {
     }
 
     @Override
+    @Transactional
     public InterestsDto update(UUID id, InterestsDto interests) {
         var interest = interestsRepository.findById(id).orElseThrow(RuntimeException::new);
         interest.setInterestDescription(interests.getInterestDescription());

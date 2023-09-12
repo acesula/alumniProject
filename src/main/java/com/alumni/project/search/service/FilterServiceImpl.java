@@ -45,7 +45,6 @@ public class FilterServiceImpl implements FilterService {
 //                return criteriaBuilder.between(root.get(searchCriteria.getKey()), split[0], split[1]);
                 return null;
             } else if (Objects.equals(searchCriteria.getOperation(), SearchCriteria.Operation.JOIN)) {
-//                LocalDate date = LocalDate.parse(searchCriteria.getValue().toString());
                 return criteriaBuilder.equal(root.get(searchCriteria.getJoinTable()).get(searchCriteria.getKey()), searchCriteria.getValue());
             }else {
                 throw new IllegalArgumentException("Unexpected operation: " + searchCriteria.getOperation());

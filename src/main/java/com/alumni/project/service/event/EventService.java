@@ -12,6 +12,7 @@ public interface EventService {
 
     void save(UUID uuid, Event event);
 
+    EventDto findById(UUID uuid);
     ResponseEntity<ErrorResponse> saveEvent(UUID uuid, Event event);
 
     List<EventDto> findAll();

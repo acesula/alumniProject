@@ -1,7 +1,9 @@
 package com.alumni.project.security.config;
 
+import com.alumni.project.security.filter.CorsFilter;
 import com.alumni.project.security.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -29,6 +32,7 @@ public class SecurityConfig implements WebMvcConfigurer{
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
+    private final CorsFilter corsFilter;
 
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
@@ -47,8 +51,7 @@ public class SecurityConfig implements WebMvcConfigurer{
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/api/v1/**").permitAll();
-                    auth.requestMatchers("**").permitAll();
+                    auth.requestMatchers("/api/v1/auth").permitAll();
                     auth.anyRequest().authenticated();
                 });
 
@@ -57,6 +60,7 @@ public class SecurityConfig implements WebMvcConfigurer{
         );
 
         httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(corsFilter, LogoutFilter.class);
         return httpSecurity.build();
     }
 
@@ -64,5 +68,7 @@ public class SecurityConfig implements WebMvcConfigurer{
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**").allowedMethods("*").allowedOrigins("*").allowedHeaders("*");
     }
+
+
 
 }

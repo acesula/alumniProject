@@ -3,9 +3,11 @@ package com.alumni.project.controller.education;
 import com.alumni.project.dal.entity.Education;
 import com.alumni.project.dto.education.EducationDto;
 import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.education.EducationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,24 +20,24 @@ public class EducationController {
 
     private final EducationService educationService;
 
-    @PostMapping("/{id}")
-    public ResponseEntity<ErrorResponse> save(@PathVariable UUID id, @RequestBody Education education) {
-        return educationService.saveEducation(id, education);
+    public AuthUserDetail authenticatedUser() {
+        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
-    @GetMapping
-    public List<EducationDto> findAll() {
-        return educationService.findAll();
+    @PostMapping
+    public ResponseEntity<ErrorResponse> save(@RequestBody Education education) {
+        return educationService.saveEducation(authenticatedUser().getId(), education);
     }
 
-//    @GetMapping("/{username}")
-//    public List<EducationDto> findByUser(@PathVariable String username) {
-//        return educationService.findByUser(username);
+//    @GetMapping
+//    public List<EducationDto> findAll() {
+//        return educationService.findAll();
 //    }
 
-    @GetMapping("/{id}")
-    public List<EducationDto> findById(@PathVariable UUID id) {
-        return educationService.findById(id);
+
+    @GetMapping
+    public List<EducationDto> findByUserId() {
+        return educationService.findByUserId(authenticatedUser().getId());
     }
 
     @PatchMapping("/{id}")

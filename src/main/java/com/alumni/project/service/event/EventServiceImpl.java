@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -26,11 +27,22 @@ public class EventServiceImpl implements EventService{
     private final MappingServiceImpl mappingService;
 
     @Override
+    @Transactional
     public void save(UUID uuid,Event event) {
         var user = userRepository.findById(uuid).orElseThrow(RuntimeException::new);
         event.setUser(user);
         user.getEvents().add(event);
         eventRepository.save(event);
+    }
+
+    @Override
+    public EventDto findById(UUID uuid) {
+        var optional = eventRepository.findById(uuid);
+        if (optional.isPresent()) {
+            return mappingService.convertToEventDto(optional.get());
+        }
+            throw new RuntimeException("Event not found!");
+
     }
 
     public ResponseEntity<ErrorResponse> saveEvent(UUID uuid,Event event) {
@@ -74,10 +86,13 @@ public class EventServiceImpl implements EventService{
     }
 
     @Override
+    @Transactional
     public EventDto update(UUID uuid, EventDto event) {
         var e = eventRepository.findById(uuid).orElseThrow(RuntimeException::new);
         e.setEventDescription(event.getEventDescription());
         e.setStartDate(event.getStartDate());
+        e.setStartTime(event.getStartTime());
+        e.setEndTime(event.getEndTime());
         e.setEndDate(event.getEndDate());
         e.setLocation(event.getLocation());
 

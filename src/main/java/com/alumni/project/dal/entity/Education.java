@@ -18,22 +18,20 @@ public class Education extends Base {
     private String institution;
     private String degree;
     private String fieldOfStudy;
-    @JsonFormat(pattern = "yyyy-MM-dd" , shape = JsonFormat.Shape.STRING)
-    private LocalDate startDate;
-    @JsonFormat(pattern = "yyyy-MM-dd" , shape = JsonFormat.Shape.STRING)
-    private LocalDate endDate;
+    private String startYear;
+    private String endYear;
     private boolean finished;
 
 
     @ManyToOne
     private User user;
 
-    public Education(String institution, String degree, String fieldOfStudy, LocalDate startDate, LocalDate endDate, boolean finished) {
+    public Education(String institution, String degree, String fieldOfStudy, String startYear, String endYear, boolean finished) {
         this.institution = institution;
         this.degree = degree;
         this.fieldOfStudy = fieldOfStudy;
-        this.startDate = startDate;
-        this.endDate= endDate;
+        this.startYear = startYear;
+        this.endYear = endYear;
         this.finished = finished;
 
     }

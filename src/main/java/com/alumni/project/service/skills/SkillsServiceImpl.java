@@ -28,6 +28,7 @@ public class SkillsServiceImpl implements SkillsService {
 
 
     @Override
+    @Transactional
     public void save(UUID uuid, Skills skills) {
         var user = userRepository.findById(uuid).orElseThrow(RuntimeException::new);
         skills.setUser(user);
@@ -64,7 +65,6 @@ public class SkillsServiceImpl implements SkillsService {
     }
 
     @Override
-    @Transactional
     public List<SkillsDto> findById(UUID id) {
         return skillsRepository.findByUser_Id(id)
                 .stream()
@@ -76,6 +76,7 @@ public class SkillsServiceImpl implements SkillsService {
 
 
     @Override
+    @Transactional
     public SkillsDto update(UUID id, Skills skillDto) {
 
         var skill = skillsRepository.findById(id).orElseThrow(RuntimeException::new);

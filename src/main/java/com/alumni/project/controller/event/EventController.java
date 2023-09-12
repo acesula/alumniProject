@@ -28,8 +28,12 @@ public class EventController {
 
     @PostMapping
     public ResponseEntity<ErrorResponse> save(@RequestBody Event event) {
-
         return eventService.saveEvent(authenticatedUser().getId(), event);
+    }
+
+    @GetMapping("/{id}")
+    public EventDto findById(@PathVariable UUID id) {
+        return eventService.findById(id);
     }
 
     @GetMapping

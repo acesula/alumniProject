@@ -3,10 +3,12 @@ package com.alumni.project.controller.skills;
 import com.alumni.project.dal.entity.Skills;
 import com.alumni.project.dto.skills.SkillsDto;
 import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.skills.SkillsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,20 +21,25 @@ public class SkillsController {
 
     private final SkillsService skillsService;
 
-    @PostMapping("/{id}")
-    public ResponseEntity<ErrorResponse> save(@Valid @PathVariable UUID id, @RequestBody Skills skill) {
-        return skillsService.saveSkill(id, skill);
+
+    public AuthUserDetail authenticatedUser() {
+        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
+
+    @PostMapping
+    public ResponseEntity<ErrorResponse> save(@RequestBody Skills skill) {
+        return skillsService.saveSkill(authenticatedUser().getId(), skill);
+    }
+//    @GetMapping
+//    public List<SkillsDto> findAll() {
+//        return skillsService.findAll();
+//    }
+
+
+
     @GetMapping
-    public List<SkillsDto> findAll() {
-        return skillsService.findAll();
-    }
-
-
-
-    @GetMapping("/{id}")
-    public List<SkillsDto> findByUser(@PathVariable UUID id){
-        return skillsService.findById(id);
+    public List<SkillsDto> findByUser(){
+        return skillsService.findById(authenticatedUser().getId());
     }
 
     @PatchMapping("/{id}")

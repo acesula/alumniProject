@@ -1,8 +1,10 @@
 package com.alumni.project.controller.contactsdetails;
 
 import com.alumni.project.dto.contactdetails.ContactDetailsDto;
+import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.contactdetails.ContactDetailsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -14,10 +16,13 @@ public class ContactDetailsController {
 
     private final ContactDetailsService contactDetailsService;
 
+    public AuthUserDetail authenticatedUser() {
+        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
 
-    @GetMapping("/{id}")
-    public ContactDetailsDto findByUserId(@PathVariable UUID id) {
-        return contactDetailsService.findByUserId(id);
+    @GetMapping
+    public ContactDetailsDto findByUserId() {
+        return contactDetailsService.findByUserId(authenticatedUser().getId());
     }
 
 

@@ -13,7 +13,7 @@ public class EducationDto {
     private String institution;
     private String degree;
     private String fieldOfStudy;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private String startYear;
+    private String endYear;
     private boolean finished;
 }

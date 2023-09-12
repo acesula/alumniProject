@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Repository
 public interface EmploymentRepository extends JpaRepository<Employment, UUID> {
-    boolean existsByCompanyAndJob(String company, String job);
+    boolean existsByCompanyAndJobAndUser_Id(String company, String job, UUID id);
 
     List<Employment> findByUser_Username(String username);
 

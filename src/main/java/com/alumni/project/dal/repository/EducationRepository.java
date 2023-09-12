@@ -9,9 +9,8 @@ import java.util.UUID;
 
 @Repository
 public interface EducationRepository extends JpaRepository<Education, UUID> {
+    boolean existsByInstitutionAndDegreeAndFieldOfStudyAndUser_Id(String institution, String degree, String fieldOfStudy, UUID id);
     List<Education> findByUser_Id(UUID id);
-
-    boolean existsByInstitutionAndDegreeAndFieldOfStudy(String institution, String degree, String fieldOfStudy);
 
     List<Education> findByUser_Username(String username);
 

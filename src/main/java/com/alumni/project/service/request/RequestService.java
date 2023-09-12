@@ -14,7 +14,7 @@ public interface RequestService {
     List<Request> findByUser(String username);
 
     Request findById(UUID id);
-    void deleteByUsername(UUID id);
+//    void deleteByUsername(UUID id);
 
     Request update(UUID id, Request request, String newStatus);
 

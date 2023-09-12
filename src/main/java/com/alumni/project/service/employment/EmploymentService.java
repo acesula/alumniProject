@@ -16,7 +16,7 @@ public interface EmploymentService {
 
     List<EmploymentDto> findAll();
 
-    List<EmploymentDto> findById(UUID id);
+    List<EmploymentDto> findByUserId(UUID id);
 
     List<EmploymentDto> findByUser(String username);
 

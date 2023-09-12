@@ -5,7 +5,9 @@ import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.FriendsRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.service.user.UserServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,20 +17,14 @@ import java.util.stream.Collectors;
 
 
 @Service
+@RequiredArgsConstructor
+@Transactional
 public class FriendsServiceImpl implements FriendsService{
     private final FriendsRepository friendsRepository;
     private final UserRepository userRepository;
 
 
     private final UserServiceImpl userService;
-
-    public FriendsServiceImpl(FriendsRepository friendsRepository, UserRepository userRepository,
-                              UserServiceImpl userService) {
-        this.friendsRepository = friendsRepository;
-        this.userRepository = userRepository;
-//        this.requestRepository = requestRepository;
-        this.userService = userService;
-    }
 
     @Override
     public String save(String user1, String friend) {

@@ -21,18 +21,28 @@ import java.util.*;
 @AllArgsConstructor
 public class User extends Base {
 
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private String surname;
+    @Column(nullable = false)
     private String gender;
+    @Column(nullable = false)
     private LocalDate birthDate;
+    @Column(nullable = false, unique = true)
     private String email;
+    @Column(nullable = false, unique = true)
     private String username;
+    @Column(nullable = false)
     private String password;
+
     private String description;
 
+    @Column(nullable = false)
     private String role;
     @Column(columnDefinition = "TEXT")
     private String profilePicture;
+    @Column(nullable = false, columnDefinition = "boolean default true")
     private boolean enabled = true;
 
 
