@@ -1,8 +1,12 @@
 package com.alumni.project.controller.request;
 
 import com.alumni.project.dal.entity.Request;
+<<<<<<< HEAD
 import com.alumni.project.dto.user.UserInfoDto;
 import com.alumni.project.dto.user.UserRequestDto;
+=======
+import com.alumni.project.service.request.RequestService;
+>>>>>>> 6ef8658e2fe6a08ac60418cd7b077e0b96c20368
 import com.alumni.project.service.request.RequestServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class RequestController {
 
-    private final RequestServiceImpl requestsService;
+    private final RequestService requestsService;
 
     @PostMapping("/{sender}/{receiver}")
     public void save(@Valid @PathVariable String sender,@Valid @PathVariable String receiver) {

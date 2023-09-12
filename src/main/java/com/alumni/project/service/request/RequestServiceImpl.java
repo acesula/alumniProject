@@ -4,29 +4,29 @@ import com.alumni.project.dal.entity.Request;
 import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.RequestRepository;
 import com.alumni.project.dal.repository.UserRepository;
-import com.alumni.project.dto.user.GetUserDto;
+
 import com.alumni.project.dto.user.UserDto;
 import com.alumni.project.dto.user.UserInfoDto;
 import com.alumni.project.dto.user.UserRequestDto;
 import com.alumni.project.service.friends.FriendsServiceImpl;
 import com.alumni.project.service.user.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class RequestServiceImpl implements RequestService {
 
     private final UserRepository userRepository;
     private final RequestRepository requestRepository;
 
-    @Autowired
     private final FriendsServiceImpl friendsService;
     private final UserServiceImpl userService;
 
@@ -64,8 +64,7 @@ public class RequestServiceImpl implements RequestService {
                 (requestItem.getUser1().getId() == senderId && requestItem.getUser2().getId() == receiverId) ||
                         (requestItem.getUser1().getId() == receiverId && requestItem.getUser2().getId() == senderId)
         ).findFirst();
-        if(request.isEmpty()) return  false;
-        return true;
+        return request.isPresent();
     }
     @Override
     public List<UserRequestDto> findAllByUsername(String username) {
@@ -94,17 +93,25 @@ public class RequestServiceImpl implements RequestService {
         throw new RuntimeException("No interest found");
     }
 
+<<<<<<< HEAD
     @Override
     public void delete(UUID id) {
         this.requestRepository.deleteById(id);
     }
+=======
+//    @Override
+//    public void deleteByUsername(UUID id) {
+//        UserDto user = this.userService.findById(id);
+//        this.userService.delete(user.getId());
+//    }
+>>>>>>> 6ef8658e2fe6a08ac60418cd7b077e0b96c20368
 
 
     @Override
     public Request update(UUID id, Request request, String newStatus) {
         var req = requestRepository.findById(id).orElseThrow(RuntimeException::new);
         req.setStatus(newStatus);
-        if(newStatus == RequestStatus.APPROVED.toString()){
+        if(Objects.equals(newStatus, RequestStatus.APPROVED.toString())){
             //Call Friends method for create
             this.friendsService.save(req.getUser1().getUsername(), req.getUser2().getUsername());
         }

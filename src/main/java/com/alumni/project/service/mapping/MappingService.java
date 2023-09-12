@@ -8,9 +8,12 @@ import com.alumni.project.dto.connection.UserConnectionDto;
 import com.alumni.project.dto.contactdetails.ContactDetailsDto;
 import com.alumni.project.dto.education.EducationDto;
 import com.alumni.project.dto.employment.EmploymentDto;
+import com.alumni.project.dto.event.AttendeesDto;
 import com.alumni.project.dto.event.EventDto;
 import com.alumni.project.dto.interests.InterestsDto;
 import com.alumni.project.dto.skills.SkillsDto;
+import com.alumni.project.dto.user.RegisterDto;
+import com.alumni.project.dto.user.UpdatePersonalInfoDto;
 import com.alumni.project.dto.user.UserDto;
 
 public interface MappingService {
@@ -24,11 +27,6 @@ public interface MappingService {
     AnnouncementsDto convertToAnnouncementsDto(Announcements announcements);
 
     Announcements convertToAnnouncements(AnnouncementsDto announcementsDto);
-
-    //Connection
-    UserConnectionDto convertToUserConnectionDto(UserConnection userConnection);
-
-    UserConnection convertToUserConnection(UserConnectionDto userConnectionDto);
 
     //ContactDetails
     ContactDetailsDto convertToContactDetailsDto(ContactDetails contactDetails);
@@ -60,12 +58,24 @@ public interface MappingService {
 
     Interests convertToInterests(InterestsDto interestsDto);
 
+<<<<<<< HEAD
     ChatRoomDto convertToChatRoomDto(ChatRoom chatRoom);
 
     ChatRoom convertToChatRoom(ChatRoomDto chatRoomDto);
 
     ChatDto convertToChatDto(Chat chat);
     Chat convertToChat(ChatDto chatDto);
+=======
+    UpdatePersonalInfoDto convertToUpdatePersonalInfoDto(User user);
+
+    RegisterDto convertToRegisterDto(User user);
+
+    User convertToUser(RegisterDto registerDto);
+
+    AttendeesDto convertToAttendeesDto(Attendees attendees);
+
+    Attendees convertToAttendees(AttendeesDto attendeesDto);
+>>>>>>> 6ef8658e2fe6a08ac60418cd7b077e0b96c20368
 
 
 }

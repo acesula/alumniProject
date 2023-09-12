@@ -1,7 +1,5 @@
 package com.alumni.project.dal.entity;
 
-import com.alumni.project.messaging.model.Status;
-import com.alumni.project.service.request.RequestStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;

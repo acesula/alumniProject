@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,9 +20,9 @@ import java.util.stream.Collectors;
 public class ContactDetailsServiceImp implements ContactDetailsService {
 
     private final ContactDetailsRepository contactDetailsRepository;
-    private final UserRepository userRepository;
     private final MappingServiceImpl mappingService;
 
+<<<<<<< HEAD
     @Override
     public void save(String username, ContactDetails contactDetails) {
         var user = userRepository.findByUsername(username);
@@ -57,9 +58,11 @@ public class ContactDetailsServiceImp implements ContactDetailsService {
         }
     }
 
+=======
+>>>>>>> 6ef8658e2fe6a08ac60418cd7b077e0b96c20368
     @Override
-    public ContactDetailsDto findByEmail(String email) {
-        var optional = contactDetailsRepository.findByEmail(email);
+    public ContactDetailsDto findByUserId(UUID uuid) {
+        var optional = contactDetailsRepository.findByUser_Id(uuid);
         if(optional.isPresent()){
             return mappingService.convertToContactDetailsDto(optional.get());
         }
@@ -80,8 +83,9 @@ public class ContactDetailsServiceImp implements ContactDetailsService {
     }
 
     @Override
-    public ContactDetailsDto update(String email, ContactDetailsDto contactDetailsDto) {
-        var contact = contactDetailsRepository.findByEmail(email).orElseThrow(RuntimeException::new);
+    @Transactional
+    public ContactDetailsDto update(UUID uuid, ContactDetailsDto contactDetailsDto) {
+        var contact = contactDetailsRepository.findByUser_Id(uuid).orElseThrow(RuntimeException::new);
         contact.setAddress(contactDetailsDto.getAddress());
         contact.setEmail(contactDetailsDto.getEmail());
         contact.setCountry(contactDetailsDto.getCountry());

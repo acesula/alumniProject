@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,24 +21,35 @@ import java.util.*;
 @AllArgsConstructor
 public class User extends Base {
 
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private String surname;
+    @Column(nullable = false)
     private String gender;
+    @Column(nullable = false)
     private LocalDate birthDate;
+    @Column(nullable = false, unique = true)
     private String email;
+    @Column(nullable = false, unique = true)
     private String username;
+    @Column(nullable = false)
     private String password;
+
     private String description;
 
+    @Column(nullable = false)
     private String role;
+    @Column(columnDefinition = "TEXT")
     private String profilePicture;
+    @Column(nullable = false, columnDefinition = "boolean default true")
     private boolean enabled = true;
 
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private List<Education> educations;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private List<Skills> skills;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
@@ -54,10 +66,6 @@ public class User extends Base {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private List<Event> events;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userConnection", fetch = FetchType.LAZY)
-    private List<UserConnection> userConnections;
-
 
     @OneToMany(mappedBy="user1", fetch = FetchType.EAGER)
     private Collection<Friends> friends;

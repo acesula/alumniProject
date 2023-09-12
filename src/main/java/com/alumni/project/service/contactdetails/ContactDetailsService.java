@@ -11,10 +11,10 @@ public interface ContactDetailsService {
 
     void save(String username, ContactDetails contactDetails);
 
-    ContactDetailsDto findByEmail(String email);
+    ContactDetailsDto findByUserId(UUID id);
 
     List<ContactDetailsDto> findByUser(String username);
     void deleteByEmail(String username);
 
-    ContactDetailsDto update(String email, ContactDetailsDto contactDetailsDto);
+    ContactDetailsDto update(UUID uuid, ContactDetailsDto contactDetailsDto);
 }

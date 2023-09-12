@@ -8,9 +8,12 @@ import com.alumni.project.dto.connection.UserConnectionDto;
 import com.alumni.project.dto.contactdetails.ContactDetailsDto;
 import com.alumni.project.dto.education.EducationDto;
 import com.alumni.project.dto.employment.EmploymentDto;
+import com.alumni.project.dto.event.AttendeesDto;
 import com.alumni.project.dto.event.EventDto;
 import com.alumni.project.dto.interests.InterestsDto;
 import com.alumni.project.dto.skills.SkillsDto;
+import com.alumni.project.dto.user.RegisterDto;
+import com.alumni.project.dto.user.UpdatePersonalInfoDto;
 import com.alumni.project.dto.user.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -41,16 +44,6 @@ public class MappingServiceImpl implements MappingService {
     @Override
     public Announcements convertToAnnouncements(AnnouncementsDto announcementsDto) {
         return modelMapper.map(announcementsDto, Announcements.class);
-    }
-
-    @Override
-    public UserConnectionDto convertToUserConnectionDto(UserConnection userConnection) {
-        return modelMapper.map(userConnection, UserConnectionDto.class);
-    }
-
-    @Override
-    public UserConnection convertToUserConnection(UserConnectionDto userConnectionDto) {
-        return modelMapper.map(userConnectionDto, UserConnection.class);
     }
 
     @Override
@@ -114,6 +107,7 @@ public class MappingServiceImpl implements MappingService {
     }
 
     @Override
+<<<<<<< HEAD
     public ChatRoomDto convertToChatRoomDto(ChatRoom chatRoom) {
         return modelMapper.map(chatRoom, ChatRoomDto.class);
     }
@@ -131,6 +125,30 @@ public class MappingServiceImpl implements MappingService {
     @Override
     public Chat convertToChat(ChatDto chatDto) {
         return modelMapper.map(chatDto, Chat.class);
+=======
+    public UpdatePersonalInfoDto convertToUpdatePersonalInfoDto(User user) {
+        return modelMapper.map(user, UpdatePersonalInfoDto.class);
+    }
+
+    @Override
+    public RegisterDto convertToRegisterDto(User user) {
+        return modelMapper.map(user, RegisterDto.class);
+    }
+
+    @Override
+    public User convertToUser(RegisterDto registerDto) {
+        return modelMapper.map(registerDto, User.class);
+    }
+
+    @Override
+    public AttendeesDto convertToAttendeesDto(Attendees attendees) {
+        return modelMapper.map(attendees, AttendeesDto.class);
+    }
+
+    @Override
+    public Attendees convertToAttendees(AttendeesDto attendeesDto) {
+        return modelMapper.map(attendeesDto, Attendees.class);
+>>>>>>> 6ef8658e2fe6a08ac60418cd7b077e0b96c20368
     }
 
 

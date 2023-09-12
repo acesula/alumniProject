@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class SearchCriteria {
     String key;
-    String value;
+    Object value;
     Operation operation;
     String joinTable;
 

@@ -9,7 +9,8 @@ import java.util.UUID;
 
 @Repository
 public interface EventRepository extends JpaRepository<Event, UUID> {
-    List<Event> findByUser_Username(String username);
+    List<Event> findByUser_Id(UUID id);
+
 
 
 }

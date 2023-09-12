@@ -3,10 +3,12 @@ package com.alumni.project.controller.interests;
 import com.alumni.project.dal.entity.Interests;
 import com.alumni.project.dto.interests.InterestsDto;
 import com.alumni.project.security.ErrorResponse;
-import com.alumni.project.service.interests.InterestsServiceImpl;
+import com.alumni.project.security.model.AuthUserDetail;
+import com.alumni.project.service.interests.InterestsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,27 +19,27 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class InterestsController {
 
-    private final InterestsServiceImpl interestsService;
+    private final InterestsService interestsService;
 
-    @PostMapping("/{username}")
-    public ResponseEntity<ErrorResponse> save(@Valid @PathVariable String username, @RequestBody Interests interest){
-        return interestsService.saveInterest(username, interest);
+    public AuthUserDetail authenticatedUser() {
+        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
+
+    @PostMapping()
+    public ResponseEntity<ErrorResponse> save(@RequestBody Interests interest){
+        return interestsService.saveInterest(authenticatedUser().getId(), interest);
+    }
+
+//    @GetMapping
+//    public List<InterestsDto> findAll(){
+//        return interestsService.findAll();
+//    }
 
     @GetMapping
-    public List<InterestsDto> findAll(){
-        return interestsService.findAll();
+    public List<InterestsDto> findByUser(){
+        return interestsService.findByUser(authenticatedUser().getId());
     }
 
-    @GetMapping("/{username}")
-    public List<InterestsDto> findByUser(@PathVariable String username){
-        return interestsService.findByUser(username);
-    }
-
-    @GetMapping("/{id}")
-    public InterestsDto findById(@PathVariable UUID id){
-        return interestsService.findById(id);
-    }
 
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable UUID id){

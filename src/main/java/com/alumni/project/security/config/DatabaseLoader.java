@@ -1,5 +1,6 @@
 package com.alumni.project.security.config;
 
+import com.alumni.project.dto.user.RegisterDto;
 import com.alumni.project.dto.user.UserDto;
 import com.alumni.project.service.mapping.MappingService;
 import com.alumni.project.service.user.UserService;
@@ -25,7 +26,7 @@ public class DatabaseLoader {
         if(!userService.findAll().isEmpty()){
             return;
         }
-        var admin= UserDto.builder()
+        var admin= RegisterDto.builder()
                 .name("Adi")
                 .surname("Cesula")
                 .email("admin@gmail.com")
@@ -36,7 +37,7 @@ public class DatabaseLoader {
                 .role("ADMIN")
                 .build();
 
-        var user = UserDto.builder()
+        var user = RegisterDto.builder()
                 .name("Adi")
                 .surname("Cesula")
                 .email("user@gmail.com")
@@ -47,8 +48,8 @@ public class DatabaseLoader {
                 .role("USER")
                 .build();
 
-        for (UserDto userDto : Arrays.asList(admin, user)) {
-            userService.register(userDto);
+        for (RegisterDto registerDto : Arrays.asList(admin, user)) {
+            userService.register(registerDto);
         }
 
     }

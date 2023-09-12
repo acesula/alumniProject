@@ -10,12 +10,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class UserConnection extends Base {
+public class Attendees extends Base{
 
-    private String friend;
-    private boolean status;
+    private String attendeeName;
+    private String attendeeSurname;
+    private String attendeeEmail;
 
     @ManyToOne
-    private User userConnection;
-
+    private Event event;
 }

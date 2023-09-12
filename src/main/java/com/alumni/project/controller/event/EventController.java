@@ -3,10 +3,12 @@ package com.alumni.project.controller.event;
 import com.alumni.project.dal.entity.Event;
 import com.alumni.project.dto.event.EventDto;
 import com.alumni.project.security.ErrorResponse;
-import com.alumni.project.service.event.EventServiceImpl;
+import com.alumni.project.security.model.AuthUserDetail;
+import com.alumni.project.service.event.EventService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,11 +19,21 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class EventController {
 
-    private final EventServiceImpl eventService;
+    private final EventService eventService;
 
-    @PostMapping("/{username}")
-    public ResponseEntity<ErrorResponse> save(@Valid @PathVariable String username, @RequestBody Event event) {
-        return eventService.saveEvent(username, event);
+    public AuthUserDetail authenticatedUser() {
+        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+
+    @PostMapping
+    public ResponseEntity<ErrorResponse> save(@RequestBody Event event) {
+        return eventService.saveEvent(authenticatedUser().getId(), event);
+    }
+
+    @GetMapping("/{id}")
+    public EventDto findById(@PathVariable UUID id) {
+        return eventService.findById(id);
     }
 
     @GetMapping
@@ -29,9 +41,9 @@ public class EventController {
         return eventService.findAll();
     }
 
-    @GetMapping("/{username}")
-    public List<EventDto> findByUser(@PathVariable String username) {
-        return eventService.findByUser(username);
+    @GetMapping("/eventsByUser")
+    public List<EventDto> findByUser() {
+        return eventService.findByUser(authenticatedUser().getId());
     }
 
     @PatchMapping("/{id}")
