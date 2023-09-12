@@ -34,7 +34,7 @@ public class EducationController {
         return educationService.findByUser(username);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/user-id/{id}")
     public EducationDto findById(@PathVariable UUID id) {
         return educationService.findById(id);
     }

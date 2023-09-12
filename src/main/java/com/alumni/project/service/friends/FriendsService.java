@@ -1,6 +1,7 @@
 package com.alumni.project.service.friends;
 
 import com.alumni.project.dal.entity.Friends;
+import com.alumni.project.dto.user.GetFriendsDto;
 
 import java.util.List;
 import java.util.UUID;
@@ -10,7 +11,7 @@ public interface FriendsService {
 
     List<Friends> findAll();
 
-    List<Friends> findByUser(String username);
+    List<GetFriendsDto> findAllFriendsPerUser(String username);
 
     Friends findById(UUID id);
 

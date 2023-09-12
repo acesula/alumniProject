@@ -1,7 +1,9 @@
 package com.alumni.project.service.mapping;
 
 import com.alumni.project.dal.entity.*;
+import com.alumni.project.dto.Chat.ChatDto;
 import com.alumni.project.dto.announcements.AnnouncementsDto;
+import com.alumni.project.dto.chatRoom.ChatRoomDto;
 import com.alumni.project.dto.connection.UserConnectionDto;
 import com.alumni.project.dto.contactdetails.ContactDetailsDto;
 import com.alumni.project.dto.education.EducationDto;
@@ -57,6 +59,13 @@ public interface MappingService {
     InterestsDto convertToInterestsDto(Interests interests);
 
     Interests convertToInterests(InterestsDto interestsDto);
+
+    ChatRoomDto convertToChatRoomDto(ChatRoom chatRoom);
+
+    ChatRoom convertToChatRoom(ChatRoomDto chatRoomDto);
+
+    ChatDto convertToChatDto(Chat chat);
+    Chat convertToChat(ChatDto chatDto);
 
 
 }

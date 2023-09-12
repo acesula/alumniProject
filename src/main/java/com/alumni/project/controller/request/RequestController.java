@@ -1,6 +1,8 @@
 package com.alumni.project.controller.request;
 
 import com.alumni.project.dal.entity.Request;
+import com.alumni.project.dto.user.UserInfoDto;
+import com.alumni.project.dto.user.UserRequestDto;
 import com.alumni.project.service.request.RequestServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,14 +26,22 @@ public class RequestController {
 //    public List<Request> findAll(@PathVariable String username) {
 //        return requestsService.findAll();
 //    }
+@GetMapping("/all-req/{username}")
+public List<UserRequestDto> findAllByUsername(@PathVariable String username) {
+    return requestsService.findAllByUsername(username);
+}
 
     @GetMapping("/{id}")
     public Request findById(@PathVariable UUID id) {
         return requestsService.findById(id);
     }
-    @PatchMapping("/{id}")
+    @PatchMapping("/update/{id}")
     public Request update(@PathVariable UUID id, @RequestBody Request dto,String status) {
         return requestsService.update(id, dto, status);
+    }
+    @DeleteMapping("/delete/{id}")
+    public void delete(@PathVariable UUID id ) {
+        requestsService.delete(id);
     }
 
 }

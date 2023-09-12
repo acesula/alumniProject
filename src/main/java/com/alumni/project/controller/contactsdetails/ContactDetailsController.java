@@ -19,10 +19,10 @@ public class ContactDetailsController {
 
     private final ContactDetailsServiceImp contactDetailsService;
 
-//    @PostMapping("/{username}")
-//    public ResponseEntity<ErrorResponse> save(@Valid @PathVariable String username, @RequestBody ContactDetails contactDetails) {
-//        return contactDetailsService.saveContactDetails(username, contactDetails);
-//    }
+    @PostMapping("/{username}")
+    public ResponseEntity<ErrorResponse> save(@Valid @PathVariable String username, @RequestBody ContactDetails contactDetails) {
+        return contactDetailsService.saveContactDetails(username, contactDetails);
+    }
 
     @GetMapping("/{email}")
     public ContactDetailsDto findByEmail(@PathVariable String email) {

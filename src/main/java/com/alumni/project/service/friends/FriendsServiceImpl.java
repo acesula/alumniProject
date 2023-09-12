@@ -4,6 +4,7 @@ import com.alumni.project.dal.entity.Friends;
 import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.FriendsRepository;
 import com.alumni.project.dal.repository.UserRepository;
+import com.alumni.project.dto.user.GetFriendsDto;
 import com.alumni.project.service.user.UserServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -72,11 +73,12 @@ public class FriendsServiceImpl implements FriendsService{
 
 
     @Override
-    public List<Friends> findByUser(String username) {
+    public List<GetFriendsDto> findAllFriendsPerUser(String username) {
 
         User user = userRepository.findByUsername(username);
         if(user != null){
-//            List<Friends> listOfFriends = friendsRepository.
+           List<GetFriendsDto> listOfFriends = friendsRepository.findAllFriendsPerUser(user.getId());
+           return listOfFriends;
         }
           return null;
 

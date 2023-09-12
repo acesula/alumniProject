@@ -1,7 +1,9 @@
 package com.alumni.project.service.mapping;
 
 import com.alumni.project.dal.entity.*;
+import com.alumni.project.dto.Chat.ChatDto;
 import com.alumni.project.dto.announcements.AnnouncementsDto;
+import com.alumni.project.dto.chatRoom.ChatRoomDto;
 import com.alumni.project.dto.connection.UserConnectionDto;
 import com.alumni.project.dto.contactdetails.ContactDetailsDto;
 import com.alumni.project.dto.education.EducationDto;
@@ -110,4 +112,26 @@ public class MappingServiceImpl implements MappingService {
     public Interests convertToInterests(InterestsDto interestsDto) {
         return modelMapper.map(interestsDto, Interests.class);
     }
+
+    @Override
+    public ChatRoomDto convertToChatRoomDto(ChatRoom chatRoom) {
+        return modelMapper.map(chatRoom, ChatRoomDto.class);
+    }
+
+    @Override
+    public ChatRoom convertToChatRoom(ChatRoomDto chatRoomDto) {
+        return modelMapper.map(chatRoomDto, ChatRoom.class);
+    }
+
+    @Override
+    public ChatDto convertToChatDto(Chat chat) {
+        return modelMapper.map(chat, ChatDto.class);
+    }
+
+    @Override
+    public Chat convertToChat(ChatDto chatDto) {
+        return modelMapper.map(chatDto, Chat.class);
+    }
+
+
 }

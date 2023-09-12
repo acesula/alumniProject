@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
 
@@ -33,7 +34,9 @@ public class Request extends Base {
     @JoinColumn(name="friend_id")
     private User user2;
     private String status;
+    @CreatedDate
     private LocalDate startDate;
+
     private LocalDate endDate;
 
 

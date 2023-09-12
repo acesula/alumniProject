@@ -7,8 +7,9 @@ import java.util.UUID;
 
 public interface ContactDetailsService {
 
-//    void save(String username, ContactDetails contactDetails);
-//
+
+
+    void save(String username, ContactDetails contactDetails);
 
     ContactDetailsDto findByEmail(String email);
 

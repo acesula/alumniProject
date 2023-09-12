@@ -6,6 +6,8 @@ import com.alumni.project.dal.repository.RequestRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.user.GetUserDto;
 import com.alumni.project.dto.user.UserDto;
+import com.alumni.project.dto.user.UserInfoDto;
+import com.alumni.project.dto.user.UserRequestDto;
 import com.alumni.project.service.friends.FriendsServiceImpl;
 import com.alumni.project.service.user.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -66,21 +68,22 @@ public class RequestServiceImpl implements RequestService {
         return true;
     }
     @Override
-    public List<Request> findAllByUsername(String username) {
+    public List<UserRequestDto> findAllByUsername(String username) {
 
-        User user = userRepository.findByUsername(username);
-        return requestRepository.findAllByUsername(user.getUsername());
-    }
-
-    @Override
-    public List<Request> findByUser(String username) {
-//        return requestRepository.findByUser_Username(username)
-//                .stream()
-//                .map(this::map)
-//                .collect(Collectors.toList());
-
+//        User user = userRepository.findByUsername(username);
+//        return requestRepository.findAllByUsername(user.getUsername());
+        try {
+            List<UserRequestDto> result = this.requestRepository.findAllByUsername(username).stream().toList();
+            if(!result.isEmpty()){
+                return  result;
+            }
+        } catch (Exception e){
+            System.out.println("----error in getting user info"+ e.getMessage());
+        }
         return null;
-    }
+   }
+
+
 
     @Override
     public Request findById(UUID id) {
@@ -92,9 +95,8 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public void deleteByUsername(UUID id) {
-        UserDto user = this.userService.findById(id);
-        this.userService.delete(user.getUsername());
+    public void delete(UUID id) {
+        this.requestRepository.deleteById(id);
     }
 
 
