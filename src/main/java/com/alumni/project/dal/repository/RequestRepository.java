@@ -12,17 +12,17 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface RequestRepository  extends JpaRepository<Request, UUID>, JpaSpecificationExecutor<Request> {
+public interface RequestRepository extends JpaRepository<Request, UUID>, JpaSpecificationExecutor<Request> {
     //List<Request> findByUser_UsernameUsername(String username);
     //long delete(String username);
 
-    @Query(value = "SELECT u.id, u.username,u.profile_picture as image,\n" +
-            " r.status, r.start_date as startDate, r.user_id as user1, r.friend_id as user2,\n " +
-            "r.end_date as endDate, r.id as mainId\n" +
+    @Query(value = "SELECT u.id, u.username,u.profile_picture as image,r.id as mainId\n" +
             " from users_table u \n" +
-            "left join request r on u.id = r.user_id\n" +
-            "  where u.username = :username", nativeQuery = true)
-    List<UserRequestDto> findAllByUsername(String username);
+            " inner join request r on r.user_id = u.id\n" +
+            " where r.friend_id = :uuid", nativeQuery = true)
+    List<UserRequestDto> findAllById(UUID uuid);
+
+
 
 
 }

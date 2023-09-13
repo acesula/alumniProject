@@ -10,7 +10,9 @@ import com.alumni.project.dto.education.EducationDto;
 import com.alumni.project.dto.employment.EmploymentDto;
 import com.alumni.project.dto.event.AttendeesDto;
 import com.alumni.project.dto.event.EventDto;
+import com.alumni.project.dto.friends.FriendsDto;
 import com.alumni.project.dto.interests.InterestsDto;
+import com.alumni.project.dto.request.RequestDto;
 import com.alumni.project.dto.skills.SkillsDto;
 import com.alumni.project.dto.user.RegisterDto;
 import com.alumni.project.dto.user.UpdatePersonalInfoDto;
@@ -151,5 +153,25 @@ public class MappingServiceImpl implements MappingService {
     @Override
     public Attendees convertToAttendees(AttendeesDto attendeesDto) {
         return modelMapper.map(attendeesDto, Attendees.class);
+    }
+
+    @Override
+    public FriendsDto convertToFriendsDto(Friends friends) {
+        return modelMapper.map(friends, FriendsDto.class);
+    }
+
+    @Override
+    public Friends convertToFriends(FriendsDto friendsDto) {
+        return modelMapper.map(friendsDto, Friends.class);
+    }
+
+    @Override
+    public RequestDto convertToRequestDto(Request request) {
+        return modelMapper.map(request, RequestDto.class);
+    }
+
+    @Override
+    public Request convertToRequest(RequestDto requestDto) {
+        return modelMapper.map(requestDto, Request.class);
     }
 }

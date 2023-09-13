@@ -4,7 +4,9 @@ import com.alumni.project.dal.entity.Friends;
 import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.FriendsRepository;
 import com.alumni.project.dal.repository.UserRepository;
+import com.alumni.project.dto.friends.FriendsDto;
 import com.alumni.project.dto.user.GetFriendsDto;
+import com.alumni.project.service.mapping.MappingService;
 import com.alumni.project.service.user.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,77 +18,76 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 
-
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class FriendsServiceImpl implements FriendsService{
+public class FriendsServiceImpl implements FriendsService {
     private final FriendsRepository friendsRepository;
     private final UserRepository userRepository;
-
-
-    private final UserServiceImpl userService;
+    private final MappingService mappingService;
 
     @Override
-    public String save(String user1, String friend) {
-        try{
-            User user = userRepository.findByUsername(user1);
-            User user2 = userRepository.findByUsername(friend);
+    public String save(UUID id1, UUID id2) {
+        try {
+            var user = userRepository.findById(id1).orElseThrow(RuntimeException::new);
+            var user2 = userRepository.findById(id2).orElseThrow(RuntimeException::new);
 
-            if(user != null && user2 != null ){
-                if(this.areTheyAlreadyFriends(user.getId(),user2.getId())){
+            if (user != null && user2 != null) {
+                if (this.areTheyAlreadyFriends(user.getId(), user2.getId())) {
                     return "You are already friends";
                 }
                 Friends newFriend = new Friends(user, user2);
                 friendsRepository.save(newFriend);
             }
             return "Success: Friend was added";
-        } catch (Exception e){
+        } catch (Exception e) {
             return e.getMessage();
         }
     }
 
-    public boolean areTheyAlreadyFriends(UUID user1 , UUID friend1){
+    @Override
+    public List<GetFriendsDto> findAllFriendsPerUser(UUID id) {
+        return friendsRepository.findAllFriendsPerUser(id);
+    }
+
+    public boolean areTheyAlreadyFriends(UUID user1, UUID friend1) {
 
         List<Friends> totalListOfFriends = this.friendsRepository.findAll();
         Optional<Friends> friend = totalListOfFriends.stream().filter(friendItem ->
                 (friendItem.getUser1().getId() == user1 && friendItem.getFriend().getId() == friend1) ||
                         (friendItem.getUser1().getId() == friend1 && friendItem.getFriend().getId() == user1)
         ).findFirst();
-        if(friend.isEmpty()) return  false;
+        if (friend.isEmpty()) return false;
         return true;
     }
 
 
+//    @Override
+//    public List<FriendsDto> findAll() {
+//        return friendsRepository.findAll()
+//                .stream()
+//                .map(mappingService::convertToFriendsDto)
+//                .collect(Collectors.toList());
+//    }
 
-    @Override
-    public List<Friends> findAll() {
-        return friendsRepository.findAll()
-                .stream()
-                .map(this::map)
-                .collect(Collectors.toList());
-    }
 
-
-    @Override
-    public List<GetFriendsDto> findAllFriendsPerUser(String username) {
-
-        User user = userRepository.findByUsername(username);
-        if(user != null){
-           List<GetFriendsDto> listOfFriends = friendsRepository.findAllFriendsPerUser(user.getId());
-           return listOfFriends;
-        }
-          return null;
-
-    }
-
+//    @Override
+//    public List<Friends> findByUser(String username) {
+//
+//        User user = userRepository.findByUsername(username);
+//        if(user != null){
+////            List<Friends> listOfFriends = friendsRepository.
+//        }
+//          return null;
+//
+//    }
 
 
     @Override
-    public Friends findById(UUID id) {
+    public FriendsDto findById(UUID id) {
         var optional = friendsRepository.findById(id);
         if (optional.isPresent()) {
-            return map(optional.get());
+            return mappingService.convertToFriendsDto(optional.get());
         }
         throw new RuntimeException("No interest found");
     }
@@ -98,14 +99,4 @@ public class FriendsServiceImpl implements FriendsService{
     }
 
 
-    private Friends map(Friends friend) {
-        var dto = new Friends();
-        dto.setId(friend.getId());
-        dto.setUser1(friend.getUser1());
-        dto.setFriend(friend.getFriend());
-        dto.setStartDate(friend.getStartDate());
-        dto.setEndDate(friend.getEndDate());
-
-        return dto;
-    }
 }

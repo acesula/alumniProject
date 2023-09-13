@@ -1,21 +1,18 @@
 package com.alumni.project.service.request;
 
 import com.alumni.project.dal.entity.Request;
-import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.RequestRepository;
 import com.alumni.project.dal.repository.UserRepository;
 
-import com.alumni.project.dto.user.UserDto;
-import com.alumni.project.dto.user.UserInfoDto;
+import com.alumni.project.dto.request.RequestDto;
 import com.alumni.project.dto.user.UserRequestDto;
 import com.alumni.project.service.friends.FriendsServiceImpl;
-import com.alumni.project.service.user.UserServiceImpl;
+import com.alumni.project.service.mapping.MappingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,36 +25,36 @@ public class RequestServiceImpl implements RequestService {
     private final RequestRepository requestRepository;
 
     private final FriendsServiceImpl friendsService;
-    private final UserServiceImpl userService;
+    private final MappingService mappingService;
 
 
-    public String sendRequest(String sender, String receiver) {
+    public void sendRequest(UUID id1, UUID id2) {
 
-       try {
-           System.out.println(sender);
-           System.out.println(receiver);
-           User senderUser = userRepository.findByUsername(sender);
-           User receiverUser = userRepository.findByUsername(receiver);
+        try {
 
-           if(senderUser != null && receiverUser != null ){
+            var senderUser = userRepository.findById(id1).orElseThrow(RuntimeException::new);
+            var receiverUser = userRepository.findById(id2).orElseThrow(RuntimeException::new);
 
-               if(this.isRequestSentBefore(senderUser.getId(),receiverUser.getId())){
-                   return "You have already sent request";
-               }
-               Request newRequest = new Request(senderUser, receiverUser, RequestStatus.PENDING.toString());
-               requestRepository.save(newRequest);
-           }
+            if (senderUser != null && receiverUser != null) {
 
-           return "Success: Request was sent";
-       } catch (Exception e){
-           return e.getMessage();
-       }
+                if (isRequestSentBefore(senderUser.getId(), receiverUser.getId())) {
+                    return;
+                }
+                if (friendsService.areTheyAlreadyFriends(senderUser.getId(), receiverUser.getId())) {
+                    return;
+                }
+
+                Request newRequest = new Request(senderUser, receiverUser);
+                requestRepository.save(newRequest);
+            }
+
+        } catch (Exception e) {
+            e.getMessage();
+        }
     }
 
 
-
-
-    public boolean isRequestSentBefore(UUID senderId, UUID receiverId){
+    public boolean isRequestSentBefore(UUID senderId, UUID receiverId) {
 
         List<Request> totalListOfRequests = this.requestRepository.findAll();
         Optional<Request> request = totalListOfRequests.stream().filter(requestItem ->
@@ -66,29 +63,27 @@ public class RequestServiceImpl implements RequestService {
         ).findFirst();
         return request.isPresent();
     }
-    @Override
-    public List<UserRequestDto> findAllByUsername(String username) {
 
-//        User user = userRepository.findByUsername(username);
-//        return requestRepository.findAllByUsername(user.getUsername());
+    @Override
+    public List<UserRequestDto> findAllById(UUID id) {
+
         try {
-            List<UserRequestDto> result = this.requestRepository.findAllByUsername(username).stream().toList();
-            if(!result.isEmpty()){
-                return  result;
+            List<UserRequestDto> result = this.requestRepository.findAllById(id).stream().toList();
+            if (!result.isEmpty()) {
+                return result;
             }
-        } catch (Exception e){
-            System.out.println("----error in getting user info"+ e.getMessage());
+        } catch (Exception e) {
+            System.out.println("----error in getting user info" + e.getMessage());
         }
         return null;
-   }
-
+    }
 
 
     @Override
-    public Request findById(UUID id) {
+    public RequestDto findById(UUID id) {
         var optional = requestRepository.findById(id);
         if (optional.isPresent()) {
-            return map(optional.get());
+            return mappingService.convertToRequestDto(optional.get());
         }
         throw new RuntimeException("No interest found");
     }
@@ -96,34 +91,15 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public void delete(UUID id) {
-        this.requestRepository.deleteById(id);
+        requestRepository.deleteById(id);
     }
-
 
 
     @Override
-    public Request update(UUID id, Request request, String newStatus) {
+    public void acceptRequest(UUID id) {
         var req = requestRepository.findById(id).orElseThrow(RuntimeException::new);
-        req.setStatus(newStatus);
-        if(Objects.equals(newStatus, RequestStatus.APPROVED.toString())){
-            //Call Friends method for create
-            this.friendsService.save(req.getUser1().getUsername(), req.getUser2().getUsername());
-        }
-        return requestRepository.save(req);
+        friendsService.save(req.getUser1().getId(), req.getUser2().getId());
+        requestRepository.delete(req);
     }
 
-    private Request map(Request request) {
-        var dto = new Request();
-        dto.setUser1(request.getUser1());
-        dto.setUser2(request.getUser2());
-        dto.setStatus(request.getStatus());
-        dto.setStartDate(request.getStartDate());
-        dto.setEndDate(request.getEndDate());
-
-        return dto;
-    }
-
-
-//    public List<Request> findAll() {
-//    }
 }

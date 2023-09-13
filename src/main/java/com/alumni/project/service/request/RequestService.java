@@ -1,6 +1,7 @@
 package com.alumni.project.service.request;
 
 import com.alumni.project.dal.entity.Request;
+import com.alumni.project.dto.request.RequestDto;
 import com.alumni.project.dto.user.UserRequestDto;
 
 import java.util.List;
@@ -8,16 +9,16 @@ import java.util.UUID;
 
 public interface RequestService {
 
-    String sendRequest(String sender, String receiver);
+    void sendRequest(UUID id1, UUID id2);
 
-    List<UserRequestDto> findAllByUsername(String username);
+    List<UserRequestDto> findAllById(UUID id);
 
-    Request findById(UUID id);
+    RequestDto findById(UUID id);
 
     void delete(UUID id);
 
 
-    Request update(UUID id, Request request, String newStatus);
+    void acceptRequest(UUID id);
 
 
 

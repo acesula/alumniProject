@@ -2,14 +2,17 @@ package com.alumni.project.controller.request;
 
 import com.alumni.project.dal.entity.Request;
 
+import com.alumni.project.dto.request.RequestDto;
 import com.alumni.project.dto.user.UserInfoDto;
 import com.alumni.project.dto.user.UserRequestDto;
 
+import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.request.RequestService;
 
 import com.alumni.project.service.request.RequestServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,31 +25,31 @@ public class RequestController {
 
     private final RequestService requestsService;
 
-    @PostMapping("/{sender}/{receiver}")
-    public void save(@Valid @PathVariable String sender, @Valid @PathVariable String receiver) {
-        requestsService.sendRequest(sender, receiver);
+    public AuthUserDetail authenticatedUser() {
+        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
-    //    @GetMapping("/{username}")
-//    public List<Request> findAll(@PathVariable String username) {
-//        return requestsService.findAll();
-//    }
-    @GetMapping("/all-req/{username}")
-    public List<UserRequestDto> findAllByUsername(@PathVariable String username) {
-        return requestsService.findAllByUsername(username);
+    @PostMapping("/{id}")
+    public void save(@Valid @PathVariable UUID id) {
+        requestsService.sendRequest(authenticatedUser().getId(), id);
+    }
+
+    @GetMapping
+    public List<UserRequestDto> findAllById() {
+        return requestsService.findAllById(authenticatedUser().getId());
     }
 
     @GetMapping("/{id}")
-    public Request findById(@PathVariable UUID id) {
+    public RequestDto findById(@PathVariable UUID id) {
         return requestsService.findById(id);
     }
 
-    @PatchMapping("/update/{id}")
-    public Request update(@PathVariable UUID id, @RequestBody Request dto, String status) {
-        return requestsService.update(id, dto, status);
+    @PostMapping("/accept/{id}")
+    public void acceptRequest(@PathVariable UUID id) {
+        requestsService.acceptRequest(id);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public void delete(@PathVariable UUID id) {
         requestsService.delete(id);
     }

@@ -18,7 +18,6 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 
 
 
@@ -31,24 +30,15 @@ public class Request extends Base {
     @ManyToOne
     @JoinColumn(name="friend_id")
     private User user2;
-    private String status;
-    @CreatedDate
-    private LocalDate startDate;
-
-    private LocalDate endDate;
 
 
-    public Request(User senderUser, User receiverUser, String status) {
+
+    public Request(User senderUser, User receiverUser) {
         this.user1 = senderUser;
         this.user2= receiverUser;
-        this.status = status;
 
     }
-//    public Request(User senderUser, User receiverUser,String status) {
-//        this.user1 = senderUser;
-//        this.user2= receiverUser;
-//        this.status = status;
-//    }
+
 }
 
 
