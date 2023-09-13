@@ -1,25 +1,38 @@
 package com.alumni.project.service.user;
 
-import com.alumni.project.dal.entity.Role;
-import com.alumni.project.dal.entity.User;
-import com.alumni.project.dto.user.GetUserDto;
-import com.alumni.project.dto.user.UserDto;
+import com.alumni.project.dto.user.*;
+import com.alumni.project.security.ErrorResponse;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
 public interface UserService{
 
-    GetUserDto save(UserDto userDto);
+    void save(RegisterDto registerDto);
 
-    List<GetUserDto> findAll();
+    ResponseEntity<ErrorResponse> register(RegisterDto registerDto);
 
-    GetUserDto findById(UUID id);
+    List<UserDto> findAll();
 
-    GetUserDto update(UUID id, UserDto user);
+    UserDto findById(UUID id);
 
-    void delete(String username);
+    UpdatePersonalInfoDto update(UUID id, UpdatePersonalInfoDto user);
 
-    Role addRole(Role role);
+    ResponseEntity<ErrorResponse> checkPassword(UUID id, String password);
+    void delete(UUID id);
 
+    void uploadProfilePicture(MultipartFile multipartFile, UUID id) throws IOException;
+
+    void updateBio(UUID id, String bio);
+
+    void updateUsername(UUID id, String username);
+
+    void updateEmail(UUID id, String email);
+
+    void updatePassword(UUID id, ChangePasswordDto password);
+
+    List<UserInfoDto> getUserInfoByUsername(String username);
 }

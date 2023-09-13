@@ -3,10 +3,12 @@ package com.alumni.project.controller.announcements;
 import com.alumni.project.dal.entity.Announcements;
 import com.alumni.project.dto.announcements.AnnouncementsDto;
 import com.alumni.project.security.ErrorResponse;
-import com.alumni.project.service.announcements.AnnouncementsServiceImpl;
-import jakarta.validation.Valid;
+import com.alumni.project.security.model.AuthUserDetail;
+import com.alumni.project.service.announcements.AnnouncementsService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,11 +19,15 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AnnouncementsController {
 
-    private final AnnouncementsServiceImpl announcementService;
+    private final AnnouncementsService announcementService;
 
-    @PostMapping("/{username}")
-    public ResponseEntity<ErrorResponse> save(@Valid @PathVariable String username, @RequestBody Announcements announcement) {
-        return announcementService.saveAnnouncement(username,announcement);
+    public AuthUserDetail authenticatedUser() {
+        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+    @PostMapping()
+    public ResponseEntity<ErrorResponse> save(@RequestBody Announcements announcement) {
+        return announcementService.saveAnnouncement(authenticatedUser().getId(), announcement);
     }
 
     @GetMapping
@@ -29,8 +35,14 @@ public class AnnouncementsController {
         return announcementService.findAll();
     }
 
+    @GetMapping("/announcementsByUser")
+    public List<AnnouncementsDto> findAnnouncementsByUser() {
+
+        return announcementService.findByUser(authenticatedUser().getId());
+    }
+
     @PatchMapping("/{id}")
-    public Announcements update(@PathVariable UUID id, @RequestBody Announcements announcement){
+    public AnnouncementsDto update(@PathVariable UUID id,@RequestBody AnnouncementsDto announcement) {
         return announcementService.update(id, announcement);
     }
 

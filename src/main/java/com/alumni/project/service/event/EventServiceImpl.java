@@ -3,14 +3,20 @@ package com.alumni.project.service.event;
 import com.alumni.project.dal.entity.Event;
 import com.alumni.project.dal.repository.EventRepository;
 import com.alumni.project.dal.repository.UserRepository;
+import com.alumni.project.dto.event.EventDto;
 import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,19 +24,31 @@ public class EventServiceImpl implements EventService{
 
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
+    private final MappingServiceImpl mappingService;
 
     @Override
-    public void save(String username,Event event) {
-        var user = userRepository.findByUsername(username);
+    @Transactional
+    public void save(UUID uuid,Event event) {
+        var user = userRepository.findById(uuid).orElseThrow(RuntimeException::new);
         event.setUser(user);
         user.getEvents().add(event);
         eventRepository.save(event);
     }
 
-    public ResponseEntity<ErrorResponse> saveEvent(String username,Event event) {
+    @Override
+    public EventDto findById(UUID uuid) {
+        var optional = eventRepository.findById(uuid);
+        if (optional.isPresent()) {
+            return mappingService.convertToEventDto(optional.get());
+        }
+            throw new RuntimeException("Event not found!");
+
+    }
+
+    public ResponseEntity<ErrorResponse> saveEvent(UUID uuid,Event event) {
         try {
-            if (userRepository.existsByUsername(username)) {
-                save(username, event);
+            if (userRepository.existsById(uuid)) {
+                save(uuid, event);
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {
                 ErrorResponse errorResponse = new ErrorResponse();
@@ -47,8 +65,19 @@ public class EventServiceImpl implements EventService{
     }
 
     @Override
-    public List<Event> findAll() {
-        return eventRepository.findAll();
+    public List<EventDto> findAll() {
+        return eventRepository.findAll()
+                .stream()
+                .map(mappingService::convertToEventDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<EventDto> findByUser(UUID uuid) {
+        return eventRepository.findByUser_Id(uuid)
+                .stream()
+                .map(mappingService::convertToEventDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -57,13 +86,16 @@ public class EventServiceImpl implements EventService{
     }
 
     @Override
-    public Event update(UUID uuid, Event event) {
+    @Transactional
+    public EventDto update(UUID uuid, EventDto event) {
         var e = eventRepository.findById(uuid).orElseThrow(RuntimeException::new);
         e.setEventDescription(event.getEventDescription());
-        e.setDate(event.getDate());
-        e.setTime(event.getTime());
+        e.setStartDate(event.getStartDate());
+        e.setStartTime(event.getStartTime());
+        e.setEndTime(event.getEndTime());
+        e.setEndDate(event.getEndDate());
         e.setLocation(event.getLocation());
 
-        return eventRepository.save(e);
+        return mappingService.convertToEventDto(eventRepository.save(e));
     }
 }

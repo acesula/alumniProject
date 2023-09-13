@@ -1,11 +1,14 @@
 package com.alumni.project.service.skills;
 
 import com.alumni.project.dal.entity.Skills;
-import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.SkillsRepository;
 import com.alumni.project.dal.repository.UserRepository;
-import com.alumni.project.dto.user.GetUserDto;
+import com.alumni.project.dto.skills.SkillsDto;
+import com.alumni.project.dto.user.UserDto;
 import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.service.mapping.MappingServiceImpl;
+import com.alumni.project.service.user.UserServiceImpl;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,23 +20,26 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class SkillsServiceImpl implements SkillsService{
+public class SkillsServiceImpl implements SkillsService {
     private final SkillsRepository skillsRepository;
     private final UserRepository userRepository;
+    private final UserServiceImpl userService;
+    private final MappingServiceImpl mappingService;
 
 
     @Override
-    public void save(String username, Skills skills) {
-        var user = userRepository.findByUsername(username);
+    @Transactional
+    public void save(UUID uuid, Skills skills) {
+        var user = userRepository.findById(uuid).orElseThrow(RuntimeException::new);
         skills.setUser(user);
         user.getSkills().add(skills);
         skillsRepository.save(skills);
     }
 
-    public ResponseEntity<ErrorResponse> saveSkill(String username, Skills skills){
-        try{
-            if (userRepository.existsByUsername(username)) {
-                save(username, skills);
+    public ResponseEntity<ErrorResponse> saveSkill(UUID uuid, Skills skills) {
+        try {
+            if (userRepository.existsById(uuid)) {
+                save(uuid, skills);
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {
                 ErrorResponse errorResponse = new ErrorResponse();
@@ -41,7 +47,7 @@ public class SkillsServiceImpl implements SkillsService{
                 errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
                 return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
             }
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             ErrorResponse error = new ErrorResponse();
             error.setMessage(e.getMessage());
             error.setErrorCode(HttpStatus.BAD_REQUEST.value());
@@ -50,46 +56,40 @@ public class SkillsServiceImpl implements SkillsService{
     }
 
     @Override
-    public List<Skills> findAll() {
+    public List<SkillsDto> findAll() {
 
         return skillsRepository.findAll()
                 .stream()
-                .map(this::map)
+                .map(mappingService::convertToSkillsDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Skills findById(UUID id) {
-
-        var optional = skillsRepository.findById(id);
-        if (optional.isPresent()) {
-            return map(optional.get());
-        }
-        throw new RuntimeException("Skill not found");
+    public List<SkillsDto> findById(UUID id) {
+        return skillsRepository.findByUser_Id(id)
+                .stream()
+                .map(mappingService::convertToSkillsDto)
+                .collect(Collectors.toList());
     }
 
 
+
+
     @Override
-    public Skills update(UUID id, Skills skillDto) {
+    @Transactional
+    public SkillsDto update(UUID id, Skills skillDto) {
 
         var skill = skillsRepository.findById(id).orElseThrow(RuntimeException::new);
         skill.setSkillField(skillDto.getSkillField());
-        skill.setSkillField(skillDto.getSkillField());
+        skill.setSkillDescription(skillDto.getSkillDescription());
 
 
-        return map(skillsRepository.save(skill));
+        return mappingService.convertToSkillsDto(skillsRepository.save(skill));
     }
 
     @Override
     public void delete(UUID id) {
         skillsRepository.deleteById(id);
     }
-    private Skills map(Skills skills) {
-        var dto = new Skills();
-        dto.setId(skills.getId());
-        dto.setSkillField(skills.getSkillField());
-        dto.setSkillDescription(skills.getSkillDescription());
 
-        return dto;
-    }
 }

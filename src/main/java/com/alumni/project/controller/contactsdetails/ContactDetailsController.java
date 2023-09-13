@@ -1,15 +1,15 @@
 package com.alumni.project.controller.contactsdetails;
 
-import com.alumni.project.dal.entity.ContactDetails;
 import com.alumni.project.dto.contactdetails.ContactDetailsDto;
 import com.alumni.project.security.ErrorResponse;
-import com.alumni.project.service.contactdetails.ContactDetailsServiceImp;
+import com.alumni.project.security.model.AuthUserDetail;
+import com.alumni.project.service.contactdetails.ContactDetailsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -17,25 +17,25 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ContactDetailsController {
 
-    private final ContactDetailsServiceImp contactDetailsService;
+    private final ContactDetailsService contactDetailsService;
 
-//    @PostMapping("/{username}")
-//    public ResponseEntity<ErrorResponse> save(@Valid @PathVariable String username, @RequestBody ContactDetails contactDetails) {
-//        return contactDetailsService.saveContactDetails(username, contactDetails);
-//    }
-
-    @GetMapping("/{email}")
-    public ContactDetailsDto findById(@PathVariable String email) {
-        return contactDetailsService.findByEmail(email);
+    public AuthUserDetail authenticatedUser() {
+        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
+    @GetMapping
+    public ContactDetailsDto findByUserId() {
+        return contactDetailsService.findByUserId(authenticatedUser().getId());
+    }
+
+
     @DeleteMapping("/{email}")
-    public void deleteById(@PathVariable String email) {
+    public void deleteByEmail(@PathVariable String email) {
         contactDetailsService.deleteByEmail(email);
     }
 
-    @PatchMapping("/{email}")
-    public ContactDetailsDto update(@PathVariable String email, @RequestBody ContactDetailsDto contactDetailsDto) {
-        return contactDetailsService.update(email, contactDetailsDto);
+    @PatchMapping("/{id}")
+    public ContactDetailsDto update(@PathVariable UUID id, @RequestBody ContactDetailsDto contactDetailsDto) {
+        return contactDetailsService.update(id, contactDetailsDto);
     }
 }

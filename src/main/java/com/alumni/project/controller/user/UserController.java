@@ -1,58 +1,97 @@
 package com.alumni.project.controller.user;
 
-import com.alumni.project.dal.entity.User;
-import com.alumni.project.dto.user.GetUserDto;
-import com.alumni.project.dto.user.UserDto;
-import com.alumni.project.dto.user.UserLoginDto;
+import com.alumni.project.dto.user.*;
 import com.alumni.project.security.ErrorResponse;
-import com.alumni.project.service.user.UserServiceImpl;
+import com.alumni.project.security.model.AuthUserDetail;
+import com.alumni.project.service.user.UserService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
+
 
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
-    @PostMapping("/register")
-    public ResponseEntity<ErrorResponse> register(@Valid @RequestBody UserDto userDto) {
-       return userService.register(userDto);
+    public AuthUserDetail authenticatedUser() {
+        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<ErrorResponse> login(@Valid @RequestBody UserLoginDto login) {
-        return userService.login(login);
+    @PostMapping
+    public ResponseEntity<ErrorResponse> register(@Valid @RequestBody RegisterDto registerDto) {
+       return userService.register(registerDto);
     }
 
     @GetMapping
-    public List<GetUserDto> findAll() {
+    public List<UserDto> findAll() {
         return userService.findAll();
     }
 
     @GetMapping("/{id}")
-    public GetUserDto findById(@PathVariable UUID id) {
+    public UserDto findById(@PathVariable UUID id) {
         return userService.findById(id);
     }
 
-    @PatchMapping("/{id}")
-    public GetUserDto update(@PathVariable UUID id, @RequestBody UserDto dto) {
-        return userService.update(id, dto);
+//    @GetMapping("/user-info/{username}")
+//    public List<UserInfoDto> findUserInfoByUsername(@PathVariable String username) {
+//        return userService.getUserInfoByUsername(username);
+//    }
+
+    @PatchMapping("/uploadImage")
+    public void updateProfilePicture(@RequestParam("profilePicture") MultipartFile multipartFile) throws IOException {
+        userService.uploadProfilePicture(multipartFile, authenticatedUser().getId());
     }
 
-    @DeleteMapping("/{username}")
-    @Transactional
-    public void delete(@PathVariable String username) {
-        userService.delete(username);
+    @PatchMapping("/updateBio")
+    public void updateBio(@RequestParam("bio") String bio)  {
+        userService.updateBio(authenticatedUser().getId(), bio);
     }
+
+    @PatchMapping("/updateUsername")
+    public void updateUsername(@RequestParam("username") String username)  {
+        userService.updateUsername(authenticatedUser().getId(), username);
+    }
+
+    @PatchMapping("/updateEmail")
+    public void updateEmail(@RequestParam("email") String email)  {
+        userService.updateEmail(authenticatedUser().getId(), email);
+    }
+
+    @PatchMapping("/updatePassword")
+    public void updatePassword(@RequestBody ChangePasswordDto password) {
+        userService.updatePassword(authenticatedUser().getId(), password);
+    }
+
+    @PatchMapping
+    public UpdatePersonalInfoDto update(@RequestBody UpdatePersonalInfoDto dto) {
+        return userService.update(authenticatedUser().getId(), dto);
+    }
+
+    @DeleteMapping
+    public void delete() {
+        userService.delete(authenticatedUser().getId());
+    }
+
+    @PostMapping("/checkPassword")
+    public ResponseEntity<ErrorResponse> checkPassword(@RequestParam("password") String password) {
+        return userService.checkPassword(authenticatedUser().getId(), password);
+    }
+
+//    @GetMapping("/users/{username}")
+//    public List<UserInfoDto> getUserInfoByUsername(@PathVariable String username) {
+//        return userService.getUserInfoByUsername(username);
+//    }
 
 
 }

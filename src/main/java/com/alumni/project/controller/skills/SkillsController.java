@@ -1,13 +1,14 @@
 package com.alumni.project.controller.skills;
 
 import com.alumni.project.dal.entity.Skills;
-import com.alumni.project.dto.user.GetUserDto;
-import com.alumni.project.dto.user.UserDto;
+import com.alumni.project.dto.skills.SkillsDto;
 import com.alumni.project.security.ErrorResponse;
-import com.alumni.project.service.skills.SkillsServiceImpl;
+import com.alumni.project.security.model.AuthUserDetail;
+import com.alumni.project.service.skills.SkillsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,24 +19,31 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class SkillsController {
 
-    private final SkillsServiceImpl skillsService;
+    private final SkillsService skillsService;
 
-    @PostMapping("/{username}")
-    public ResponseEntity<ErrorResponse> save(@Valid @PathVariable String username, @RequestBody Skills skill) {
-        return skillsService.saveSkill(username, skill);
+
+    public AuthUserDetail authenticatedUser() {
+        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
+
+    @PostMapping
+    public ResponseEntity<ErrorResponse> save(@RequestBody Skills skill) {
+        return skillsService.saveSkill(authenticatedUser().getId(), skill);
+    }
+//    @GetMapping
+//    public List<SkillsDto> findAll() {
+//        return skillsService.findAll();
+//    }
+
+
+
     @GetMapping
-    public List<Skills> findAll() {
-        return skillsService.findAll();
-    }
-
-    @GetMapping("/{id}")
-    public Skills findById(@PathVariable UUID id) {
-        return skillsService.findById(id);
+    public List<SkillsDto> findByUser(){
+        return skillsService.findById(authenticatedUser().getId());
     }
 
     @PatchMapping("/{id}")
-    public Skills update(@PathVariable UUID id, @RequestBody Skills dto) {
+    public SkillsDto update(@PathVariable UUID id, @RequestBody Skills dto) {
         return skillsService.update(id, dto);
     }
 

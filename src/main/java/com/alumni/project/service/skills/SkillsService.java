@@ -2,18 +2,24 @@ package com.alumni.project.service.skills;
 
 import com.alumni.project.dal.entity.Skills;
 import com.alumni.project.dal.entity.User;
+import com.alumni.project.dto.skills.SkillsDto;
+import com.alumni.project.security.ErrorResponse;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-
+@Service
 public interface SkillsService {
-    void save(String username, Skills skills);
+    void save(UUID uuid, Skills skills);
 
-    List<Skills> findAll();
+    ResponseEntity<ErrorResponse> saveSkill(UUID id, Skills skill);
 
-    Skills findById(UUID id);
+    List<SkillsDto> findAll();
 
-    Skills update(UUID id, Skills dto);
+    List<SkillsDto> findById(UUID id);
+
+    SkillsDto update(UUID id, Skills dto);
 
     void delete(UUID id);
 }

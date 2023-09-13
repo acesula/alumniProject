@@ -5,28 +5,35 @@ import com.alumni.project.dal.repository.ContactDetailsRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.contactdetails.ContactDetailsDto;
 import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ContactDetailsServiceImp implements ContactDetailsService {
 
-    private final ContactDetailsRepository contactDetailsRepository;
     private final UserRepository userRepository;
+    private final ContactDetailsRepository contactDetailsRepository;
+    private final MappingServiceImpl mappingService;
 
-//    @Override
-//    public void save(String username, ContactDetails contactDetails) {
-//        var user = userRepository.findByUsername(username);
-//        contactDetails.setUser(user);
-//        user.setContactDetails(contactDetails);
-//        contactDetailsRepository.save(contactDetails);
-//    }
-//
+
+
+    @Override
+    public void save(String username, ContactDetails contactDetails) {
+        var user = userRepository.findByUsername(username);
+        contactDetails.setUser(user);
+        user.setContactDetails(contactDetails);
+        contactDetailsRepository.save(contactDetails);
+    }
+
 //    public ResponseEntity<ErrorResponse> saveContactDetails(String username, ContactDetails contactDetails){
 //        try{
 //            if (userRepository.existsByUsername(username)) {
@@ -54,13 +61,22 @@ public class ContactDetailsServiceImp implements ContactDetailsService {
 //        }
 //    }
 
+
     @Override
-    public ContactDetailsDto findByEmail(String email) {
-        var optional = contactDetailsRepository.findByEmail(email);
+    public ContactDetailsDto findByUserId(UUID uuid) {
+        var optional = contactDetailsRepository.findByUser_Id(uuid);
         if(optional.isPresent()){
-            return map(optional.get());
+            return mappingService.convertToContactDetailsDto(optional.get());
         }
         throw new RuntimeException("Could not find contact details");
+    }
+
+    @Override
+    public List<ContactDetailsDto> findByUser(String username) {
+        return contactDetailsRepository.findByUser_Username(username)
+                .stream()
+                .map(mappingService::convertToContactDetailsDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -69,8 +85,9 @@ public class ContactDetailsServiceImp implements ContactDetailsService {
     }
 
     @Override
-    public ContactDetailsDto update(String email, ContactDetailsDto contactDetailsDto) {
-        var contact = contactDetailsRepository.findByEmail(email).orElseThrow(RuntimeException::new);
+    @Transactional
+    public ContactDetailsDto update(UUID uuid, ContactDetailsDto contactDetailsDto) {
+        var contact = contactDetailsRepository.findByUser_Id(uuid).orElseThrow(RuntimeException::new);
         contact.setAddress(contactDetailsDto.getAddress());
         contact.setEmail(contactDetailsDto.getEmail());
         contact.setCountry(contactDetailsDto.getCountry());
@@ -79,18 +96,6 @@ public class ContactDetailsServiceImp implements ContactDetailsService {
         contact.setLinkedIn(contactDetailsDto.getLinkedIn());
         contact.setZipCode(contactDetailsDto.getZipCode());
 
-        return map(contactDetailsRepository.save(contact));
-    }
-
-    public ContactDetailsDto map(ContactDetails contactDetails){
-        var dto = new ContactDetailsDto();
-        dto.setEmail(contactDetails.getEmail());
-        dto.setAddress(contactDetails.getAddress());
-        dto.setCity(contactDetails.getCity());
-        dto.setCountry(contactDetails.getCountry());
-        dto.setZipCode(contactDetails.getZipCode());
-        dto.setLinkedIn(contactDetails.getLinkedIn());
-
-        return dto;
+        return mappingService.convertToContactDetailsDto(contactDetailsRepository.save(contact));
     }
 }

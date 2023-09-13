@@ -13,14 +13,28 @@ import lombok.Setter;
 
 public class Chat extends Base {
     @ManyToOne
-    @JoinColumn(name="sender_user_id")
+    @JoinColumn(name="chat_room_id")
     private ChatRoom chatRoom;
 
-    @ManyToOne
-    @JoinColumn(name="sender_user_id")
-    private User user1;
 
-    @ManyToOne
-    @JoinColumn(name="recever_user_id")
-    private User user2;
+    private String sender;
+
+    private String receiver;
+    private String message;
+
+    public Chat(String sender, String receiverUser) {
+        this.sender = sender;
+        this.receiver = receiverUser;
+
+    }
+    public Chat(){
+
+    }
+
+    public Chat(String sender, String receiver, ChatRoom chatRoom, String message) {
+        this.sender = sender;
+        this.receiver = receiver;
+        this.chatRoom = chatRoom;
+        this.message = message;
+    }
 }

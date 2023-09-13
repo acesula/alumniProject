@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 
 @Entity
 @Getter
@@ -15,6 +17,7 @@ import lombok.Setter;
 public class Announcements extends Base {
 
     private String announcementDescription;
+    private String announcementDate;
 
     @ManyToOne
     private User user;

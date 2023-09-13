@@ -1,17 +1,18 @@
 package com.alumni.project.service.education;
 
 import com.alumni.project.dal.entity.Education;
-import com.alumni.project.dal.entity.Skills;
-import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.EducationRepository;
 import com.alumni.project.dal.repository.SkillsRepository;
 import com.alumni.project.dal.repository.UserRepository;
+import com.alumni.project.dto.education.EducationDto;
 import com.alumni.project.dto.user.GetUserDto;
 import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,27 +23,30 @@ import java.util.stream.Collectors;
 public class EducationServiceImpl implements EducationService {
     private final EducationRepository educationRepository;
     private final UserRepository userRepository;
+    private final MappingServiceImpl mappingService;
 
     @Override
-    public void save(String username, Education education) {
-        var user = userRepository.findByUsername(username);
+    @Transactional
+    public void save(UUID uuid, Education education) {
+        var user = userRepository.findById(uuid).orElseThrow(RuntimeException::new);
         education.setUser(user);
         user.getEducations().add(education);
         educationRepository.save(education);
     }
 
-    public ResponseEntity<ErrorResponse> saveEducation(String username, Education education) {
+    public ResponseEntity<ErrorResponse> saveEducation(UUID uuid, Education education) {
         try {
-            if (userRepository.existsByUsername(username)) {
-                if (educationRepository.existsByInstitutionAndDegreeAndFieldOfStudy(education.getInstitution(),
+            if (userRepository.existsById(uuid)) {
+                if (educationRepository.existsByInstitutionAndDegreeAndFieldOfStudyAndUser_Id(education.getInstitution(),
                         education.getDegree(),
-                        education.getFieldOfStudy())) {
+                        education.getFieldOfStudy(),
+                        uuid)) {
                     ErrorResponse errorResponse = new ErrorResponse();
                     errorResponse.setMessage("Education already exists!");
                     errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
                     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                 }
-                save(username, education);
+                save(uuid, education);
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {
                 ErrorResponse errorResponse = new ErrorResponse();
@@ -59,36 +63,45 @@ public class EducationServiceImpl implements EducationService {
     }
 
     @Override
-    public List<Education> findAll() {
-        return educationRepository.findAll();
+    public List<EducationDto> findAll() {
+        return educationRepository.findAll()
+                .stream()
+                .map(mappingService::convertToEducationDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Education findById(UUID id) {
-        var optional = educationRepository.findById(id);
-        if (optional.isPresent()) {
-            return optional.get();
-        }
-        throw new RuntimeException("Education not found");
+    public List<EducationDto> findByUserId(UUID id) {
+        return educationRepository.findByUser_Id(id)
+                .stream()
+                .map(mappingService::convertToEducationDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Education update(UUID id, Education education) {
+    public List<EducationDto> findByUser(String username) {
+        return educationRepository.findByUser_Username(username)
+                .stream()
+                .map(mappingService::convertToEducationDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public EducationDto update(UUID id, EducationDto education) {
         var ed = educationRepository.findById(id).orElseThrow(RuntimeException::new);
         ed.setInstitution(education.getInstitution());
         ed.setDegree(education.getDegree());
         ed.setFieldOfStudy(education.getFieldOfStudy());
-        ed.setStartDate(education.getStartDate());
-        ed.setEndDate(education.getEndDate());
+        ed.setStartYear(education.getStartYear());
+        ed.setEndYear(education.getEndYear());
         ed.setFinished(education.isFinished());
 
-
-        return educationRepository.save(education);
+        return mappingService.convertToEducationDto(educationRepository.save(ed));
     }
 
     @Override
     public void delete(UUID id) {
         educationRepository.deleteById(id);
-
     }
 }

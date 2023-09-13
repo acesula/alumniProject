@@ -4,14 +4,18 @@ import com.alumni.project.dal.entity.Employment;
 import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.EmploymentRepository;
 import com.alumni.project.dal.repository.UserRepository;
+import com.alumni.project.dto.employment.EmploymentDto;
 import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -19,25 +23,27 @@ public class EmploymentServiceImpl implements EmploymentService {
 
     private final EmploymentRepository employmentRepository;
     private final UserRepository userRepository;
+    private final MappingServiceImpl mappingService;
 
     @Override
-    public void save(String username, Employment employment) {
-        var user = userRepository.findByUsername(username);
+    @Transactional
+    public void save(UUID uuid, Employment employment) {
+        var user = userRepository.findById(uuid).orElseThrow(RuntimeException::new);
         employment.setUser(user);
         user.getEmployments().add(employment);
         employmentRepository.save(employment);
     }
 
-    public ResponseEntity<ErrorResponse> saveEmployment(String username, Employment employment) {
+    public ResponseEntity<ErrorResponse> saveEmployment(UUID uuid, Employment employment) {
         try {
-            if (userRepository.existsByUsername(username)) {
-                if (employmentRepository.existsByCompanyAndJob(employment.getCompany(), employment.getJob())) {
+            if (userRepository.existsById(uuid)) {
+                if (employmentRepository.existsByCompanyAndJobAndUser_Id(employment.getCompany(), employment.getJob(), uuid)) {
                     ErrorResponse errorResponse = new ErrorResponse();
                     errorResponse.setMessage("Employment already exists!");
                     errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
                     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                 }
-                save(username, employment);
+                save(uuid, employment);
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {
                 ErrorResponse errorResponse = new ErrorResponse();
@@ -54,21 +60,32 @@ public class EmploymentServiceImpl implements EmploymentService {
     }
 
     @Override
-    public List<Employment> findAll() {
-        return employmentRepository.findAll();
+    public List<EmploymentDto> findAll() {
+        return employmentRepository.findAll()
+                .stream()
+                .map(mappingService::convertToEmploymentDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Employment findById(UUID id) {
-        var optional = employmentRepository.findById(id);
-        if (optional.isPresent()) {
-            return optional.get();
-        }
-        throw new RuntimeException("Employment not found");
+    public List<EmploymentDto> findByUserId(UUID id) {
+        return employmentRepository.findByUser_Id(id)
+                .stream()
+                .map(mappingService::convertToEmploymentDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Employment update(UUID id, Employment employmentNew) {
+    public List<EmploymentDto> findByUser(String username) {
+        return employmentRepository.findByUser_Username(username)
+                .stream()
+                .map(mappingService::convertToEmploymentDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public EmploymentDto update(UUID id, EmploymentDto employmentNew) {
         var employment = employmentRepository.findById(id).orElseThrow(RuntimeException::new);
         employment.setCompany(employmentNew.getCompany());
         employment.setJob(employmentNew.getJob());
@@ -76,7 +93,7 @@ public class EmploymentServiceImpl implements EmploymentService {
         employment.setEndDate(employmentNew.getEndDate());
         employment.setStatus(employmentNew.isStatus());
 
-        return employmentRepository.save(employment);
+        return mappingService.convertToEmploymentDto(employmentRepository.save(employment));
     }
 
     @Override

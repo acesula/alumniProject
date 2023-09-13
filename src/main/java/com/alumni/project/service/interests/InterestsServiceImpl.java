@@ -3,34 +3,40 @@ package com.alumni.project.service.interests;
 import com.alumni.project.dal.entity.Interests;
 import com.alumni.project.dal.repository.InterestsRepository;
 import com.alumni.project.dal.repository.UserRepository;
+import com.alumni.project.dto.interests.InterestsDto;
 import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class InterestsServiceImpl implements InterestService {
+public class InterestsServiceImpl implements InterestsService {
 
     private final InterestsRepository interestsRepository;
     private final UserRepository userRepository;
+    private final MappingServiceImpl mappingService;
 
     @Override
-    public void save(String username, Interests interests) {
-        var user = userRepository.findByUsername(username);
+    @Transactional
+    public void save(UUID uuid, Interests interests) {
+        var user = userRepository.findById(uuid).orElseThrow(RuntimeException::new);
         interests.setUser(user);
         user.getInterests().add(interests);
         interestsRepository.save(interests);
     }
 
-    public ResponseEntity<ErrorResponse> saveInterest(String username,Interests interests){
+    public ResponseEntity<ErrorResponse> saveInterest(UUID uuid, Interests interests) {
         try {
-            if (userRepository.existsByUsername(username)) {
-                save(username, interests);
+            if (userRepository.existsById(uuid)) {
+                save(uuid, interests);
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {
                 ErrorResponse errorResponse = new ErrorResponse();
@@ -47,15 +53,26 @@ public class InterestsServiceImpl implements InterestService {
     }
 
     @Override
-    public List<Interests> findAll() {
-        return interestsRepository.findAll();
+    public List<InterestsDto> findAll() {
+        return interestsRepository.findAll()
+                .stream()
+                .map(mappingService::convertToInterestsDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Interests findById(UUID id) {
+    public List<InterestsDto> findByUser(UUID id) {
+        return interestsRepository.findByUser_Id(id)
+                .stream()
+                .map(mappingService::convertToInterestsDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public InterestsDto findById(UUID id) {
         var optional = interestsRepository.findById(id);
         if (optional.isPresent()) {
-            return optional.get();
+            return mappingService.convertToInterestsDto(optional.get());
         }
         throw new RuntimeException("No interest found");
     }
@@ -66,10 +83,11 @@ public class InterestsServiceImpl implements InterestService {
     }
 
     @Override
-    public Interests update(UUID id, Interests interests) {
+    @Transactional
+    public InterestsDto update(UUID id, InterestsDto interests) {
         var interest = interestsRepository.findById(id).orElseThrow(RuntimeException::new);
         interest.setInterestDescription(interests.getInterestDescription());
 
-        return interestsRepository.save(interest);
+        return mappingService.convertToInterestsDto(interestsRepository.save(interest));
     }
 }

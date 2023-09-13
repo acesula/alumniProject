@@ -5,6 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -16,46 +20,57 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User extends Base {
+
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private String surname;
+    @Column(nullable = false)
     private String gender;
+    @Column(nullable = false)
     private LocalDate birthDate;
+    @Column(nullable = false, unique = true)
     private String email;
+    @Column(nullable = false, unique = true)
     private String username;
+    @Column(nullable = false)
     private String password;
+
     private String description;
+
+    @Column(nullable = false)
+    private String role;
+    @Column(columnDefinition = "TEXT")
     private String profilePicture;
-
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinTable(name = "users_roles", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
-    )
-    private List<Role> roles = new ArrayList<>();
+    @Column(nullable = false, columnDefinition = "boolean default true")
+    private boolean enabled = true;
 
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private List<Education> educations;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private List<Skills> skills;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private List<Employment> employments;
 
-    @OneToOne
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private ContactDetails contactDetails;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private List<Interests> interests;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private List<Announcements> announcements;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
     private List<Event> events;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userConnection")
-    private List<UserConnection> userConnections;
+    @OneToMany(mappedBy="user1", fetch = FetchType.EAGER)
+    private Collection<Friends> friends;
+    @OneToMany(mappedBy="friend", fetch = FetchType.EAGER)
+    private Collection<Friends> friend;
 
     @OneToMany(mappedBy="senderUser", fetch = FetchType.EAGER)
     private Collection<ChatRoom> senders;
@@ -74,13 +89,6 @@ public class User extends Base {
     private Collection<Chat> friends;
 
     public User(String name, String surname, String email, LocalDate birthDate, String username, String password, String gender) {
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.birthDate = birthDate;
-        this.username = username;
-        this.password = password;
-        this.gender = gender;
+        super();
     }
-
 }
