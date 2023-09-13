@@ -27,22 +27,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableMethodSecurity
 @EnableWebSecurity
 @RequiredArgsConstructor
-<<<<<<< HEAD
+
 public class SecurityConfig implements WebMvcConfigurer {
-=======
-public class SecurityConfig implements WebMvcConfigurer{
->>>>>>> 6ef8658e2fe6a08ac60418cd7b077e0b96c20368
+
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
     private final CorsFilter corsFilter;
 
-    @Override
-    public  void addCorsMappings(CorsRegistry corsRegistry){
-        corsRegistry.addMapping("/**")
-                .allowedOrigins("*");
-    }
+
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -60,12 +54,9 @@ public class SecurityConfig implements WebMvcConfigurer{
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
-<<<<<<< HEAD
 
-                    auth.requestMatchers("/api/v1/**").permitAll();
-=======
                     auth.requestMatchers("/api/v1/auth").permitAll();
->>>>>>> 6ef8658e2fe6a08ac60418cd7b077e0b96c20368
+
                     auth.anyRequest().authenticated();
                 });
 

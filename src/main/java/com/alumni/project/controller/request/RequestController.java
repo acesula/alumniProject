@@ -1,12 +1,12 @@
 package com.alumni.project.controller.request;
 
 import com.alumni.project.dal.entity.Request;
-<<<<<<< HEAD
+
 import com.alumni.project.dto.user.UserInfoDto;
 import com.alumni.project.dto.user.UserRequestDto;
-=======
+
 import com.alumni.project.service.request.RequestService;
->>>>>>> 6ef8658e2fe6a08ac60418cd7b077e0b96c20368
+
 import com.alumni.project.service.request.RequestServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,28 +23,31 @@ public class RequestController {
     private final RequestService requestsService;
 
     @PostMapping("/{sender}/{receiver}")
-    public void save(@Valid @PathVariable String sender,@Valid @PathVariable String receiver) {
-        requestsService.sendRequest(sender,receiver);
+    public void save(@Valid @PathVariable String sender, @Valid @PathVariable String receiver) {
+        requestsService.sendRequest(sender, receiver);
     }
-//    @GetMapping("/{username}")
+
+    //    @GetMapping("/{username}")
 //    public List<Request> findAll(@PathVariable String username) {
 //        return requestsService.findAll();
 //    }
-@GetMapping("/all-req/{username}")
-public List<UserRequestDto> findAllByUsername(@PathVariable String username) {
-    return requestsService.findAllByUsername(username);
-}
+    @GetMapping("/all-req/{username}")
+    public List<UserRequestDto> findAllByUsername(@PathVariable String username) {
+        return requestsService.findAllByUsername(username);
+    }
 
     @GetMapping("/{id}")
     public Request findById(@PathVariable UUID id) {
         return requestsService.findById(id);
     }
+
     @PatchMapping("/update/{id}")
-    public Request update(@PathVariable UUID id, @RequestBody Request dto,String status) {
+    public Request update(@PathVariable UUID id, @RequestBody Request dto, String status) {
         return requestsService.update(id, dto, status);
     }
+
     @DeleteMapping("/delete/{id}")
-    public void delete(@PathVariable UUID id ) {
+    public void delete(@PathVariable UUID id) {
         requestsService.delete(id);
     }
 

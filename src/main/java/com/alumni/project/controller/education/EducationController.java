@@ -36,7 +36,6 @@ public class EducationController {
 
 
     @GetMapping
-<<<<<<< HEAD
     public List<EducationDto> findAll() {
         return educationService.findAll();
     }
@@ -47,12 +46,8 @@ public class EducationController {
     }
 
     @GetMapping("/user-id/{id}")
-    public EducationDto findById(@PathVariable UUID id) {
-        return educationService.findById(id);
-=======
-    public List<EducationDto> findByUserId() {
-        return educationService.findByUserId(authenticatedUser().getId());
->>>>>>> 6ef8658e2fe6a08ac60418cd7b077e0b96c20368
+    public List<EducationDto> findById(@PathVariable UUID id) {
+        return educationService.findByUserId(id);
     }
 
     @PatchMapping("/{id}")

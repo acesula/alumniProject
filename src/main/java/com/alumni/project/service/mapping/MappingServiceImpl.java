@@ -107,7 +107,7 @@ public class MappingServiceImpl implements MappingService {
     }
 
     @Override
-<<<<<<< HEAD
+
     public ChatRoomDto convertToChatRoomDto(ChatRoom chatRoom) {
         return modelMapper.map(chatRoom, ChatRoomDto.class);
     }
@@ -125,7 +125,10 @@ public class MappingServiceImpl implements MappingService {
     @Override
     public Chat convertToChat(ChatDto chatDto) {
         return modelMapper.map(chatDto, Chat.class);
-=======
+
+    }
+
+    @Override
     public UpdatePersonalInfoDto convertToUpdatePersonalInfoDto(User user) {
         return modelMapper.map(user, UpdatePersonalInfoDto.class);
     }
@@ -148,8 +151,5 @@ public class MappingServiceImpl implements MappingService {
     @Override
     public Attendees convertToAttendees(AttendeesDto attendeesDto) {
         return modelMapper.map(attendeesDto, Attendees.class);
->>>>>>> 6ef8658e2fe6a08ac60418cd7b077e0b96c20368
     }
-
-
 }

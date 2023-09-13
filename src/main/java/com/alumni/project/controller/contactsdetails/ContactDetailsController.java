@@ -1,9 +1,12 @@
 package com.alumni.project.controller.contactsdetails;
 
 import com.alumni.project.dto.contactdetails.ContactDetailsDto;
+import com.alumni.project.security.ErrorResponse;
 import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.contactdetails.ContactDetailsService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,20 +19,14 @@ public class ContactDetailsController {
 
     private final ContactDetailsService contactDetailsService;
 
-<<<<<<< HEAD
-    @PostMapping("/{username}")
-    public ResponseEntity<ErrorResponse> save(@Valid @PathVariable String username, @RequestBody ContactDetails contactDetails) {
-        return contactDetailsService.saveContactDetails(username, contactDetails);
-    }
-
-    @GetMapping("/{email}")
-    public ContactDetailsDto findByEmail(@PathVariable String email) {
-        return contactDetailsService.findByEmail(email);
-=======
     public AuthUserDetail authenticatedUser() {
         return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
->>>>>>> 6ef8658e2fe6a08ac60418cd7b077e0b96c20368
     }
+//    @PostMapping("/{username}")
+//    public ResponseEntity<ErrorResponse> save(@Valid @PathVariable String username, @RequestBody ContactDetails contactDetails) {
+//        return contactDetailsService.saveContactDetails(username, contactDetails);
+//    }
+
 
     @GetMapping
     public ContactDetailsDto findByUserId() {

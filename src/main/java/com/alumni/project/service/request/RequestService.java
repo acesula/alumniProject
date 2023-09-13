@@ -13,11 +13,9 @@ public interface RequestService {
     List<UserRequestDto> findAllByUsername(String username);
 
     Request findById(UUID id);
-<<<<<<< HEAD
+
     void delete(UUID id);
-=======
-//    void deleteByUsername(UUID id);
->>>>>>> 6ef8658e2fe6a08ac60418cd7b077e0b96c20368
+
 
     Request update(UUID id, Request request, String newStatus);
 

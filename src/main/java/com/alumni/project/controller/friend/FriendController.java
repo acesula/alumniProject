@@ -1,11 +1,10 @@
 package com.alumni.project.controller.friend;
 import com.alumni.project.dal.entity.Friends;
-<<<<<<< HEAD
+
 import com.alumni.project.dto.user.GetFriendsDto;
-=======
+
 import com.alumni.project.service.friends.FriendsService;
->>>>>>> 6ef8658e2fe6a08ac60418cd7b077e0b96c20368
-import com.alumni.project.service.friends.FriendsServiceImpl;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

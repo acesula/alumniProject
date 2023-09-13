@@ -13,16 +13,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ContactDetailsServiceImp implements ContactDetailsService {
 
+    private final UserRepository userRepository;
     private final ContactDetailsRepository contactDetailsRepository;
     private final MappingServiceImpl mappingService;
 
-<<<<<<< HEAD
+
+
     @Override
     public void save(String username, ContactDetails contactDetails) {
         var user = userRepository.findByUsername(username);
@@ -58,8 +61,7 @@ public class ContactDetailsServiceImp implements ContactDetailsService {
         }
     }
 
-=======
->>>>>>> 6ef8658e2fe6a08ac60418cd7b077e0b96c20368
+
     @Override
     public ContactDetailsDto findByUserId(UUID uuid) {
         var optional = contactDetailsRepository.findByUser_Id(uuid);

@@ -93,18 +93,12 @@ public class RequestServiceImpl implements RequestService {
         throw new RuntimeException("No interest found");
     }
 
-<<<<<<< HEAD
+
     @Override
     public void delete(UUID id) {
         this.requestRepository.deleteById(id);
     }
-=======
-//    @Override
-//    public void deleteByUsername(UUID id) {
-//        UserDto user = this.userService.findById(id);
-//        this.userService.delete(user.getId());
-//    }
->>>>>>> 6ef8658e2fe6a08ac60418cd7b077e0b96c20368
+
 
 
     @Override

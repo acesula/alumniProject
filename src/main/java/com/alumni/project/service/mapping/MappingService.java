@@ -58,14 +58,14 @@ public interface MappingService {
 
     Interests convertToInterests(InterestsDto interestsDto);
 
-<<<<<<< HEAD
+
     ChatRoomDto convertToChatRoomDto(ChatRoom chatRoom);
 
     ChatRoom convertToChatRoom(ChatRoomDto chatRoomDto);
 
     ChatDto convertToChatDto(Chat chat);
     Chat convertToChat(ChatDto chatDto);
-=======
+
     UpdatePersonalInfoDto convertToUpdatePersonalInfoDto(User user);
 
     RegisterDto convertToRegisterDto(User user);
@@ -75,7 +75,7 @@ public interface MappingService {
     AttendeesDto convertToAttendeesDto(Attendees attendees);
 
     Attendees convertToAttendees(AttendeesDto attendeesDto);
->>>>>>> 6ef8658e2fe6a08ac60418cd7b077e0b96c20368
+
 
 
 }
