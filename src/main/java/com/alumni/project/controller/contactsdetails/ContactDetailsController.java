@@ -22,11 +22,6 @@ public class ContactDetailsController {
     public AuthUserDetail authenticatedUser() {
         return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
-//    @PostMapping("/{username}")
-//    public ResponseEntity<ErrorResponse> save(@Valid @PathVariable String username, @RequestBody ContactDetails contactDetails) {
-//        return contactDetailsService.saveContactDetails(username, contactDetails);
-//    }
-
 
     @GetMapping
     public ContactDetailsDto findByUserId() {

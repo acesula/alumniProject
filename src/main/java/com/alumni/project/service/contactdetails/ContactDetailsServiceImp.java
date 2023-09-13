@@ -34,32 +34,32 @@ public class ContactDetailsServiceImp implements ContactDetailsService {
         contactDetailsRepository.save(contactDetails);
     }
 
-    public ResponseEntity<ErrorResponse> saveContactDetails(String username, ContactDetails contactDetails){
-        try{
-            if (userRepository.existsByUsername(username)) {
-                if(contactDetailsRepository.existsByEmail(contactDetails.getEmail())){
-                    ErrorResponse errorResponse = new ErrorResponse();
-                    errorResponse.setMessage("User has already been given contact details!");
-                    errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
-                    return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-                }
-                else{
-                    save(username, contactDetails);
-                    return new ResponseEntity<>(HttpStatus.OK);
-                }
-            } else {
-                ErrorResponse errorResponse = new ErrorResponse();
-                errorResponse.setMessage("User could not be found!");
-                errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
-                return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-            }
-        }catch (IllegalArgumentException e){
-            ErrorResponse error = new ErrorResponse();
-            error.setMessage(e.getMessage());
-            error.setErrorCode(HttpStatus.BAD_REQUEST.value());
-            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
-        }
-    }
+//    public ResponseEntity<ErrorResponse> saveContactDetails(String username, ContactDetails contactDetails){
+//        try{
+//            if (userRepository.existsByUsername(username)) {
+//                if(contactDetailsRepository.existsByEmail(contactDetails.getEmail())){
+//                    ErrorResponse errorResponse = new ErrorResponse();
+//                    errorResponse.setMessage("User has already been given contact details!");
+//                    errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
+//                    return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+//                }
+//                else{
+//                    save(username, contactDetails);
+//                    return new ResponseEntity<>(HttpStatus.OK);
+//                }
+//            } else {
+//                ErrorResponse errorResponse = new ErrorResponse();
+//                errorResponse.setMessage("User could not be found!");
+//                errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
+//                return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+//            }
+//        }catch (IllegalArgumentException e){
+//            ErrorResponse error = new ErrorResponse();
+//            error.setMessage(e.getMessage());
+//            error.setErrorCode(HttpStatus.BAD_REQUEST.value());
+//            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
 
     @Override
