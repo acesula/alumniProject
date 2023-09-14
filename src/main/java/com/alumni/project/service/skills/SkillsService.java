@@ -1,7 +1,6 @@
 package com.alumni.project.service.skills;
 
 import com.alumni.project.dal.entity.Skills;
-import com.alumni.project.dal.entity.User;
 import com.alumni.project.dto.skills.SkillsDto;
 import com.alumni.project.security.ErrorResponse;
 import org.springframework.http.ResponseEntity;

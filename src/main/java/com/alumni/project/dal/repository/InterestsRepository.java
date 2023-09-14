@@ -12,6 +12,4 @@ public interface InterestsRepository extends JpaRepository<Interests, UUID> {
     List<Interests> findByUser_Id(UUID id);
 
 
-
-
 }

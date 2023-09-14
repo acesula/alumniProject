@@ -4,7 +4,6 @@ import com.alumni.project.dal.entity.*;
 import com.alumni.project.dto.Chat.ChatDto;
 import com.alumni.project.dto.announcements.AnnouncementsDto;
 import com.alumni.project.dto.chatRoom.ChatRoomDto;
-import com.alumni.project.dto.connection.UserConnectionDto;
 import com.alumni.project.dto.contactdetails.ContactDetailsDto;
 import com.alumni.project.dto.education.EducationDto;
 import com.alumni.project.dto.employment.EmploymentDto;

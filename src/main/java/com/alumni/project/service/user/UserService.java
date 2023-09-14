@@ -34,5 +34,4 @@ public interface UserService{
 
     void updatePassword(UUID id, ChangePasswordDto password);
 
-    List<UserInfoDto> getUserInfoByUsername(String username);
 }

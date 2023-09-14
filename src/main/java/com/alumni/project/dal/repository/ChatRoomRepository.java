@@ -1,6 +1,5 @@
 package com.alumni.project.dal.repository;
 
-import com.alumni.project.dal.entity.Chat;
 import com.alumni.project.dal.entity.ChatRoom;
 import com.alumni.project.dto.user.UserRequestDto;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,6 +1,5 @@
 package com.alumni.project.controller.friend;
 
-import com.alumni.project.dal.entity.Friends;
 
 import com.alumni.project.dto.friends.FriendsDto;
 import com.alumni.project.dto.user.GetFriendsDto;
@@ -30,10 +29,6 @@ public class FriendController {
     public void save(@Valid @PathVariable UUID id) {
         friendsService.save(authenticatedUser().getId(), id);
     }
-//    @GetMapping
-//    public List<Friends> findAll() {
-//        return friendsService.findAll();
-//    }
 
 
     @GetMapping

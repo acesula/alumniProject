@@ -1,7 +1,6 @@
 package com.alumni.project.service.employment;
 
 import com.alumni.project.dal.entity.Employment;
-import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.EmploymentRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.employment.EmploymentDto;

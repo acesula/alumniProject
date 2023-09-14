@@ -6,9 +6,6 @@ import java.util.*;
 import java.util.UUID;
 
 public interface ContactDetailsService {
-
-
-
     void save(String username, ContactDetails contactDetails);
 
     ContactDetailsDto findByUserId(UUID id);

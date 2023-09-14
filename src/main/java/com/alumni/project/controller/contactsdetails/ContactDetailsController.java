@@ -1,12 +1,9 @@
 package com.alumni.project.controller.contactsdetails;
 
 import com.alumni.project.dto.contactdetails.ContactDetailsDto;
-import com.alumni.project.security.ErrorResponse;
 import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.contactdetails.ContactDetailsService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 

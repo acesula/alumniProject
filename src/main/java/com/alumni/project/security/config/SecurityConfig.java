@@ -27,7 +27,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableMethodSecurity
 @EnableWebSecurity
 @RequiredArgsConstructor
-
 public class SecurityConfig implements WebMvcConfigurer {
 
 
@@ -54,9 +53,7 @@ public class SecurityConfig implements WebMvcConfigurer {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
-
                     auth.requestMatchers("/api/v1/auth").permitAll();
-
                     auth.anyRequest().authenticated();
                 });
 

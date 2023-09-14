@@ -1,13 +1,11 @@
 package com.alumni.project.service.friends;
 
 import com.alumni.project.dal.entity.Friends;
-import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.FriendsRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.friends.FriendsDto;
 import com.alumni.project.dto.user.GetFriendsDto;
 import com.alumni.project.service.mapping.MappingService;
-import com.alumni.project.service.user.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -60,27 +57,6 @@ public class FriendsServiceImpl implements FriendsService {
         if (friend.isEmpty()) return false;
         return true;
     }
-
-
-//    @Override
-//    public List<FriendsDto> findAll() {
-//        return friendsRepository.findAll()
-//                .stream()
-//                .map(mappingService::convertToFriendsDto)
-//                .collect(Collectors.toList());
-//    }
-
-
-//    @Override
-//    public List<Friends> findByUser(String username) {
-//
-//        User user = userRepository.findByUsername(username);
-//        if(user != null){
-////            List<Friends> listOfFriends = friendsRepository.
-//        }
-//          return null;
-//
-//    }
 
 
     @Override

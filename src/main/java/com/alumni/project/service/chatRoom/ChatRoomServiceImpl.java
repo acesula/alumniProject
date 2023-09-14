@@ -66,10 +66,6 @@ public class ChatRoomServiceImpl implements ChatRoomService{
         throw new RuntimeException("No interest found");
     }
 
-//    @Override
-//    public List<ChatRoom> findByUser(UUID id) {
-//        return null;
-//    }
 
     @Override
     public void delete(UUID id) {

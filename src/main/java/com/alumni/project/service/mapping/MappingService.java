@@ -60,29 +60,34 @@ public interface MappingService {
 
     Interests convertToInterests(InterestsDto interestsDto);
 
-
+    //ChatRoom
     ChatRoomDto convertToChatRoomDto(ChatRoom chatRoom);
 
     ChatRoom convertToChatRoom(ChatRoomDto chatRoomDto);
 
+    //Chat
     ChatDto convertToChatDto(Chat chat);
     Chat convertToChat(ChatDto chatDto);
 
+    //UpdatePersonalInfoDto
     UpdatePersonalInfoDto convertToUpdatePersonalInfoDto(User user);
 
+    //Register
     RegisterDto convertToRegisterDto(User user);
 
     User convertToUser(RegisterDto registerDto);
 
+    //Attendees
     AttendeesDto convertToAttendeesDto(Attendees attendees);
 
     Attendees convertToAttendees(AttendeesDto attendeesDto);
 
-
+    //Friends
     FriendsDto convertToFriendsDto(Friends friends);
 
     Friends convertToFriends(FriendsDto friendsDto);
 
+    //Requests
     RequestDto convertToRequestDto(Request request);
 
     Request convertToRequest(RequestDto requestDto);

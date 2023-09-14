@@ -5,7 +5,6 @@ import com.alumni.project.dto.event.EventDto;
 import com.alumni.project.security.ErrorResponse;
 import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.event.EventService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;

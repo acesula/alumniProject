@@ -1,12 +1,6 @@
 package com.alumni.project.controller.ChatRoom;
-import com.alumni.project.dal.entity.Request;
 import com.alumni.project.dto.chatRoom.ChatRoomDto;
-import com.alumni.project.dto.user.UserDto;
-import com.alumni.project.dto.user.UserInfoDto;
-import com.alumni.project.dto.user.UserRequestDto;
-import com.alumni.project.service.chat.ChatService;
 import com.alumni.project.service.chatRoom.ChatRoomServiceImpl;
-import com.alumni.project.service.request.RequestServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

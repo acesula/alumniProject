@@ -4,7 +4,6 @@ import com.alumni.project.dal.entity.Skills;
 import com.alumni.project.dal.repository.SkillsRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.skills.SkillsDto;
-import com.alumni.project.dto.user.UserDto;
 import com.alumni.project.security.ErrorResponse;
 import com.alumni.project.service.mapping.MappingServiceImpl;
 import com.alumni.project.service.user.UserServiceImpl;
@@ -71,8 +70,6 @@ public class SkillsServiceImpl implements SkillsService {
                 .map(mappingService::convertToSkillsDto)
                 .collect(Collectors.toList());
     }
-
-
 
 
     @Override

@@ -102,19 +102,6 @@ public class UserServiceImpl implements UserService {
         throw new RuntimeException("User not found");
     }
 
-
-    public List<UserInfoDto> getUserInfoByUsername(String username){
-
-        try {
-            var result = this.userRepository.getUserInfoByUsername(username).stream().toList();
-            if(!result.isEmpty()){
-                return  result;
-            }
-        } catch (Exception e){
-            System.out.println("----error in getting user info"+ e.getMessage());
-        }
-        return null;
-    }
     @Override
     public UpdatePersonalInfoDto update(UUID id, UpdatePersonalInfoDto userDto) {
         var user = findEntity(id);

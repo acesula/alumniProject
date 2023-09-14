@@ -4,7 +4,6 @@ import com.alumni.project.dto.user.*;
 import com.alumni.project.security.ErrorResponse;
 import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.user.UserService;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -43,10 +42,6 @@ public class UserController {
         return userService.findById(id);
     }
 
-//    @GetMapping("/user-info/{username}")
-//    public List<UserInfoDto> findUserInfoByUsername(@PathVariable String username) {
-//        return userService.getUserInfoByUsername(username);
-//    }
 
     @PatchMapping("/uploadImage")
     public void updateProfilePicture(@RequestParam("profilePicture") MultipartFile multipartFile) throws IOException {
@@ -88,10 +83,6 @@ public class UserController {
         return userService.checkPassword(authenticatedUser().getId(), password);
     }
 
-//    @GetMapping("/users/{username}")
-//    public List<UserInfoDto> getUserInfoByUsername(@PathVariable String username) {
-//        return userService.getUserInfoByUsername(username);
-//    }
 
 
 }
