@@ -72,21 +72,20 @@ public class User extends Base {
     @OneToMany(mappedBy="friend", fetch = FetchType.EAGER)
     private Collection<Friends> friend;
 
-    @OneToMany(mappedBy="senderUser", fetch = FetchType.EAGER)
-    private Collection<ChatRoom> senders;
+    @OneToMany(mappedBy="user1", fetch = FetchType.EAGER)
+    private Collection<ChatRoom> user1;
 
-    @OneToMany(mappedBy="receiverUser", fetch = FetchType.EAGER)
-    private Collection<ChatRoom> receivers;
-    @OneToMany(mappedBy="senderUser", fetch = FetchType.EAGER)
-    private Collection<Chat> sender;
+    @OneToMany(mappedBy="user2", fetch = FetchType.EAGER)
+    private Collection<ChatRoom> user2;
+//    @OneToMany(mappedBy="senderUser", fetch = FetchType.EAGER)
+//    private Collection<Chat> sender;
+//
+//    @OneToMany(mappedBy="receiverUser", fetch = FetchType.EAGER)
+//    private Collection<Chat> receiver;
+//    @OneToMany(mappedBy="user_id", fetch = FetchType.EAGER)
+//    private Collection<Chat> owner;
 
-    @OneToMany(mappedBy="receiverUser", fetch = FetchType.EAGER)
-    private Collection<Chat> receiver;
-    @OneToMany(mappedBy="user_id", fetch = FetchType.EAGER)
-    private Collection<Chat> owner;
 
-    @OneToMany(mappedBy="user_id", fetch = FetchType.EAGER)
-    private Collection<Chat> friends;
 
     public User(String name, String surname, String email, LocalDate birthDate, String username, String password, String gender) {
         super();

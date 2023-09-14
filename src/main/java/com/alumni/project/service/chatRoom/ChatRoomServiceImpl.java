@@ -1,6 +1,7 @@
 package com.alumni.project.service.chatRoom;
 
 import com.alumni.project.dal.entity.ChatRoom;
+import com.alumni.project.dal.entity.Friends;
 import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.ChatRoomRepository;
 import com.alumni.project.dal.repository.UserRepository;
@@ -27,21 +28,18 @@ public class ChatRoomServiceImpl implements ChatRoomService{
     }
 
     @Override
-    public String save(String sender, String receiver) {
+    public String save(UUID id1, UUID id2) {
         try {
-            System.out.println(sender);
-            System.out.println(receiver);
-            User senderUser = userRepository.findByUsername(sender);
-            User receiverUser = userRepository.findByUsername(receiver);
+            var user = userRepository.findById(id1).orElseThrow(RuntimeException::new);
+            var user2 = userRepository.findById(id2).orElseThrow(RuntimeException::new);
 
-            if(senderUser != null && receiverUser != null ){
+            if (user != null && user2 != null) {
 
-                ChatRoom newChatRoom = new ChatRoom(sender, receiver);
+                ChatRoom newChatRoom = new ChatRoom(user, user2);
                 chatRoomRepository.save(newChatRoom);
             }
-
-            return "Success: Request was sent";
-        } catch (Exception e){
+            return "Success";
+        } catch (Exception e) {
             return e.getMessage();
         }
 

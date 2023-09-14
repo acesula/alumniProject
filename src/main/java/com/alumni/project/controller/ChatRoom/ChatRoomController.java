@@ -4,11 +4,13 @@ import com.alumni.project.dto.chatRoom.ChatRoomDto;
 import com.alumni.project.dto.user.UserDto;
 import com.alumni.project.dto.user.UserInfoDto;
 import com.alumni.project.dto.user.UserRequestDto;
+import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.chat.ChatService;
 import com.alumni.project.service.chatRoom.ChatRoomServiceImpl;
 import com.alumni.project.service.request.RequestServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,11 +24,14 @@ public class ChatRoomController {
 
     private final ChatRoomServiceImpl chatRoomService;
 
+    public AuthUserDetail authenticatedUser() {
+        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
 
 
-    @PostMapping("/{sender}/{receiver}")
-    public void save(@Valid @PathVariable String sender,@Valid @PathVariable String receiver) {
-        chatRoomService.save(sender,receiver);
+    @PostMapping("/{otherUserId}")
+    public void save(@Valid @PathVariable UUID id1,@Valid @PathVariable UUID otherUserId) {
+        chatRoomService.save(authenticatedUser().getId(),otherUserId);
     }
 
     @GetMapping("/{sender}")

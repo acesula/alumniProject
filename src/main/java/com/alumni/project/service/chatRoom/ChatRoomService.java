@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ChatRoomService {
-    String save(String sender, String receiver);
+    String save(UUID id1, UUID id2);
 
     List<ChatRoomDto> findAll();
     ChatRoomDto findById(UUID id);

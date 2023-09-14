@@ -15,16 +15,21 @@ import java.util.Collection;
 @AllArgsConstructor
 public class ChatRoom extends Base{
 
-    private String user1;
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User user1;
 
-    private String user2;
+    @ManyToOne
+    @JoinColumn(name="friend_id")
+    private User user2;
+
 
     @OneToMany(mappedBy="chatRoom", fetch = FetchType.EAGER)
     private Collection<Chat> chats;
 
 
-    public ChatRoom(String sender, String receiver) {
-        this.user1 = sender;
-        this.user2 = receiver;
+    public ChatRoom(User user1, User user2) {
+        this.user1 = user1;
+        this.user2= user2;
     }
 }
