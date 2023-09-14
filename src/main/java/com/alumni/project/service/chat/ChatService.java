@@ -2,10 +2,7 @@ package com.alumni.project.service.chat;
 
 import com.alumni.project.dal.entity.Chat;
 
-import com.alumni.project.dal.entity.ChatRoom;
-import com.alumni.project.dal.entity.Event;
 import com.alumni.project.dto.Chat.ChatDto;
-import com.alumni.project.dto.event.EventDto;
 
 
 import java.util.List;
@@ -19,8 +16,6 @@ public interface ChatService {
     List<ChatDto> findAll();
     ChatDto findById(UUID id);
 
-//    List<Chat> findByUser(UUID id);
-//
     void delete(UUID uuid);
 
 }

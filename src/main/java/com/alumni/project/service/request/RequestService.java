@@ -1,6 +1,5 @@
 package com.alumni.project.service.request;
 
-import com.alumni.project.dal.entity.Request;
 import com.alumni.project.dto.request.RequestDto;
 import com.alumni.project.dto.user.UserRequestDto;
 

@@ -2,10 +2,8 @@ package com.alumni.project.service.education;
 
 import com.alumni.project.dal.entity.Education;
 import com.alumni.project.dal.repository.EducationRepository;
-import com.alumni.project.dal.repository.SkillsRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.education.EducationDto;
-import com.alumni.project.dto.user.GetUserDto;
 import com.alumni.project.security.ErrorResponse;
 import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;

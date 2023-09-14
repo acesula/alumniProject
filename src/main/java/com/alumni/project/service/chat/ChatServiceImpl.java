@@ -54,11 +54,6 @@ public class ChatServiceImpl implements ChatService{
         throw new RuntimeException("Education not found");
     }
 
-//    @Override
-//    public List<Chat> findByUser(UUID id) {
-//        return null;
-//    }
-//
 
 
     @Override

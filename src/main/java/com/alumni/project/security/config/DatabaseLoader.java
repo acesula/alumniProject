@@ -1,9 +1,7 @@
 package com.alumni.project.security.config;
 
 import com.alumni.project.dto.user.RegisterDto;
-import com.alumni.project.dto.user.UserDto;
 import com.alumni.project.service.mapping.MappingService;
-import com.alumni.project.service.user.UserService;
 import com.alumni.project.service.user.UserServiceImpl;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -20,18 +18,20 @@ public class DatabaseLoader {
     private final MappingService mappingService;
 
     @PostConstruct
-    void init(){createUser();}
+    void init() {
+        createUser();
+    }
 
-    private void createUser(){
-        if(!userService.findAll().isEmpty()){
+    private void createUser() {
+        if (!userService.findAll().isEmpty()) {
             return;
         }
-        var admin= RegisterDto.builder()
+        var admin = RegisterDto.builder()
                 .name("Adi")
                 .surname("Cesula")
                 .email("admin@gmail.com")
                 .gender("Male")
-                .birthDate(LocalDate.of(2001,6,4))
+                .birthDate(LocalDate.of(2001, 6, 4))
                 .username("admin")
                 .password("password")
                 .role("ADMIN")

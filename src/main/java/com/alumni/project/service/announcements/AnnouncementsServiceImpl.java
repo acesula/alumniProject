@@ -1,11 +1,9 @@
 package com.alumni.project.service.announcements;
 
 import com.alumni.project.dal.entity.Announcements;
-import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.AnnouncementsRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.announcements.AnnouncementsDto;
-import com.alumni.project.dto.user.GetUserDto;
 import com.alumni.project.security.ErrorResponse;
 import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;

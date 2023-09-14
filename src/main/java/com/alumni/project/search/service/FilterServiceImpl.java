@@ -11,9 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,23 +28,9 @@ public class FilterServiceImpl implements FilterService {
                 return criteriaBuilder.equal(root.get(searchCriteria.getKey()), searchCriteria.getValue());
             } else if (Objects.equals(searchCriteria.getOperation(), SearchCriteria.Operation.LIKE)) {
                 return criteriaBuilder.like(root.get(searchCriteria.getKey()), "%" + searchCriteria.getValue() + "%");
-            } else if (Objects.equals(searchCriteria.getOperation(), SearchCriteria.Operation.IN)) {
-//                String[] split = searchCriteria.getValue().split(",");
-//                return root.get(searchCriteria.getKey()).in(Arrays.asList(split));
-                return null;
-            } else if (Objects.equals(searchCriteria.getOperation(), SearchCriteria.Operation.GREATER_THAN)) {
-//                return criteriaBuilder.greaterThan(root.get(searchCriteria.getKey()), searchCriteria.getValue());
-                return null;
-            } else if (Objects.equals(searchCriteria.getOperation(), SearchCriteria.Operation.LESS_THAN)) {
-//                return criteriaBuilder.lessThan(root.get(searchCriteria.getKey()), searchCriteria.getValue());
-                return null;
-            } else if (Objects.equals(searchCriteria.getOperation(), SearchCriteria.Operation.BETWEEN)) {
-//                String[] split = searchCriteria.getValue().split(",");
-//                return criteriaBuilder.between(root.get(searchCriteria.getKey()), split[0], split[1]);
-                return null;
             } else if (Objects.equals(searchCriteria.getOperation(), SearchCriteria.Operation.JOIN)) {
                 return criteriaBuilder.equal(root.get(searchCriteria.getJoinTable()).get(searchCriteria.getKey()), searchCriteria.getValue());
-            }else {
+            } else {
                 throw new IllegalArgumentException("Unexpected operation: " + searchCriteria.getOperation());
             }
         };
@@ -74,7 +58,6 @@ public class FilterServiceImpl implements FilterService {
         Specification<User> userSpecification = getSearchSpecification(searchRequestDto.getSearchCriteria(), searchRequestDto.getGlobalOperator());
         List<User> users = userRepository.findAll(userSpecification);
 
-        // Convert User entities to UserDto objects
         List<UserDto> userDtos = new ArrayList<>();
         for (User user : users) {
             var userDto = mappingService.convertToUserDto(user);

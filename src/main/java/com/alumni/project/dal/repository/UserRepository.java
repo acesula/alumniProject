@@ -16,20 +16,11 @@ import java.util.UUID;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificationExecutor<User> {
-    @Transactional
-    @Modifying
-    @Query("update User u set u.profilePicture = ?1 where u.id = ?2")
-    void updateProfilePictureById(String profilePicture, UUID id);
-    long deleteByUsername(String username);
     boolean existsByEmail(String email);
-
-    Optional<User> findByEmail(String email);
 
     boolean existsByUsername(String username);
 
     User findByUsername(String username);
-
-    User findByUsernameAndPassword(String username, String password);
 
 
 

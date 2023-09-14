@@ -5,7 +5,6 @@ import com.alumni.project.dto.interests.InterestsDto;
 import com.alumni.project.security.ErrorResponse;
 import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.interests.InterestsService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,28 +25,24 @@ public class InterestsController {
     }
 
     @PostMapping()
-    public ResponseEntity<ErrorResponse> save(@RequestBody Interests interest){
+    public ResponseEntity<ErrorResponse> save(@RequestBody Interests interest) {
         return interestsService.saveInterest(authenticatedUser().getId(), interest);
     }
 
-//    @GetMapping
-//    public List<InterestsDto> findAll(){
-//        return interestsService.findAll();
-//    }
 
     @GetMapping
-    public List<InterestsDto> findByUser(){
+    public List<InterestsDto> findByUser() {
         return interestsService.findByUser(authenticatedUser().getId());
     }
 
 
     @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable UUID id){
+    public void deleteById(@PathVariable UUID id) {
         interestsService.deleteById(id);
     }
 
     @PatchMapping("/{id}")
-    public InterestsDto update(@PathVariable UUID id, @RequestBody InterestsDto interest){
+    public InterestsDto update(@PathVariable UUID id, @RequestBody InterestsDto interest) {
         return interestsService.update(id, interest);
     }
 

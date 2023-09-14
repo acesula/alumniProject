@@ -1,13 +1,8 @@
 package com.alumni.project.dal.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import java.time.LocalDate;
 
 @Entity
 @Getter
