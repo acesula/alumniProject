@@ -30,7 +30,7 @@ public class FriendsServiceImpl implements FriendsService {
             var user2 = userRepository.findById(id2).orElseThrow(RuntimeException::new);
 
             if (user != null && user2 != null) {
-                if (this.areTheyAlreadyFriends(user.getId(), user2.getId())) {
+                if (areTheyAlreadyFriends(user.getId(), user2.getId())) {
                     return "You are already friends";
                 }
                 Friends newFriend = new Friends(user, user2);
@@ -49,13 +49,13 @@ public class FriendsServiceImpl implements FriendsService {
 
     public boolean areTheyAlreadyFriends(UUID user1, UUID friend1) {
 
-        List<Friends> totalListOfFriends = this.friendsRepository.findAll();
-        Optional<Friends> friend = totalListOfFriends.stream().filter(friendItem ->
-                (friendItem.getUser1().getId() == user1 && friendItem.getFriend().getId() == friend1) ||
-                        (friendItem.getUser1().getId() == friend1 && friendItem.getFriend().getId() == user1)
-        ).findFirst();
-        if (friend.isEmpty()) return false;
-        return true;
+//        List<Friends> totalListOfFriends = friendsRepository.findAll();
+//        Optional<Friends> friend = totalListOfFriends.stream().filter(friendItem ->
+//                (friendItem.getUser1().getId() == user1 && friendItem.getFriend().getId() == friend1) ||
+//                        (friendItem.getUser1().getId() == friend1 && friendItem.getFriend().getId() == user1)
+//        ).findFirst();
+//        return friend.isPresent();
+        return friendsRepository.areTheyAlreadyFriends(user1, friend1);
     }
 
 

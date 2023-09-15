@@ -1,4 +1,5 @@
 package com.alumni.project.dal.entity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -18,6 +19,7 @@ public class Chat extends Base {
     private String sender;
 
     private String receiver;
+    @Column(columnDefinition = "TEXT")
     private String message;
 
     public Chat(String sender, String receiverUser) {

@@ -56,7 +56,7 @@ public class RequestServiceImpl implements RequestService {
 
     public boolean isRequestSentBefore(UUID senderId, UUID receiverId) {
 
-        List<Request> totalListOfRequests = this.requestRepository.findAll();
+        List<Request> totalListOfRequests = requestRepository.findAll();
         Optional<Request> request = totalListOfRequests.stream().filter(requestItem ->
                 (requestItem.getUser1().getId() == senderId && requestItem.getUser2().getId() == receiverId) ||
                         (requestItem.getUser1().getId() == receiverId && requestItem.getUser2().getId() == senderId)

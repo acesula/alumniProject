@@ -13,7 +13,7 @@ import java.util.UUID;
 @Repository
 public interface RequestRepository extends JpaRepository<Request, UUID>, JpaSpecificationExecutor<Request> {
 
-    @Query(value = "SELECT u.id, u.username,u.profile_picture as image,r.id as mainId\n" +
+    @Query(value = "SELECT u.id, u.name, u.surname, u.username,u.profile_picture as image,r.id as mainId\n" +
             " from users_table u \n" +
             " inner join request r on r.user_id = u.id\n" +
             " where r.friend_id = :uuid", nativeQuery = true)

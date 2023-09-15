@@ -1,5 +1,6 @@
 package com.alumni.project.dal.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
@@ -17,7 +18,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class Event extends Base{
 
+    @Column(columnDefinition = "TEXT")
     private String eventDescription;
+    private String eventTitle;
     private LocalDate startDate;
     private String startTime;
     private String endTime;

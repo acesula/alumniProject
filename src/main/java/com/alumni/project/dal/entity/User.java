@@ -31,7 +31,7 @@ public class User extends Base {
     private String username;
     @Column(nullable = false)
     private String password;
-
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(nullable = false)

@@ -12,6 +12,8 @@ public interface RequestService {
 
     List<UserRequestDto> findAllById(UUID id);
 
+    boolean isRequestSentBefore(UUID senderId, UUID receiverId);
+
     RequestDto findById(UUID id);
 
     void delete(UUID id);

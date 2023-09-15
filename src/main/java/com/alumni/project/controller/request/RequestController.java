@@ -4,11 +4,13 @@ package com.alumni.project.controller.request;
 import com.alumni.project.dto.request.RequestDto;
 import com.alumni.project.dto.user.UserRequestDto;
 
+import com.alumni.project.security.ErrorResponse;
 import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.request.RequestService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +36,11 @@ public class RequestController {
     @GetMapping
     public List<UserRequestDto> findAllById() {
         return requestsService.findAllById(authenticatedUser().getId());
+    }
+
+    @GetMapping("/requestSent/{id}")
+    public boolean requestSent(@Valid @PathVariable UUID id){
+        return requestsService.isRequestSentBefore(authenticatedUser().getId(), id);
     }
 
     @GetMapping("/{id}")

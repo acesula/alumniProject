@@ -86,6 +86,8 @@ public class AnnouncementsServiceImpl implements AnnouncementsService {
     public AnnouncementsDto update(UUID uuid, AnnouncementsDto announcement) {
         var announc = announcementsRepository.findById(uuid).orElseThrow(RuntimeException::new);
         announc.setAnnouncementDescription(announcement.getAnnouncementDescription());
+        announc.setAnnouncementTitle(announcement.getAnnouncementTitle());
+        announc.setImage(announcement.getImage());
 
         return mappingService.convertToAnnouncementsDto(announcementsRepository.save(announc));
     }

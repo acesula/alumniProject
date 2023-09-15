@@ -1,5 +1,6 @@
 package com.alumni.project.dal.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Interests extends Base{
+    @Column(columnDefinition = "TEXT")
     private String interestDescription;
 
     @ManyToOne
