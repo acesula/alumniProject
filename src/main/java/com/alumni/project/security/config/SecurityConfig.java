@@ -35,7 +35,6 @@ public class SecurityConfig implements WebMvcConfigurer {
     private final PasswordEncoder passwordEncoder;
     private final CorsFilter corsFilter;
 
-
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
