@@ -79,6 +79,7 @@ public class EventServiceImpl implements EventService{
     }
 
     @Override
+    @Transactional
     public void delete(UUID uuid) {
         eventRepository.deleteById(uuid);
     }

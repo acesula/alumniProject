@@ -11,8 +11,8 @@ import java.util.UUID;
 public class GetUserDto extends UserDto {
     private UUID userId;
 
-    GetUserDto(UUID id,String name, String surname, String email, String gender, LocalDate birthDate, String username, String role, String profilePicture, String description) {
-        super(id,name, surname, email, gender, birthDate, username, role, profilePicture, description);
+    GetUserDto(UUID id,String name, String surname, String email, String gender, LocalDate birthDate, String username, String profilePicture, String description) {
+        super(id,name, surname, email, gender, birthDate, username,profilePicture, description);
     }
 }
 

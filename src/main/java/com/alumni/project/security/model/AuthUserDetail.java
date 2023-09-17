@@ -34,13 +34,14 @@ public class AuthUserDetail implements UserDetails {
     private List<GrantedAuthority> authorities;
 
 
-    public AuthUserDetail(UUID id, String username, String password, String email, boolean enabled, List<GrantedAuthority> authorities) {
+    public AuthUserDetail(UUID id, String username, String password, String email, boolean enabled, List<GrantedAuthority> authorities, String role) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
         this.enabled = enabled;
         this.authorities = authorities;
+        this.role = role;
     }
 
     public static AuthUserDetail createUser(User user) {
@@ -50,13 +51,22 @@ public class AuthUserDetail implements UserDetails {
                 user.getPassword(),
                 user.getEmail(),
                 user.isEnabled(),
-                new ArrayList<>()
+                new ArrayList<>(),
+                user.getRole()
         );
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new ArrayList<>();
+        String role = getRole();
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new GrantedAuthority() {
+            @Override
+            public String getAuthority() {
+                return role;
+            }
+        });
+        return authorities;
     }
 
     @Override

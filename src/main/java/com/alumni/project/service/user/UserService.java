@@ -15,7 +15,7 @@ public interface UserService{
 
     ResponseEntity<ErrorResponse> register(RegisterDto registerDto);
 
-    List<UserDto> findAll();
+    List<AdminUserInfoDto> findAll();
 
     UserDto findById(UUID id);
 
@@ -33,5 +33,11 @@ public interface UserService{
     void updateEmail(UUID id, String email);
 
     void updatePassword(UUID id, ChangePasswordDto password);
+
+    void updateUserByAdmin(UUID id, AdminUserInfoDto user);
+
+    void changeAccountStatus(UUID id, boolean status);
+
+    void updatePasswordByAdmin(UUID id, String password);
 
 }

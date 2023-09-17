@@ -13,6 +13,7 @@ import com.alumni.project.dto.friends.FriendsDto;
 import com.alumni.project.dto.interests.InterestsDto;
 import com.alumni.project.dto.request.RequestDto;
 import com.alumni.project.dto.skills.SkillsDto;
+import com.alumni.project.dto.user.AdminUserInfoDto;
 import com.alumni.project.dto.user.RegisterDto;
 import com.alumni.project.dto.user.UpdatePersonalInfoDto;
 import com.alumni.project.dto.user.UserDto;
@@ -172,5 +173,15 @@ public class MappingServiceImpl implements MappingService {
     @Override
     public Request convertToRequest(RequestDto requestDto) {
         return modelMapper.map(requestDto, Request.class);
+    }
+
+    @Override
+    public AdminUserInfoDto convertToAdminUserInfoDto(User user) {
+        return modelMapper.map(user, AdminUserInfoDto.class);
+    }
+
+    @Override
+    public User convertToUser(AdminUserInfoDto adminUserInfoDto) {
+        return modelMapper.map(adminUserInfoDto, User.class);
     }
 }
