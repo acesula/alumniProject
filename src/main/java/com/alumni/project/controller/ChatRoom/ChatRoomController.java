@@ -1,6 +1,7 @@
 package com.alumni.project.controller.ChatRoom;
 import com.alumni.project.dal.entity.Request;
 import com.alumni.project.dto.chatRoom.ChatRoomDto;
+import com.alumni.project.dto.user.GetChatRoomDto;
 import com.alumni.project.dto.user.UserDto;
 import com.alumni.project.dto.user.UserInfoDto;
 import com.alumni.project.dto.user.UserRequestDto;
@@ -30,13 +31,18 @@ public class ChatRoomController {
 
 
     @PostMapping("/{otherUserId}")
-    public void save(@Valid @PathVariable UUID id1,@Valid @PathVariable UUID otherUserId) {
+    public void save(@Valid @PathVariable UUID otherUserId) {
         chatRoomService.save(authenticatedUser().getId(),otherUserId);
     }
 
     @GetMapping("/{sender}")
     public List<ChatRoomDto> findAllChatRoom(@PathVariable String sender){
         return chatRoomService.findAll();
+    }
+
+    @GetMapping("/listperuser")
+    public List<GetChatRoomDto> findAllChatRoomsById(){
+        return chatRoomService.findAllChatRoomsById(authenticatedUser().getId());
     }
 
     @GetMapping("/all-req/{id}")

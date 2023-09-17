@@ -73,6 +73,12 @@ public class User extends Base {
 
     @OneToMany(mappedBy="user2", fetch = FetchType.EAGER)
     private Collection<ChatRoom> user2;
+
+    @OneToMany(mappedBy="user1", fetch = FetchType.EAGER)
+    private Collection<Request> sender;
+
+    @OneToMany(mappedBy="user2", fetch = FetchType.EAGER)
+    private Collection<Request> receiver;
 //    @OneToMany(mappedBy="senderUser", fetch = FetchType.EAGER)
 //    private Collection<Chat> sender;
 //

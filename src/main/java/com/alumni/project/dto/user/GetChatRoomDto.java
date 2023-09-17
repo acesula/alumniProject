@@ -6,6 +6,5 @@ public interface GetChatRoomDto {
     UUID getId();
     String getUsername();
     UUID getMainId();
-    String getUser1();
-    String getUser2();
+    String getImage();
 }
