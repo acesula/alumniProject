@@ -1,6 +1,7 @@
 package com.alumni.project.dto.chat;
 
 import com.alumni.project.dal.entity.ChatRoom;
+import com.alumni.project.dto.chatRoom.ChatRoomDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChatDto {
-    private ChatRoom chatRoom;
+    private ChatRoomDto chatRoom;
 
 
     private String sender;

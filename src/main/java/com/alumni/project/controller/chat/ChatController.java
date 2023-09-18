@@ -4,6 +4,7 @@ import com.alumni.project.dto.chat.ChatDto;
 import com.alumni.project.dto.chat.ChatMessageDto;
 
 import com.alumni.project.security.model.AuthUserDetail;
+import com.alumni.project.service.chat.ChatService;
 import com.alumni.project.service.chat.ChatServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,18 +20,18 @@ import java.util.UUID;
 @RequiredArgsConstructor
 
 public class ChatController {
-    private final ChatServiceImpl chatService;
+    private final ChatService chatService;
 
-    public AuthUserDetail authenticatedUser() {
-        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    }
-
-
-    @PostMapping("/{receiver}/{chatRoomId}")
-    public void save(@Valid @PathVariable UUID receiver,
-                     @Valid @PathVariable UUID chatRoomId, @RequestBody ChatMessageDto chatMessageDto) {
-        chatService.save(authenticatedUser().getId(), receiver, chatRoomId, chatMessageDto.getMessage());
-    }
+//    public AuthUserDetail authenticatedUser() {
+//        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//    }
+//
+//
+//    @PostMapping("/{receiver}/{chatRoomId}")
+//    public void save(@Valid @PathVariable UUID receiver,
+//                     @Valid @PathVariable UUID chatRoomId, @RequestBody ChatMessageDto chatMessageDto) {
+//        chatService.save(authenticatedUser().getId(), receiver, chatRoomId, chatMessageDto.getMessage());
+//    }
 
     @GetMapping("/list/{chatRoomId}")
     public List<ChatDto> getAllChatsByChatRoomId(@PathVariable UUID chatRoomId) {

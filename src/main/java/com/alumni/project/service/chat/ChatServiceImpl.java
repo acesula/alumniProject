@@ -67,19 +67,22 @@ public class ChatServiceImpl implements ChatService{
 
     @Override
     public List<ChatDto> getAllChatsByChatRoomId(UUID chatRoomId) {
-        try {
-            List<Chat> chats = chatRepository.findAllByChatRoomId(chatRoomId).stream().toList();
-            List<ChatDto> chatList = new ArrayList<>();
-            chats.forEach(it -> chatList.add(mappingService.convertToChatDto(it)));
-            return chatList;
-        } catch (Exception e) {
-                return null;
-        }
+//        try {
+//            List<Chat> chats = chatRepository.findAllByChatRoomId(chatRoomId);
+//            List<ChatDto> chatList = new ArrayList<>();
+//            chats.forEach(it -> chatList.add(mappingService.convertToChatDto(it)));
+//            return chatList;
+//        } catch (Exception e) {
+//                return null;
+//        }
+        return chatRepository.findByChatRoom_Id(chatRoomId)
+                .stream()
+                .map(mappingService::convertToChatDto)
+                .collect(Collectors.toList());
 
     }
 
     @Override
-
     public ChatDto findById(UUID id) {
         var optional = chatRepository.findById(id);
         if (optional.isPresent()) {
@@ -97,13 +100,6 @@ public class ChatServiceImpl implements ChatService{
     }
 
 
-    private Chat map(Chat chat) {
-        var dto = new Chat();
-        dto.setChatRoom(chat.getChatRoom());
-        dto.setSender(chat.getSender());
-        dto.setReceiver(chat.getReceiver());
 
-        return dto;
-    }
 
 }

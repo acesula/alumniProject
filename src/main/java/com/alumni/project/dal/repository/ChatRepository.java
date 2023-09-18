@@ -7,7 +7,9 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.util.List;
 import java.util.UUID;
 
-public interface ChatRepository extends JpaRepository<Chat, UUID>, JpaSpecificationExecutor<Chat> {
+public interface ChatRepository extends JpaRepository<Chat, UUID> {
 
-    List<Chat> findAllByChatRoomId(UUID chatRoomId);
+    List<Chat> findByChatRoom_Id(UUID id);
+
+
 }
