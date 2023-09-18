@@ -16,19 +16,20 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
 
     @Override
-    public void configureMessageBroker(@NotNull final MessageBrokerRegistry registry) {
+    public void configureMessageBroker(final MessageBrokerRegistry registry) {
         registry.enableSimpleBroker("/topic");
         registry.setApplicationDestinationPrefixes("/ws");
     }
 
     @Override
-    public void registerStompEndpoints(@NotNull final StompEndpointRegistry registry) {
-        registry.addEndpoint("/webSocket")
-                .setHandshakeHandler(new UserHandshakeHandler());
-        registry.addEndpoint("/webSocketjs")
+    public void registerStompEndpoints(final StompEndpointRegistry registry) {
+        registry.addEndpoint("/websocket")
                 .setHandshakeHandler(new UserHandshakeHandler())
-                .withSockJS()
-        ;
+                .setAllowedOrigins("http://localhost:4200")
+                .withSockJS();
+        registry.addEndpoint("/websocket")
+                .setHandshakeHandler(new UserHandshakeHandler())
+                .setAllowedOrigins("http://localhost:4200");
     }
 
 }

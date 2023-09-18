@@ -25,6 +25,8 @@ public class AnnouncementsServiceImpl implements AnnouncementsService {
     private final UserRepository userRepository;
     private final MappingServiceImpl mappingService;
 
+
+
     @Override
     @Transactional
     public void save(UUID uuid, Announcements announcement) {

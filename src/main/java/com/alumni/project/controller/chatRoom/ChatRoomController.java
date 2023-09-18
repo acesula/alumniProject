@@ -9,22 +9,20 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/v1/ChatRoom")
+@RequestMapping("/api/v1/chatRoom")
 @RequiredArgsConstructor
 
 public class ChatRoomController {
 
     private final ChatRoomServiceImpl chatRoomService;
 
-
-
     @PostMapping("/{sender}/{receiver}")
     public void save(@Valid @PathVariable String sender,@Valid @PathVariable String receiver) {
         chatRoomService.save(sender,receiver);
     }
 
-    @GetMapping("/{sender}")
-    public List<ChatRoomDto> findAllChatRoom(@PathVariable String sender){
+    @GetMapping
+    public List<ChatRoomDto> findAllChatRoom(){
         return chatRoomService.findAll();
     }
 

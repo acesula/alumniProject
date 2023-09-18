@@ -13,12 +13,13 @@ public class WSController {
     private final WSService service;
 
     @PostMapping("/send-message")
-    public void sendMessage(@RequestBody Message message) {
-        service.notifyFrontEnd(message.getMessageContent());
+    public void sendMessage(@RequestBody final Message message) {
+        service.notifyFrontend(message.getMessageContent());
     }
 
     @PostMapping("/send-private-message/{id}")
-    public void sendPrivateMessage(@PathVariable String id, @RequestBody Message message) {
+    public void sendPrivateMessage(@PathVariable final String id,
+                                   @RequestBody final Message message) {
         service.notifyUser(id, message.getMessageContent());
     }
 }
