@@ -9,17 +9,20 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class WSService {
 
-    private final SimpMessagingTemplate simpMessagingTemplate;
+    private final SimpMessagingTemplate  messagingTemplate;
+    private final NotificationService notificationService;
 
-    public void notifyFrontEnd(final String message) {
-        ResponseMessage responseMessage = new ResponseMessage(message);
+    public void notifyFrontend(final String message) {
+        ResponseMessage response = new ResponseMessage(message);
+        notificationService.sendGlobalNotification();
 
-        simpMessagingTemplate.convertAndSend("/topic/messages", responseMessage);
+        messagingTemplate.convertAndSend("/topic/messages", response);
     }
 
-    public void notifyUser(String id, final String message) {
-        ResponseMessage responseMessage = new ResponseMessage(message);
+    public void notifyUser(final String id, final String message) {
+        ResponseMessage response = new ResponseMessage(message);
 
-        simpMessagingTemplate.convertAndSendToUser(id, "/topic/private-messages", responseMessage);
+        notificationService.sendPrivateNotification(id);
+        messagingTemplate.convertAndSendToUser(id, "/topic/private-messages", response);
     }
 }
