@@ -1,7 +1,7 @@
 package com.alumni.project.service.mapping;
 
 import com.alumni.project.dal.entity.*;
-import com.alumni.project.dto.Chat.ChatDto;
+import com.alumni.project.dto.chat.ChatDto;
 import com.alumni.project.dto.announcements.AnnouncementsDto;
 import com.alumni.project.dto.chatRoom.ChatRoomDto;
 import com.alumni.project.dto.contactdetails.ContactDetailsDto;

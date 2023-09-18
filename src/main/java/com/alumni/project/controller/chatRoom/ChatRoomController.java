@@ -1,4 +1,4 @@
-package com.alumni.project.controller.ChatRoom;
+package com.alumni.project.controller.chatRoom;
 import com.alumni.project.dto.chatRoom.ChatRoomDto;
 import com.alumni.project.service.chatRoom.ChatRoomServiceImpl;
 import jakarta.validation.Valid;

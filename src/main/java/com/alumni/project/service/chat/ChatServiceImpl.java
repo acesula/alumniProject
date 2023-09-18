@@ -4,7 +4,7 @@ import com.alumni.project.dal.entity.Chat;
 
 import com.alumni.project.dal.repository.ChatRepository;
 import com.alumni.project.dal.repository.UserRepository;
-import com.alumni.project.dto.Chat.ChatDto;
+import com.alumni.project.dto.chat.ChatDto;
 import com.alumni.project.service.mapping.MappingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,7 +36,6 @@ public class ChatServiceImpl implements ChatService{
     }
 
     @Override
-
     public List<ChatDto> findAll() {
         return chatRepository.findAll()
                 .stream()
