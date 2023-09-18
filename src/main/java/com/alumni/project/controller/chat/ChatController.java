@@ -1,7 +1,7 @@
-package com.alumni.project.controller.Chat;
+package com.alumni.project.controller.chat;
 
-import com.alumni.project.dto.Chat.ChatDto;
-import com.alumni.project.dto.Chat.ChatMessageDto;
+import com.alumni.project.dto.chat.ChatDto;
+import com.alumni.project.dto.chat.ChatMessageDto;
 import com.alumni.project.service.chat.ChatServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
