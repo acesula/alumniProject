@@ -36,6 +36,11 @@ public class FriendController {
         return friendsService.findAllFriendsPerUser(authenticatedUser().getId());
     }
 
+    @GetMapping("/areTheyFriends/{id}")
+    public boolean areTheyFriends(@Valid @PathVariable UUID id){
+        return friendsService.areTheyAlreadyFriends(authenticatedUser().getId(), id);
+    }
+
     @DeleteMapping("/delete/{id}")
     public void delete(@PathVariable UUID id) {
         friendsService.delete(id);

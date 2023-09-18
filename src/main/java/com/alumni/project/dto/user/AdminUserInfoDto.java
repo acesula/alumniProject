@@ -1,24 +1,25 @@
 package com.alumni.project.dto.user;
 
-import jakarta.validation.constraints.NotEmpty;
-import lombok.*;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class UserDto {
+public class AdminUserInfoDto {
     private UUID id;
     private String name;
     private String surname;
     private String email;
     private String gender;
     private LocalDate birthDate;
+    private String password;
     private String username;
+    private String role;
     private String profilePicture;
     private String description;
+    public boolean enabled;
 }

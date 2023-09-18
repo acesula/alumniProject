@@ -13,6 +13,7 @@ import com.alumni.project.dto.friends.FriendsDto;
 import com.alumni.project.dto.interests.InterestsDto;
 import com.alumni.project.dto.request.RequestDto;
 import com.alumni.project.dto.skills.SkillsDto;
+import com.alumni.project.dto.user.AdminUserInfoDto;
 import com.alumni.project.dto.user.RegisterDto;
 import com.alumni.project.dto.user.UpdatePersonalInfoDto;
 import com.alumni.project.dto.user.UserDto;
@@ -90,6 +91,11 @@ public interface MappingService {
     RequestDto convertToRequestDto(Request request);
 
     Request convertToRequest(RequestDto requestDto);
+
+    //Admin
+    AdminUserInfoDto convertToAdminUserInfoDto(User user);
+
+    User convertToUser(AdminUserInfoDto adminUserInfoDto);
 
 
 }

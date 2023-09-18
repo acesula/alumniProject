@@ -11,6 +11,8 @@ import java.util.UUID;
 public class AnnouncementsDto {
     private UUID id;
     private String announcementDescription;
+    private String announcementTitle;
+    private String image;
     private String announcementDate;
     private UUID userId;
 }

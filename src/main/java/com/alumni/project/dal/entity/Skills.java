@@ -1,5 +1,6 @@
 package com.alumni.project.dal.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -15,6 +16,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Skills extends Base {
     private String skillField;
+    @Column(columnDefinition = "TEXT")
     private String skillDescription;
 
     @ManyToOne

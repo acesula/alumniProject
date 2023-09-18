@@ -32,11 +32,6 @@ public class UserController {
        return userService.register(registerDto);
     }
 
-    @GetMapping
-    public List<UserDto> findAll() {
-        return userService.findAll();
-    }
-
     @GetMapping("/{id}")
     public UserDto findById(@PathVariable UUID id) {
         return userService.findById(id);

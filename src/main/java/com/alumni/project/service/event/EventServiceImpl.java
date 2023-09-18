@@ -79,6 +79,7 @@ public class EventServiceImpl implements EventService{
     }
 
     @Override
+    @Transactional
     public void delete(UUID uuid) {
         eventRepository.deleteById(uuid);
     }
@@ -87,6 +88,7 @@ public class EventServiceImpl implements EventService{
     @Transactional
     public EventDto update(UUID uuid, EventDto event) {
         var e = eventRepository.findById(uuid).orElseThrow(RuntimeException::new);
+        e.setEventTitle(event.getEventTitle());
         e.setEventDescription(event.getEventDescription());
         e.setStartDate(event.getStartDate());
         e.setStartTime(event.getStartTime());

@@ -86,10 +86,10 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public List<UserDto> findAll() {
+    public List<AdminUserInfoDto> findAll() {
         return userRepository.findAll()
                 .stream()
-                .map(mappingService::convertToUserDto)
+                .map(mappingService::convertToAdminUserInfoDto)
                 .collect(Collectors.toList());
     }
 
@@ -170,5 +170,30 @@ public class UserServiceImpl implements UserService {
         }
         user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
         userRepository.save(user);
+    }
+
+    public void updatePasswordByAdmin(UUID id, String password){
+        var user = findEntity(id);
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+    }
+
+    @Override
+    public void updateUserByAdmin(UUID id, AdminUserInfoDto user) {
+        var userEntity = findEntity(id);
+        userEntity.setName(user.getName());
+        userEntity.setSurname(user.getSurname());
+        userEntity.setUsername(user.getUsername());
+        userEntity.setEmail(user.getEmail());
+        userEntity.setBirthDate(user.getBirthDate());
+        userEntity.setGender(user.getGender());
+        userEntity.setRole(user.getRole());
+
+        userRepository.save(userEntity);
+    }
+
+    @Override
+    public void changeAccountStatus(UUID id, boolean status) {
+        userRepository.updateEnabledById(status, id);
     }
 }

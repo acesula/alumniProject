@@ -16,6 +16,10 @@ import java.util.UUID;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificationExecutor<User> {
+    @Transactional
+    @Modifying
+    @Query("update User u set u.enabled = ?1 where u.id = ?2")
+    void updateEnabledById(boolean enabled, UUID id);
     boolean existsByEmail(String email);
 
     boolean existsByUsername(String username);

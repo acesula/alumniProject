@@ -35,7 +35,6 @@ public class SecurityConfig implements WebMvcConfigurer {
     private final PasswordEncoder passwordEncoder;
     private final CorsFilter corsFilter;
 
-
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -53,9 +52,11 @@ public class SecurityConfig implements WebMvcConfigurer {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/api/v1/auth").permitAll();
+                    auth.requestMatchers("/api/v1/auth/**").permitAll();
+                    auth.requestMatchers("/api/v1/admin/**").hasAuthority("ADMIN");
                     auth.anyRequest().authenticated();
                 });
+
 
         httpSecurity.exceptionHandling((exceptionHandling) ->
                 exceptionHandling.authenticationEntryPoint(new JwtAuthEntryPoint())
@@ -70,7 +71,6 @@ public class SecurityConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**").allowedMethods("*").allowedOrigins("*").allowedHeaders("*");
     }
-
 
 
 }
