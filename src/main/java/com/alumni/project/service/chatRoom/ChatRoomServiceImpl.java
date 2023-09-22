@@ -7,7 +7,9 @@ import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.chatRoom.ChatRoomDto;
 import com.alumni.project.dto.user.GetChatRoomDto;
 import com.alumni.project.service.mapping.MappingServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,18 +17,12 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-
-
+@RequiredArgsConstructor
 public class ChatRoomServiceImpl implements ChatRoomService{
     private final UserRepository userRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final MappingServiceImpl mappingService;
 
-    public ChatRoomServiceImpl(UserRepository userRepository, ChatRoomRepository chatRoomRepository, MappingServiceImpl mappingService) {
-        this.userRepository = userRepository;
-        this.chatRoomRepository = chatRoomRepository;
-        this.mappingService = mappingService;
-    }
 
     @Override
     public String save(UUID id1, UUID id2) {
@@ -36,7 +32,7 @@ public class ChatRoomServiceImpl implements ChatRoomService{
 
 
             if (user != null && user2 != null) {
-                if (this.doesChatRoomExist(user.getId(), user2.getId())) {
+                if (doesChatRoomExist(user.getId(), user2.getId())) {
                     return "ChatRoom Exist";
                 }
 
@@ -52,7 +48,6 @@ public class ChatRoomServiceImpl implements ChatRoomService{
 
     @Override
     public List<ChatRoomDto> findAll() {
-
         return chatRoomRepository.findAll()
                 .stream()
                 .map(mappingService::convertToChatRoomDto)
@@ -61,24 +56,25 @@ public class ChatRoomServiceImpl implements ChatRoomService{
 
     @Override
     public ChatRoomDto findById(UUID id) {
-
         var optional = chatRoomRepository.findById(id);
         if (optional.isPresent()) {
             return mappingService.convertToChatRoomDto(optional.get());
         }
-        throw new RuntimeException("No interest found");
+        throw new RuntimeException("No chat found");
     }
 
 
     @Override
     public void delete(UUID id) {
-        chatRoomRepository.deleteById(id);
+       var chatRoom = chatRoomRepository.findById(id).orElseThrow(RuntimeException::new);
+
+        chatRoomRepository.delete(chatRoom);
     }
 
     @Override
     public List<GetChatRoomDto> findAllChatRoomsById(UUID id) {
         try {
-            List<GetChatRoomDto> result = this.chatRoomRepository.findAllChatRoomsById(id).stream().toList();
+            List<GetChatRoomDto> result = chatRoomRepository.findAllChatRoomsById(id).stream().toList();
             if (!result.isEmpty()) {
                 return result;
             }

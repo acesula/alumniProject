@@ -10,6 +10,7 @@ import com.alumni.project.dto.employment.EmploymentDto;
 import com.alumni.project.dto.event.AttendeesDto;
 import com.alumni.project.dto.event.EventDto;
 import com.alumni.project.dto.friends.FriendsDto;
+import com.alumni.project.dto.groupChat.GroupChatDto;
 import com.alumni.project.dto.interests.InterestsDto;
 import com.alumni.project.dto.request.RequestDto;
 import com.alumni.project.dto.skills.SkillsDto;
@@ -97,6 +98,9 @@ public interface MappingService {
 
     User convertToUser(AdminUserInfoDto adminUserInfoDto);
 
+    //GroupChat
+    GroupChatDto convertToGroupChatDto(GroupChat groupChat);
 
+    GroupChat convertToGroupChat(GroupChatDto groupChatDto);
 }
 

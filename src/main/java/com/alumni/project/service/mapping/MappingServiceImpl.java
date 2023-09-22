@@ -10,6 +10,7 @@ import com.alumni.project.dto.employment.EmploymentDto;
 import com.alumni.project.dto.event.AttendeesDto;
 import com.alumni.project.dto.event.EventDto;
 import com.alumni.project.dto.friends.FriendsDto;
+import com.alumni.project.dto.groupChat.GroupChatDto;
 import com.alumni.project.dto.interests.InterestsDto;
 import com.alumni.project.dto.request.RequestDto;
 import com.alumni.project.dto.skills.SkillsDto;
@@ -183,5 +184,15 @@ public class MappingServiceImpl implements MappingService {
     @Override
     public User convertToUser(AdminUserInfoDto adminUserInfoDto) {
         return modelMapper.map(adminUserInfoDto, User.class);
+    }
+
+    @Override
+    public GroupChatDto convertToGroupChatDto(GroupChat groupChat) {
+        return modelMapper.map(groupChat, GroupChatDto.class);
+    }
+
+    @Override
+    public GroupChat convertToGroupChat(GroupChatDto groupChatDto) {
+        return modelMapper.map(groupChatDto, GroupChat.class);
     }
 }

@@ -2,10 +2,12 @@ package com.alumni.project.controller.chatRoom;
 import com.alumni.project.dto.chatRoom.ChatRoomDto;
 import com.alumni.project.dto.user.GetChatRoomDto;
 import com.alumni.project.security.model.AuthUserDetail;
+import com.alumni.project.service.chatRoom.ChatRoomService;
 import com.alumni.project.service.chatRoom.ChatRoomServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,10 +16,10 @@ import java.util.UUID;
 @RestController
 @RequestMapping("api/v1/chatRoom")
 @RequiredArgsConstructor
-
+@Transactional
 public class ChatRoomController {
 
-    private final ChatRoomServiceImpl chatRoomService;
+    private final ChatRoomService chatRoomService;
 
     public AuthUserDetail authenticatedUser() {
         return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -44,7 +46,7 @@ public class ChatRoomController {
         return chatRoomService.findById(id);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public void deleteById(@PathVariable UUID id) {
         chatRoomService.delete(id);
     }

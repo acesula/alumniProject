@@ -42,51 +42,46 @@ public class User extends Base {
     private boolean enabled = true;
 
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<Education> educations;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<Skills> skills;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Employment> employments;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private ContactDetails contactDetails;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<Interests> interests;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Announcements> announcements;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<Event> events;
 
-    @OneToMany(mappedBy="user1", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="user1", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Collection<Friends> friends;
-    @OneToMany(mappedBy="friend", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="friend", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Collection<Friends> friend;
 
-    @OneToMany(mappedBy="user1", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="user1", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Collection<ChatRoom> user1;
 
-    @OneToMany(mappedBy="user2", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="user2", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Collection<ChatRoom> user2;
 
-    @OneToMany(mappedBy="user1", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="user1", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Collection<Request> sender;
 
-    @OneToMany(mappedBy="user2", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="user2", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Collection<Request> receiver;
-//    @OneToMany(mappedBy="senderUser", fetch = FetchType.EAGER)
-//    private Collection<Chat> sender;
-//
-//    @OneToMany(mappedBy="receiverUser", fetch = FetchType.EAGER)
-//    private Collection<Chat> receiver;
-//    @OneToMany(mappedBy="user_id", fetch = FetchType.EAGER)
-//    private Collection<Chat> owner;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<GroupChat> groupChats;
 
 
     public User(String name, String surname, String email, LocalDate birthDate, String username, String password, String gender) {

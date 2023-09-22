@@ -23,8 +23,7 @@ public class ChatRoom extends Base{
     @JoinColumn(name="friend_id")
     private User user2;
 
-
-    @OneToMany(mappedBy="chatRoom", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="chatRoom", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Collection<Chat> chats;
 
 

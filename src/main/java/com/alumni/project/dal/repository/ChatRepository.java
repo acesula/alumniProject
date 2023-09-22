@@ -11,5 +11,7 @@ public interface ChatRepository extends JpaRepository<Chat, UUID> {
 
     List<Chat> findByChatRoom_Id(UUID id);
 
+    List<Chat> findByGroupChat_Id(UUID id);
+
 
 }

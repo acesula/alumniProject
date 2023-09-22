@@ -4,6 +4,7 @@ import com.alumni.project.dal.entity.Chat;
 
 import com.alumni.project.dal.entity.ChatRoom;
 import com.alumni.project.dal.repository.ChatRepository;
+import com.alumni.project.dal.repository.GroupChatRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.chat.ChatDto;
 import com.alumni.project.service.chatRoom.ChatRoomService;
@@ -18,46 +19,36 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ChatServiceImpl implements ChatService{
+public class ChatServiceImpl implements ChatService {
     private final ChatRepository chatRepository;
     private final ChatRoomService chatRoomService;
-    private final UserRepository userRepository;
     private final MappingService mappingService;
+    private final GroupChatRepository groupChatRepository;
 
 
     @Override
-    public String save(UUID sender, UUID receiver, UUID chatRoomId, String message) {
-        try{
-            ChatRoom chatRoom = this.chatRoomService.findChatRoomById(chatRoomId);
-            if(chatRoom != null){
-                Chat chat = new Chat();
-                chat.setSender(sender.toString());
-                chat.setReceiver(receiver.toString());
-                chat.setChatRoom(chatRoom);
-                chat.setMessage(message);
-                this.chatRepository.save(chat);
-
-                return "Message was sent successfully";
-
-            } else{
-                return "Chat room does not exist";
-            }
-        } catch(Exception e){
-            return "Error on sending chat";
+    public void saveByChatRoomId(String sender, UUID chatRoomId, String message) {
+        ChatRoom chatRoom = this.chatRoomService.findChatRoomById(chatRoomId);
+        if (chatRoom != null) {
+            Chat chat = new Chat();
+            chat.setChatRoom(chatRoom);
+            chat.setSender(sender);
+            chat.setMessage(message);
+            chatRepository.save(chat);
         }
     }
 
-    @Override
-    public void save(UUID id, Chat chat) {
-        var chat1 = chatRepository.findById(id).orElseThrow(RuntimeException::new);
-        chat1.setChatRoom(chat.getChatRoom());
-        chat1.setSender(chat.getSender());
-        chat1.setReceiver(chat.getReceiver());
-
+    public void saveByGroupChatId(String sender, UUID groupChatId, String message) {
+        var groupChat = groupChatRepository.findById(groupChatId).orElseThrow(RuntimeException::new);
+        if (groupChat != null) {
+            var chat = new Chat();
+            chat.setGroupChat(groupChat);
+            chat.setSender(sender);
+            chat.setMessage(message);
+            chatRepository.save(chat);
+        }
     }
-
     @Override
-
     public List<ChatDto> findAll() {
         return chatRepository.findAll()
                 .stream()
@@ -67,19 +58,19 @@ public class ChatServiceImpl implements ChatService{
 
     @Override
     public List<ChatDto> getAllChatsByChatRoomId(UUID chatRoomId) {
-//        try {
-//            List<Chat> chats = chatRepository.findAllByChatRoomId(chatRoomId);
-//            List<ChatDto> chatList = new ArrayList<>();
-//            chats.forEach(it -> chatList.add(mappingService.convertToChatDto(it)));
-//            return chatList;
-//        } catch (Exception e) {
-//                return null;
-//        }
         return chatRepository.findByChatRoom_Id(chatRoomId)
                 .stream()
                 .map(mappingService::convertToChatDto)
                 .collect(Collectors.toList());
 
+    }
+
+    @Override
+    public List<ChatDto> getAllChatsByGroupChatId(UUID groupChatId) {
+        return chatRepository.findByGroupChat_Id(groupChatId)
+                .stream()
+                .map(mappingService::convertToChatDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -92,14 +83,11 @@ public class ChatServiceImpl implements ChatService{
     }
 
 
-
     @Override
     public void delete(UUID id) {
-        this.chatRepository.deleteById(id);
+        chatRepository.deleteById(id);
 
     }
-
-
 
 
 }

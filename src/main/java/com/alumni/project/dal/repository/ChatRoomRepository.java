@@ -14,14 +14,14 @@ import java.util.UUID;
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, UUID>, JpaSpecificationExecutor<ChatRoom> {
 
 
-    @Query(value = "SELECT ch.id as mainId, u.id,  u.username,u.profile_picture as image  \n " +
+    @Query(value = "SELECT ch.id as mainId, u.id, u.name, u.surname, u.username,u.profile_picture as image  \n " +
             " from users_table u  \n" +
             " inner join chat_room ch  on ch.friend_id = u.id  \n" +
             " where ch.user_id = :id" +
             "\n"+
             "UNION\n" +
             "\n" +
-            "SELECT ch.id as mainId, u.id, u.username, u.profile_picture as image \n" +
+            "SELECT ch.id as mainId, u.id, u.name, u.surname, u.username, u.profile_picture as image \n" +
             "from users_table u \n" +
             "inner join chat_room ch on ch.user_id = u.id \n" +
             "where ch.friend_id = :id", nativeQuery = true)
