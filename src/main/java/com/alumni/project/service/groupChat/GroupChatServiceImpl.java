@@ -4,8 +4,10 @@ import com.alumni.project.dal.entity.GroupChat;
 import com.alumni.project.dal.repository.GroupChatRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.groupChat.GroupChatDto;
+import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 
@@ -20,11 +22,13 @@ public class GroupChatServiceImpl implements GroupChatService{
     private final MappingServiceImpl mappingService;
     private final UserRepository userRepository;
 
-
+    public AuthUserDetail authenticatedUser() {
+        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
 
     @Override
-    public void createGroupChat(UUID uuid, String name) {
-        var user = userRepository.findById(uuid).orElseThrow(RuntimeException::new);
+    public void createGroupChat(String name) {
+        var user = userRepository.findById(authenticatedUser().getId()).orElseThrow(RuntimeException::new);
         var groupChat = new GroupChat();
         groupChat.setName(name);
         groupChat.setAdmin(user.getUsername());

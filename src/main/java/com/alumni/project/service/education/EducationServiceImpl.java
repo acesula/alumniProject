@@ -5,10 +5,12 @@ import com.alumni.project.dal.repository.EducationRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.education.EducationDto;
 import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,28 +25,32 @@ public class EducationServiceImpl implements EducationService {
     private final UserRepository userRepository;
     private final MappingServiceImpl mappingService;
 
+    public AuthUserDetail authenticatedUser() {
+        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
     @Override
     @Transactional
-    public void save(UUID uuid, Education education) {
-        var user = userRepository.findById(uuid).orElseThrow(RuntimeException::new);
+    public void save(Education education) {
+        var user = userRepository.findById(authenticatedUser().getId()).orElseThrow(RuntimeException::new);
         education.setUser(user);
         user.getEducations().add(education);
         educationRepository.save(education);
     }
 
-    public ResponseEntity<ErrorResponse> saveEducation(UUID uuid, Education education) {
+    public ResponseEntity<ErrorResponse> saveEducation(Education education) {
         try {
-            if (userRepository.existsById(uuid)) {
+            if (userRepository.existsById(authenticatedUser().getId())) {
                 if (educationRepository.existsByInstitutionAndDegreeAndFieldOfStudyAndUser_Id(education.getInstitution(),
                         education.getDegree(),
                         education.getFieldOfStudy(),
-                        uuid)) {
+                        authenticatedUser().getId())) {
                     ErrorResponse errorResponse = new ErrorResponse();
                     errorResponse.setMessage("Education already exists!");
                     errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
                     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
                 }
-                save(uuid, education);
+                save(education);
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {
                 ErrorResponse errorResponse = new ErrorResponse();
@@ -69,20 +75,13 @@ public class EducationServiceImpl implements EducationService {
     }
 
     @Override
-    public List<EducationDto> findByUserId(UUID id) {
-        return educationRepository.findByUser_Id(id)
+    public List<EducationDto> findByUserId() {
+        return educationRepository.findByUser_Id(authenticatedUser().getId())
                 .stream()
                 .map(mappingService::convertToEducationDto)
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public List<EducationDto> findByUser(String username) {
-        return educationRepository.findByUser_Username(username)
-                .stream()
-                .map(mappingService::convertToEducationDto)
-                .collect(Collectors.toList());
-    }
 
     @Override
     @Transactional

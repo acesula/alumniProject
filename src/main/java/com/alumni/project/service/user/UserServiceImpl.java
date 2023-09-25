@@ -7,10 +7,12 @@ import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.user.*;
 import com.alumni.project.security.ErrorResponse;
 import com.alumni.project.security.exception.AuthServerException;
+import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.mapping.MappingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +39,9 @@ public class UserServiceImpl implements UserService {
     private final MappingService mappingService;
     private final PasswordEncoder passwordEncoder;
 
+    public AuthUserDetail authenticatedUser() {
+        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
 
     public boolean existsByUsername(String username) {
         return userRepository.existsByUsername(username);
@@ -46,8 +51,8 @@ public class UserServiceImpl implements UserService {
         return userRepository.existsByEmail(email);
     }
 
-    public User findEntity(UUID id) {
-        return userRepository.findById(id).orElseThrow(RuntimeException::new);
+    public User findEntity() {
+        return userRepository.findById(authenticatedUser().getId()).orElseThrow(RuntimeException::new);
     }
 
     public void save(RegisterDto registerDto) {
@@ -103,8 +108,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UpdatePersonalInfoDto update(UUID id, UpdatePersonalInfoDto userDto) {
-        var user = findEntity(id);
+    public UpdatePersonalInfoDto update(UpdatePersonalInfoDto userDto) {
+        var user = findEntity();
         user.setName(userDto.getName());
         user.setSurname(userDto.getSurname());
         user.setBirthDate(userDto.getBirthDate());
@@ -113,8 +118,8 @@ public class UserServiceImpl implements UserService {
         return mappingService.convertToUpdatePersonalInfoDto(userRepository.save(user));
     }
 
-    public ResponseEntity<ErrorResponse> checkPassword(UUID id, String password) {
-        var user = findEntity(id);
+    public ResponseEntity<ErrorResponse> checkPassword(String password) {
+        var user = findEntity();
         if (!passwordEncoder.matches(password, user.getPassword())) {
             ErrorResponse error = new ErrorResponse();
             error.setMessage("Password does not match");
@@ -125,13 +130,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(UUID id) {
+    public void deleteByAdmin(UUID id) {
         userRepository.deleteById(id);
     }
 
     @Override
-    public void uploadProfilePicture(MultipartFile multipartFile, UUID uuid) throws IOException {
-        var user = findEntity(uuid);
+    public void delete() {
+        userRepository.deleteById(authenticatedUser().getId());
+    }
+
+
+
+    @Override
+    public void uploadProfilePicture(MultipartFile multipartFile) throws IOException {
+        var user = findEntity();
         byte[] imageBytes = multipartFile.getBytes();
         String base64Image = Base64.getEncoder().encodeToString(imageBytes);
         user.setProfilePicture(base64Image);
@@ -141,21 +153,21 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    public void updateBio(UUID id, String bio) {
-        var user = findEntity(id);
+    public void updateBio(String bio) {
+        var user = findEntity();
         user.setDescription(bio);
         userRepository.save(user);
     }
 
-    public void updateUsername(UUID id, String username) {
-        var user = findEntity(id);
+    public void updateUsername(String username) {
+        var user = findEntity();
         user.setUsername(username);
         userRepository.save(user);
     }
 
-    public void updateEmail(UUID id, String email) {
-        var user = findEntity(id);
-        var contactDetails = contactDetailsRepository.findByUser_Id(id).orElseThrow(RuntimeException::new);
+    public void updateEmail(String email) {
+        var user = findEntity();
+        var contactDetails = contactDetailsRepository.findByUser_Id(authenticatedUser().getId()).orElseThrow(RuntimeException::new);
         contactDetails.setEmail(email);
         contactDetailsRepository.save(contactDetails);
         user.setContactDetails(contactDetails);
@@ -163,8 +175,8 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-    public void updatePassword(UUID id, ChangePasswordDto changePasswordDto) {
-        var user = findEntity(id);
+    public void updatePassword(ChangePasswordDto changePasswordDto) {
+        var user = findEntity();
         if (!passwordEncoder.matches(changePasswordDto.getOldPassword(), user.getPassword())) {
             throw new AuthServerException("Password does not match");
         }
@@ -173,14 +185,14 @@ public class UserServiceImpl implements UserService {
     }
 
     public void updatePasswordByAdmin(UUID id, String password){
-        var user = findEntity(id);
+        var user = userRepository.findById(id).orElseThrow(RuntimeException::new);
         user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
     }
 
     @Override
     public void updateUserByAdmin(UUID id, AdminUserInfoDto user) {
-        var userEntity = findEntity(id);
+        var userEntity = userRepository.findById(id).orElseThrow(RuntimeException::new);
         userEntity.setName(user.getName());
         userEntity.setSurname(user.getSurname());
         userEntity.setUsername(user.getUsername());

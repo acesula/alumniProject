@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.UUID;
 @Service
 public interface SkillsService {
-    void save(UUID uuid, Skills skills);
+    void save(Skills skills);
 
-    ResponseEntity<ErrorResponse> saveSkill(UUID id, Skills skill);
+    ResponseEntity<ErrorResponse> saveSkill(Skills skill);
 
     List<SkillsDto> findAll();
 
-    List<SkillsDto> findById(UUID id);
+    List<SkillsDto> findById();
 
     SkillsDto update(UUID id, Skills dto);
 

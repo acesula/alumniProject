@@ -11,5 +11,4 @@ import java.util.UUID;
 public interface SkillsRepository extends JpaRepository<Skills, UUID> {
     List<Skills> findByUser_Id(UUID id);
 
-
 }

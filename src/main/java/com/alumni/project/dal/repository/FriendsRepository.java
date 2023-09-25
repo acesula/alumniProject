@@ -1,7 +1,7 @@
 package com.alumni.project.dal.repository;
 
 import com.alumni.project.dal.entity.Friends;
-import com.alumni.project.dto.user.GetFriendsDto;
+import com.alumni.project.dto.friends.GetFriendsDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

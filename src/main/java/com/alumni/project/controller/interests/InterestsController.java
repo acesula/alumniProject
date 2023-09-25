@@ -3,11 +3,9 @@ package com.alumni.project.controller.interests;
 import com.alumni.project.dal.entity.Interests;
 import com.alumni.project.dto.interests.InterestsDto;
 import com.alumni.project.security.ErrorResponse;
-import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.interests.InterestsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,19 +18,16 @@ public class InterestsController {
 
     private final InterestsService interestsService;
 
-    public AuthUserDetail authenticatedUser() {
-        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    }
 
     @PostMapping()
     public ResponseEntity<ErrorResponse> save(@RequestBody Interests interest) {
-        return interestsService.saveInterest(authenticatedUser().getId(), interest);
+        return interestsService.saveInterest(interest);
     }
 
 
     @GetMapping
     public List<InterestsDto> findByUser() {
-        return interestsService.findByUser(authenticatedUser().getId());
+        return interestsService.findByUser();
     }
 
 

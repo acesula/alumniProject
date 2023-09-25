@@ -19,20 +19,22 @@ public interface UserService{
 
     UserDto findById(UUID id);
 
-    UpdatePersonalInfoDto update(UUID id, UpdatePersonalInfoDto user);
+    UpdatePersonalInfoDto update(UpdatePersonalInfoDto user);
 
-    ResponseEntity<ErrorResponse> checkPassword(UUID id, String password);
-    void delete(UUID id);
+    ResponseEntity<ErrorResponse> checkPassword(String password);
+    void deleteByAdmin(UUID id);
 
-    void uploadProfilePicture(MultipartFile multipartFile, UUID id) throws IOException;
+    void delete();
 
-    void updateBio(UUID id, String bio);
+    void uploadProfilePicture(MultipartFile multipartFile) throws IOException;
 
-    void updateUsername(UUID id, String username);
+    void updateBio(String bio);
 
-    void updateEmail(UUID id, String email);
+    void updateUsername(String username);
 
-    void updatePassword(UUID id, ChangePasswordDto password);
+    void updateEmail(String email);
+
+    void updatePassword(ChangePasswordDto password);
 
     void updateUserByAdmin(UUID id, AdminUserInfoDto user);
 

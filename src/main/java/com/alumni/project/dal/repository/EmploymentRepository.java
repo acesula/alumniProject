@@ -11,8 +11,6 @@ import java.util.UUID;
 public interface EmploymentRepository extends JpaRepository<Employment, UUID> {
     boolean existsByCompanyAndJobAndUser_Id(String company, String job, UUID id);
 
-    List<Employment> findByUser_Username(String username);
-
     List<Employment> findByUser_Id(UUID id);
 
 }

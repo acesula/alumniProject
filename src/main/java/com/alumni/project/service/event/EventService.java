@@ -10,14 +10,14 @@ import java.util.UUID;
 
 public interface EventService {
 
-    void save(UUID uuid, Event event);
+    void save(Event event);
 
     EventDto findById(UUID uuid);
-    ResponseEntity<ErrorResponse> saveEvent(UUID uuid, Event event);
+    ResponseEntity<ErrorResponse> saveEvent(Event event);
 
     List<EventDto> findAll();
 
-    List<EventDto> findByUser(UUID uuid);
+    List<EventDto> findByUser();
 
     void delete(UUID uuid);
 

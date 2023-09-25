@@ -4,14 +4,15 @@ import com.alumni.project.dal.entity.Friends;
 import com.alumni.project.dal.repository.FriendsRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.friends.FriendsDto;
-import com.alumni.project.dto.user.GetFriendsDto;
+import com.alumni.project.dto.friends.GetFriendsDto;
+import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.mapping.MappingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 
@@ -23,14 +24,18 @@ public class FriendsServiceImpl implements FriendsService {
     private final UserRepository userRepository;
     private final MappingService mappingService;
 
+    public AuthUserDetail authenticatedUser() {
+        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
     @Override
-    public String save(UUID id1, UUID id2) {
+    public String save(UUID id) {
         try {
-            var user = userRepository.findById(id1).orElseThrow(RuntimeException::new);
-            var user2 = userRepository.findById(id2).orElseThrow(RuntimeException::new);
+            var user = userRepository.findById(authenticatedUser().getId()).orElseThrow(RuntimeException::new);
+            var user2 = userRepository.findById(id).orElseThrow(RuntimeException::new);
 
             if (user != null && user2 != null) {
-                if (areTheyAlreadyFriends(user.getId(), user2.getId())) {
+                if (areTheyAlreadyFriends(user2.getId())) {
                     return "You are already friends";
                 }
                 Friends newFriend = new Friends(user, user2);
@@ -43,19 +48,13 @@ public class FriendsServiceImpl implements FriendsService {
     }
 
     @Override
-    public List<GetFriendsDto> findAllFriendsPerUser(UUID id) {
-        return friendsRepository.findAllFriendsPerUser(id);
+    public List<GetFriendsDto> findAllFriendsPerUser() {
+        return friendsRepository.findAllFriendsPerUser(authenticatedUser().getId());
     }
 
-    public boolean areTheyAlreadyFriends(UUID user1, UUID friend1) {
+    public boolean areTheyAlreadyFriends(UUID friend) {
 
-//        List<Friends> totalListOfFriends = friendsRepository.findAll();
-//        Optional<Friends> friend = totalListOfFriends.stream().filter(friendItem ->
-//                (friendItem.getUser1().getId() == user1 && friendItem.getFriend().getId() == friend1) ||
-//                        (friendItem.getUser1().getId() == friend1 && friendItem.getFriend().getId() == user1)
-//        ).findFirst();
-//        return friend.isPresent();
-        return friendsRepository.areTheyAlreadyFriends(user1, friend1);
+        return friendsRepository.areTheyAlreadyFriends(authenticatedUser().getId(), friend);
     }
 
 

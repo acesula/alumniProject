@@ -1,15 +1,15 @@
-package com.alumni.project.dto.user;
+package com.alumni.project.dto.friends;
+
+import com.alumni.project.dal.entity.User;
 
 import java.util.UUID;
 
-public interface GetChatRoomDto {
+public interface GetFriendsDto {
     UUID getId();
 
     String getName();
-
     String getSurname();
-
     String getUsername();
-    UUID getMainId();
     String getImage();
+    UUID getMainId();
 }

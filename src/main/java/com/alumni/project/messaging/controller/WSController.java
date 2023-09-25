@@ -12,13 +12,8 @@ public class WSController {
 
     private final WSService service;
 
-//    @PostMapping("/send-message")
-//    public void sendMessage(@RequestBody final Message message) {
-//        service.notifyFrontend(message.getMessageContent());
-//    }
-
     @PostMapping
     public void sendPrivateMessage(@RequestBody Message message) {
-        service.notifyUser(message);
+        service.sendMessage(message);
     }
 }

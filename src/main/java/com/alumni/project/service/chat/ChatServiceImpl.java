@@ -5,14 +5,14 @@ import com.alumni.project.dal.entity.Chat;
 import com.alumni.project.dal.entity.ChatRoom;
 import com.alumni.project.dal.repository.ChatRepository;
 import com.alumni.project.dal.repository.GroupChatRepository;
-import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.chat.ChatDto;
+import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.chatRoom.ChatRoomService;
 import com.alumni.project.service.mapping.MappingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -25,25 +25,28 @@ public class ChatServiceImpl implements ChatService {
     private final MappingService mappingService;
     private final GroupChatRepository groupChatRepository;
 
+    public AuthUserDetail authenticatedUser() {
+        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
 
     @Override
-    public void saveByChatRoomId(String sender, UUID chatRoomId, String message) {
+    public void saveByChatRoomId(UUID chatRoomId, String message) {
         ChatRoom chatRoom = this.chatRoomService.findChatRoomById(chatRoomId);
         if (chatRoom != null) {
             Chat chat = new Chat();
             chat.setChatRoom(chatRoom);
-            chat.setSender(sender);
+            chat.setSender(authenticatedUser().getUsername());
             chat.setMessage(message);
             chatRepository.save(chat);
         }
     }
 
-    public void saveByGroupChatId(String sender, UUID groupChatId, String message) {
+    public void saveByGroupChatId(UUID groupChatId, String message) {
         var groupChat = groupChatRepository.findById(groupChatId).orElseThrow(RuntimeException::new);
         if (groupChat != null) {
             var chat = new Chat();
             chat.setGroupChat(groupChat);
-            chat.setSender(sender);
+            chat.setSender(authenticatedUser().getUsername());
             chat.setMessage(message);
             chatRepository.save(chat);
         }

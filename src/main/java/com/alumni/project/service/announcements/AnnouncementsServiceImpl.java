@@ -5,10 +5,12 @@ import com.alumni.project.dal.repository.AnnouncementsRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.announcements.AnnouncementsDto;
 import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,11 +28,14 @@ public class AnnouncementsServiceImpl implements AnnouncementsService {
     private final MappingServiceImpl mappingService;
 
 
+    public AuthUserDetail authenticatedUser() {
+        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
 
     @Override
     @Transactional
-    public void save(UUID uuid, Announcements announcement) {
-        var user = userRepository.findById(uuid).orElseThrow(RuntimeException::new);
+    public void save(Announcements announcement) {
+        var user = userRepository.findById(authenticatedUser().getId()).orElseThrow(RuntimeException::new);
         announcement.setUser(user);
         announcement.setAnnouncementDate(LocalDateTime.of(
                 LocalDateTime.now().getYear(),
@@ -43,10 +48,10 @@ public class AnnouncementsServiceImpl implements AnnouncementsService {
         announcementsRepository.save(announcement);
     }
 
-    public ResponseEntity<ErrorResponse> saveAnnouncement(UUID uuid, Announcements announcements) {
+    public ResponseEntity<ErrorResponse> saveAnnouncement( Announcements announcements) {
         try {
-            if (userRepository.existsById(uuid)) {
-                save(uuid, announcements);
+            if (userRepository.existsById(authenticatedUser().getId())) {
+                save(announcements);
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {
                 ErrorResponse errorResponse = new ErrorResponse();
@@ -71,8 +76,8 @@ public class AnnouncementsServiceImpl implements AnnouncementsService {
     }
 
     @Override
-    public List<AnnouncementsDto> findByUser(UUID uuid) {
-        return announcementsRepository.findByUser_Id(uuid)
+    public List<AnnouncementsDto> findByUser() {
+        return announcementsRepository.findByUser_Id(authenticatedUser().getId())
                 .stream()
                 .map(mappingService::convertToAnnouncementsDto)
                 .collect(Collectors.toList());

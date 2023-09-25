@@ -4,14 +4,12 @@ import com.alumni.project.dal.entity.ContactDetails;
 import com.alumni.project.dal.repository.ContactDetailsRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.contactdetails.ContactDetailsDto;
+import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,10 +20,14 @@ public class ContactDetailsServiceImp implements ContactDetailsService {
     private final MappingServiceImpl mappingService;
 
 
+    public AuthUserDetail authenticatedUser() {
+        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
 
     @Override
-    public void save(String username, ContactDetails contactDetails) {
-        var user = userRepository.findByUsername(username);
+    public void save(ContactDetails contactDetails) {
+        var user = userRepository.findById(authenticatedUser().getId()).orElseThrow(RuntimeException::new);
         contactDetails.setUser(user);
         user.setContactDetails(contactDetails);
         contactDetailsRepository.save(contactDetails);
@@ -33,21 +35,14 @@ public class ContactDetailsServiceImp implements ContactDetailsService {
 
 
     @Override
-    public ContactDetailsDto findByUserId(UUID uuid) {
-        var optional = contactDetailsRepository.findByUser_Id(uuid);
+    public ContactDetailsDto findByUserId() {
+        var optional = contactDetailsRepository.findByUser_Id(authenticatedUser().getId());
         if(optional.isPresent()){
             return mappingService.convertToContactDetailsDto(optional.get());
         }
         throw new RuntimeException("Could not find contact details");
     }
 
-    @Override
-    public List<ContactDetailsDto> findByUser(String username) {
-        return contactDetailsRepository.findByUser_Username(username)
-                .stream()
-                .map(mappingService::convertToContactDetailsDto)
-                .collect(Collectors.toList());
-    }
 
     @Override
     public void deleteByEmail(String email) {
@@ -56,8 +51,8 @@ public class ContactDetailsServiceImp implements ContactDetailsService {
 
     @Override
     @Transactional
-    public ContactDetailsDto update(UUID uuid, ContactDetailsDto contactDetailsDto) {
-        var contact = contactDetailsRepository.findByUser_Id(uuid).orElseThrow(RuntimeException::new);
+    public ContactDetailsDto update(ContactDetailsDto contactDetailsDto) {
+        var contact = contactDetailsRepository.findByUser_Id(authenticatedUser().getId()).orElseThrow(RuntimeException::new);
         contact.setAddress(contactDetailsDto.getAddress());
         contact.setEmail(contactDetailsDto.getEmail());
         contact.setCountry(contactDetailsDto.getCountry());

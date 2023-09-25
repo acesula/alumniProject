@@ -1,10 +1,8 @@
 package com.alumni.project.controller.groupChat;
 
 import com.alumni.project.dto.groupChat.GroupChatDto;
-import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.groupChat.GroupChatService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,9 +16,7 @@ public class GroupChatController {
     private final GroupChatService groupChatService;
 
 
-    public AuthUserDetail authenticatedUser() {
-        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    }
+
 
     @GetMapping
     public List<GroupChatDto> getAllGroupChats() {
@@ -29,7 +25,7 @@ public class GroupChatController {
 
     @PostMapping
     public void createGroupChat(@RequestParam("name") String name) {
-        groupChatService.createGroupChat(authenticatedUser().getId(), name);
+        groupChatService.createGroupChat(name);
     }
 
     @PatchMapping("/changeName/{groupChatId}")

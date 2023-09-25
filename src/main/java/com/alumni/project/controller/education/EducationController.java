@@ -3,11 +3,9 @@ package com.alumni.project.controller.education;
 import com.alumni.project.dal.entity.Education;
 import com.alumni.project.dto.education.EducationDto;
 import com.alumni.project.security.ErrorResponse;
-import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.education.EducationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,24 +18,16 @@ public class EducationController {
 
     private final EducationService educationService;
 
-    public AuthUserDetail authenticatedUser() {
-        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    }
+
 
     @PostMapping
     public ResponseEntity<ErrorResponse> save(@RequestBody Education education) {
-        return educationService.saveEducation(authenticatedUser().getId(), education);
+        return educationService.saveEducation(education);
     }
-
-//    @GetMapping
-//    public List<EducationDto> findAll() {
-//        return educationService.findAll();
-//    }
-
 
     @GetMapping
     public List<EducationDto> findByUserId() {
-        return educationService.findByUserId(authenticatedUser().getId());
+        return educationService.findByUserId();
     }
 
     @PatchMapping("/{id}")

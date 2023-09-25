@@ -1,12 +1,9 @@
 package com.alumni.project.controller.chatRoom;
 import com.alumni.project.dto.chatRoom.ChatRoomDto;
-import com.alumni.project.dto.user.GetChatRoomDto;
-import com.alumni.project.security.model.AuthUserDetail;
+import com.alumni.project.dto.chatRoom.GetChatRoomDto;
 import com.alumni.project.service.chatRoom.ChatRoomService;
-import com.alumni.project.service.chatRoom.ChatRoomServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,27 +18,25 @@ public class ChatRoomController {
 
     private final ChatRoomService chatRoomService;
 
-    public AuthUserDetail authenticatedUser() {
-        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+
+
+    @PostMapping("/{userId}")
+    public void save(@Valid @PathVariable UUID userId) {
+        chatRoomService.save(userId);
     }
 
-
-    @PostMapping("/{otherUserId}")
-    public void save(@Valid @PathVariable UUID otherUserId) {
-        chatRoomService.save(authenticatedUser().getId(),otherUserId);
-    }
-
-    @GetMapping("/{sender}")
-    public List<ChatRoomDto> findAllChatRoom(@PathVariable String sender){
+    @GetMapping
+    public List<ChatRoomDto> findAllChatRooms(){
         return chatRoomService.findAll();
     }
 
-    @GetMapping("/listperuser")
+    @GetMapping("/chatRoomsOfUser")
     public List<GetChatRoomDto> findAllChatRoomsById(){
-        return chatRoomService.findAllChatRoomsById(authenticatedUser().getId());
+        return chatRoomService.findAllChatRoomsById();
     }
 
-    @GetMapping("/all-req/{id}")
+    @GetMapping("/chatRoom/{id}")
     public ChatRoomDto findById(@PathVariable UUID id) {
         return chatRoomService.findById(id);
     }

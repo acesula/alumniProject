@@ -5,12 +5,14 @@ import com.alumni.project.dal.repository.SkillsRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.skills.SkillsDto;
 import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.mapping.MappingServiceImpl;
 import com.alumni.project.service.user.UserServiceImpl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,19 +28,23 @@ public class SkillsServiceImpl implements SkillsService {
     private final MappingServiceImpl mappingService;
 
 
+    public AuthUserDetail authenticatedUser() {
+        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
     @Override
     @Transactional
-    public void save(UUID uuid, Skills skills) {
-        var user = userRepository.findById(uuid).orElseThrow(RuntimeException::new);
+    public void save(Skills skills) {
+        var user = userRepository.findById(authenticatedUser().getId()).orElseThrow(RuntimeException::new);
         skills.setUser(user);
         user.getSkills().add(skills);
         skillsRepository.save(skills);
     }
 
-    public ResponseEntity<ErrorResponse> saveSkill(UUID uuid, Skills skills) {
+    public ResponseEntity<ErrorResponse> saveSkill(Skills skills) {
         try {
-            if (userRepository.existsById(uuid)) {
-                save(uuid, skills);
+            if (userRepository.existsById(authenticatedUser().getId())) {
+                save(skills);
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {
                 ErrorResponse errorResponse = new ErrorResponse();
@@ -64,8 +70,8 @@ public class SkillsServiceImpl implements SkillsService {
     }
 
     @Override
-    public List<SkillsDto> findById(UUID id) {
-        return skillsRepository.findByUser_Id(id)
+    public List<SkillsDto> findById() {
+        return skillsRepository.findByUser_Id(authenticatedUser().getId())
                 .stream()
                 .map(mappingService::convertToSkillsDto)
                 .collect(Collectors.toList());
@@ -73,7 +79,6 @@ public class SkillsServiceImpl implements SkillsService {
 
 
     @Override
-    @Transactional
     public SkillsDto update(UUID id, Skills skillDto) {
 
         var skill = skillsRepository.findById(id).orElseThrow(RuntimeException::new);

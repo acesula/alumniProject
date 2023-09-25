@@ -1,8 +1,6 @@
 package com.alumni.project.controller.user;
 
 import com.alumni.project.dto.user.AdminUserInfoDto;
-import com.alumni.project.dto.user.ChangePasswordDto;
-import com.alumni.project.dto.user.UserDto;
 import com.alumni.project.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +37,6 @@ public class AdminController {
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable UUID id) {
-        userService.delete(id);
+        userService.deleteByAdmin(id);
     }
 }

@@ -9,6 +9,4 @@ import java.util.UUID;
 public interface GroupChatRepository extends JpaRepository<GroupChat, UUID> {
     List<GroupChat> findByUser_Id(UUID id);
 
-
-
 }

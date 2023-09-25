@@ -7,9 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
-
-
 @Entity
 @Getter
 @Setter
@@ -23,8 +20,6 @@ public class Request extends Base {
     @ManyToOne
     @JoinColumn(name="friend_id")
     private User user2;
-
-
 
     public Request(User senderUser, User receiverUser) {
         this.user1 = senderUser;

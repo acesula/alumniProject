@@ -10,17 +10,16 @@ import java.util.UUID;
 
 public interface EmploymentService {
 
-    void save(UUID uuid, Employment employment);
+    void save(Employment employment);
 
-    ResponseEntity<ErrorResponse> saveEmployment(UUID uuid, Employment employment);
+    ResponseEntity<ErrorResponse> saveEmployment(Employment employment);
 
     List<EmploymentDto> findAll();
 
-    List<EmploymentDto> findByUserId(UUID id);
+    List<EmploymentDto> findByUserId();
 
-    List<EmploymentDto> findByUser(String username);
 
-    EmploymentDto update(UUID uuid,EmploymentDto employment);
+    EmploymentDto update(UUID uuid, EmploymentDto employment);
 
     void delete(UUID id);
 

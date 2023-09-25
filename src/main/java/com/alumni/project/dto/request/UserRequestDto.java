@@ -1,4 +1,4 @@
-package com.alumni.project.dto.user;
+package com.alumni.project.dto.request;
 
 import java.util.UUID;
 

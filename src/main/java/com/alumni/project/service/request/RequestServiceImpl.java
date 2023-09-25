@@ -5,10 +5,12 @@ import com.alumni.project.dal.repository.RequestRepository;
 import com.alumni.project.dal.repository.UserRepository;
 
 import com.alumni.project.dto.request.RequestDto;
-import com.alumni.project.dto.user.UserRequestDto;
+import com.alumni.project.dto.request.UserRequestDto;
+import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.friends.FriendsServiceImpl;
 import com.alumni.project.service.mapping.MappingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,24 +25,27 @@ public class RequestServiceImpl implements RequestService {
 
     private final UserRepository userRepository;
     private final RequestRepository requestRepository;
-
     private final FriendsServiceImpl friendsService;
     private final MappingService mappingService;
 
 
-    public void sendRequest(UUID id1, UUID id2) {
+    public AuthUserDetail authenticatedUser() {
+        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+    public void sendRequest(UUID id) {
 
         try {
 
-            var senderUser = userRepository.findById(id1).orElseThrow(RuntimeException::new);
-            var receiverUser = userRepository.findById(id2).orElseThrow(RuntimeException::new);
+            var senderUser = userRepository.findById(authenticatedUser().getId()).orElseThrow(RuntimeException::new);
+            var receiverUser = userRepository.findById(id).orElseThrow(RuntimeException::new);
 
             if (senderUser != null && receiverUser != null) {
 
-                if (isRequestSentBefore(senderUser.getId(), receiverUser.getId())) {
+                if (isRequestSentBefore(receiverUser.getId())) {
                     return;
                 }
-                if (friendsService.areTheyAlreadyFriends(senderUser.getId(), receiverUser.getId())) {
+                if (friendsService.areTheyAlreadyFriends(receiverUser.getId())) {
                     return;
                 }
 
@@ -54,21 +59,21 @@ public class RequestServiceImpl implements RequestService {
     }
 
 
-    public boolean isRequestSentBefore(UUID senderId, UUID receiverId) {
+    public boolean isRequestSentBefore(UUID receiverId) {
 
         List<Request> totalListOfRequests = requestRepository.findAll();
         Optional<Request> request = totalListOfRequests.stream().filter(requestItem ->
-                (requestItem.getUser1().getId() == senderId && requestItem.getUser2().getId() == receiverId) ||
-                        (requestItem.getUser1().getId() == receiverId && requestItem.getUser2().getId() == senderId)
+                (requestItem.getUser1().getId() == authenticatedUser().getId() && requestItem.getUser2().getId() == receiverId) ||
+                        (requestItem.getUser1().getId() == receiverId && requestItem.getUser2().getId() == authenticatedUser().getId())
         ).findFirst();
         return request.isPresent();
     }
 
     @Override
-    public List<UserRequestDto> findAllById(UUID id) {
+    public List<UserRequestDto> findAllById() {
 
         try {
-            List<UserRequestDto> result = this.requestRepository.findAllById(id).stream().toList();
+            List<UserRequestDto> result = requestRepository.findAllById(authenticatedUser().getId()).stream().toList();
             if (!result.isEmpty()) {
                 return result;
             }
@@ -98,7 +103,7 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public void acceptRequest(UUID id) {
         var req = requestRepository.findById(id).orElseThrow(RuntimeException::new);
-        friendsService.save(req.getUser1().getId(), req.getUser2().getId());
+        friendsService.save(req.getUser2().getId());
         requestRepository.delete(req);
     }
 

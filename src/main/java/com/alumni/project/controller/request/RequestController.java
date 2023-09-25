@@ -2,16 +2,12 @@ package com.alumni.project.controller.request;
 
 
 import com.alumni.project.dto.request.RequestDto;
-import com.alumni.project.dto.user.UserRequestDto;
+import com.alumni.project.dto.request.UserRequestDto;
 
-import com.alumni.project.security.ErrorResponse;
-import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.request.RequestService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,23 +20,21 @@ public class RequestController {
 
     private final RequestService requestsService;
 
-    public AuthUserDetail authenticatedUser() {
-        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    }
+
 
     @PostMapping("/{id}")
     public void save(@Valid @PathVariable UUID id) {
-        requestsService.sendRequest(authenticatedUser().getId(), id);
+        requestsService.sendRequest(id);
     }
 
     @GetMapping
     public List<UserRequestDto> findAllById() {
-        return requestsService.findAllById(authenticatedUser().getId());
+        return requestsService.findAllById();
     }
 
     @GetMapping("/requestSent/{id}")
     public boolean requestSent(@Valid @PathVariable UUID id){
-        return requestsService.isRequestSentBefore(authenticatedUser().getId(), id);
+        return requestsService.isRequestSentBefore(id);
     }
 
     @GetMapping("/{id}")

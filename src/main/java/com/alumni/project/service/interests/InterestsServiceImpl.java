@@ -5,10 +5,12 @@ import com.alumni.project.dal.repository.InterestsRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.interests.InterestsDto;
 import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,19 +26,23 @@ public class InterestsServiceImpl implements InterestsService {
     private final UserRepository userRepository;
     private final MappingServiceImpl mappingService;
 
+    public AuthUserDetail authenticatedUser() {
+        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
     @Override
     @Transactional
-    public void save(UUID uuid, Interests interests) {
-        var user = userRepository.findById(uuid).orElseThrow(RuntimeException::new);
+    public void save(Interests interests) {
+        var user = userRepository.findById(authenticatedUser().getId()).orElseThrow(RuntimeException::new);
         interests.setUser(user);
         user.getInterests().add(interests);
         interestsRepository.save(interests);
     }
 
-    public ResponseEntity<ErrorResponse> saveInterest(UUID uuid, Interests interests) {
+    public ResponseEntity<ErrorResponse> saveInterest(Interests interests) {
         try {
-            if (userRepository.existsById(uuid)) {
-                save(uuid, interests);
+            if (userRepository.existsById(authenticatedUser().getId())) {
+                save(interests);
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {
                 ErrorResponse errorResponse = new ErrorResponse();
@@ -61,8 +67,8 @@ public class InterestsServiceImpl implements InterestsService {
     }
 
     @Override
-    public List<InterestsDto> findByUser(UUID id) {
-        return interestsRepository.findByUser_Id(id)
+    public List<InterestsDto> findByUser() {
+        return interestsRepository.findByUser_Id(authenticatedUser().getId())
                 .stream()
                 .map(mappingService::convertToInterestsDto)
                 .collect(Collectors.toList());

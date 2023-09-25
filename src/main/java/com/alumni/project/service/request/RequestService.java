@@ -1,18 +1,18 @@
 package com.alumni.project.service.request;
 
 import com.alumni.project.dto.request.RequestDto;
-import com.alumni.project.dto.user.UserRequestDto;
+import com.alumni.project.dto.request.UserRequestDto;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface RequestService {
 
-    void sendRequest(UUID id1, UUID id2);
+    void sendRequest(UUID id);
 
-    List<UserRequestDto> findAllById(UUID id);
+    List<UserRequestDto> findAllById();
 
-    boolean isRequestSentBefore(UUID senderId, UUID receiverId);
+    boolean isRequestSentBefore(UUID receiverId);
 
     RequestDto findById(UUID id);
 

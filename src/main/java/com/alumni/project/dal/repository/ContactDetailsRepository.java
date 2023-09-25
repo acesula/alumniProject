@@ -11,12 +11,6 @@ import java.util.UUID;
 @Repository
 public interface ContactDetailsRepository extends JpaRepository<ContactDetails, UUID> {
     void deleteByEmail(String email);
-
-    boolean existsByEmail(String email);
-    Optional<ContactDetails> findByEmail(String email);
-
     Optional<ContactDetails> findByUser_Id(UUID id);
 
-
-    List<ContactDetails> findByUser_Username(String username);
 }

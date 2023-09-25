@@ -10,13 +10,13 @@ import java.util.UUID;
 
 public interface InterestsService {
 
-    void save(UUID uuid, Interests interests);
+    void save(Interests interests);
 
-    ResponseEntity<ErrorResponse> saveInterest(UUID uuid, Interests interests);
+    ResponseEntity<ErrorResponse> saveInterest(Interests interests);
 
     List<InterestsDto> findAll();
 
-    List<InterestsDto> findByUser(UUID uuid);
+    List<InterestsDto> findByUser();
 
     InterestsDto findById(UUID id);
 

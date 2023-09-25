@@ -52,8 +52,7 @@ public class SecurityConfig implements WebMvcConfigurer {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/websocket/**").permitAll();
-                    auth.requestMatchers("/api/v1/auth/**").permitAll();
+                    auth.requestMatchers("/api/v1/auth/**", "/websocket/**").permitAll();
                     auth.requestMatchers("/api/v1/admin/**").hasAuthority("ADMIN");
                     auth.anyRequest().authenticated();
                 });

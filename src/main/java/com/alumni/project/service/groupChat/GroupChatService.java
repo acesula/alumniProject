@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface GroupChatService {
 
-    void createGroupChat(UUID uuid, String name);
+    void createGroupChat(String name);
 
     List<GroupChatDto> getAllGroupChats();
 

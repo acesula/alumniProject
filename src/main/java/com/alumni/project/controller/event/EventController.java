@@ -3,11 +3,9 @@ package com.alumni.project.controller.event;
 import com.alumni.project.dal.entity.Event;
 import com.alumni.project.dto.event.EventDto;
 import com.alumni.project.security.ErrorResponse;
-import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.event.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,14 +18,10 @@ public class EventController {
 
     private final EventService eventService;
 
-    public AuthUserDetail authenticatedUser() {
-        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    }
-
 
     @PostMapping
     public ResponseEntity<ErrorResponse> save(@RequestBody Event event) {
-        return eventService.saveEvent(authenticatedUser().getId(), event);
+        return eventService.saveEvent(event);
     }
 
     @GetMapping("/{id}")
@@ -42,7 +36,7 @@ public class EventController {
 
     @GetMapping("/eventsByUser")
     public List<EventDto> findByUser() {
-        return eventService.findByUser(authenticatedUser().getId());
+        return eventService.findByUser();
     }
 
     @PatchMapping("/{id}")

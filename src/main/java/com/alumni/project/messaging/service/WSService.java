@@ -13,14 +13,7 @@ public class WSService {
     private final SimpMessagingTemplate messagingTemplate;
     private final NotificationService notificationService;
 
-//    public void notifyFrontend(final String message) {
-//        ResponseMessage response = new ResponseMessage(message);
-//        notificationService.sendGlobalNotification();
-//
-//        messagingTemplate.convertAndSend("/topic/messages", response);
-//    }
-
-    public void notifyUser(final Message message) {
+    public void sendMessage(final Message message) {
 
         ResponseMessage response = new ResponseMessage(message.getSender(), message.getMessageContent());
 //        notificationService.sendGlobalNotification();

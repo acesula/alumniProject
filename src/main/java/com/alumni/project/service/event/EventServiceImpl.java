@@ -5,10 +5,12 @@ import com.alumni.project.dal.repository.EventRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.event.EventDto;
 import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,10 +26,14 @@ public class EventServiceImpl implements EventService{
     private final UserRepository userRepository;
     private final MappingServiceImpl mappingService;
 
+    public AuthUserDetail authenticatedUser() {
+        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
     @Override
     @Transactional
-    public void save(UUID uuid,Event event) {
-        var user = userRepository.findById(uuid).orElseThrow(RuntimeException::new);
+    public void save(Event event) {
+        var user = userRepository.findById(authenticatedUser().getId()).orElseThrow(RuntimeException::new);
         event.setUser(user);
         user.getEvents().add(event);
         eventRepository.save(event);
@@ -43,10 +49,10 @@ public class EventServiceImpl implements EventService{
 
     }
 
-    public ResponseEntity<ErrorResponse> saveEvent(UUID uuid,Event event) {
+    public ResponseEntity<ErrorResponse> saveEvent(Event event) {
         try {
-            if (userRepository.existsById(uuid)) {
-                save(uuid, event);
+            if (userRepository.existsById(authenticatedUser().getId())) {
+                save(event);
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {
                 ErrorResponse errorResponse = new ErrorResponse();
@@ -71,8 +77,8 @@ public class EventServiceImpl implements EventService{
     }
 
     @Override
-    public List<EventDto> findByUser(UUID uuid) {
-        return eventRepository.findByUser_Id(uuid)
+    public List<EventDto> findByUser() {
+        return eventRepository.findByUser_Id(authenticatedUser().getId())
                 .stream()
                 .map(mappingService::convertToEventDto)
                 .collect(Collectors.toList());
