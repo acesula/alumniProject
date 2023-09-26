@@ -16,7 +16,7 @@ public class AttendeeController {
 
 
     private final AttendeeService attendeeService;
-    @GetMapping()
+    @GetMapping
     public List<AttendeesDto> getAllAttendeesPerEvent() {
         return attendeeService.allAttendees();
     }

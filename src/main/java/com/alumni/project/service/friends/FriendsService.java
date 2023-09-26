@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface FriendsService {
-    String save(UUID receiver);
+    String save(UUID sender,UUID receiver);
 
     public boolean areTheyAlreadyFriends(UUID friend);
     List<GetFriendsDto> findAllFriendsPerUser();

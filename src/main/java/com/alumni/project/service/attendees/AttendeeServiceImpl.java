@@ -5,8 +5,10 @@ import com.alumni.project.dal.entity.Event;
 import com.alumni.project.dal.repository.AttendeesRepository;
 import com.alumni.project.dal.repository.EventRepository;
 import com.alumni.project.dto.event.AttendeesDto;
+import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.mapping.MappingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,9 +23,13 @@ public class AttendeeServiceImpl implements AttendeeService{
     private final MappingService mappingService;
     private final EventRepository eventRepository;
 
+    public AuthUserDetail authenticatedUser() {
+        return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
     @Override
     public List<AttendeesDto> allAttendees() {
-        return attendeesRepository.findAll()
+        return attendeesRepository.findByAttendeeEmail(authenticatedUser().getEmail())
                 .stream()
                 .map(mappingService::convertToAttendeesDto)
                 .toList();

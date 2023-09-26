@@ -19,14 +19,6 @@ import java.util.UUID;
 public class FriendController {
     private final FriendsService friendsService;
 
-
-
-    @PostMapping("/{id}")
-    public void save(@Valid @PathVariable UUID id) {
-        friendsService.save(id);
-    }
-
-
     @GetMapping
     public List<GetFriendsDto> findAllFriendsPerUser() {
         return friendsService.findAllFriendsPerUser();

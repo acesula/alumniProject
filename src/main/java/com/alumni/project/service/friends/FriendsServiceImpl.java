@@ -30,10 +30,10 @@ public class FriendsServiceImpl implements FriendsService {
 
     @Override
     @Transactional
-    public String save(UUID id) {
+    public String save(UUID id1 ,UUID id2) {
         try {
-            var user = userRepository.findById(authenticatedUser().getId()).orElseThrow(RuntimeException::new);
-            var user2 = userRepository.findById(id).orElseThrow(RuntimeException::new);
+            var user = userRepository.findById(id1).orElseThrow(RuntimeException::new);
+            var user2 = userRepository.findById(id2).orElseThrow(RuntimeException::new);
 
             if (user != null && user2 != null) {
                 if (areTheyAlreadyFriends(user2.getId())) {

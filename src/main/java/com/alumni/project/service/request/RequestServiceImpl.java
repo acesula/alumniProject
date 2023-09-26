@@ -107,7 +107,7 @@ public class RequestServiceImpl implements RequestService {
     @Transactional
     public void acceptRequest(UUID id) {
         var req = requestRepository.findById(id).orElseThrow(RuntimeException::new);
-        friendsService.save(req.getUser2().getId());
+        friendsService.save(req.getUser1().getId(),req.getUser2().getId());
         requestRepository.delete(req);
     }
 
