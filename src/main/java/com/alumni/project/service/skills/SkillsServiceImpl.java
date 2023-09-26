@@ -4,7 +4,7 @@ import com.alumni.project.dal.entity.Skills;
 import com.alumni.project.dal.repository.SkillsRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.skills.SkillsDto;
-import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.dto.error.ErrorResponse;
 import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.mapping.MappingServiceImpl;
 import com.alumni.project.service.user.UserServiceImpl;
@@ -41,6 +41,7 @@ public class SkillsServiceImpl implements SkillsService {
         skillsRepository.save(skills);
     }
 
+    @Override
     public ResponseEntity<ErrorResponse> saveSkill(Skills skills) {
         try {
             if (userRepository.existsById(authenticatedUser().getId())) {
@@ -79,12 +80,12 @@ public class SkillsServiceImpl implements SkillsService {
 
 
     @Override
+    @Transactional
     public SkillsDto update(UUID id, Skills skillDto) {
 
         var skill = skillsRepository.findById(id).orElseThrow(RuntimeException::new);
         skill.setSkillField(skillDto.getSkillField());
         skill.setSkillDescription(skillDto.getSkillDescription());
-
 
         return mappingService.convertToSkillsDto(skillsRepository.save(skill));
     }

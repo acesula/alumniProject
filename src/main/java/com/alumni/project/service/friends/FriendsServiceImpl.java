@@ -29,6 +29,7 @@ public class FriendsServiceImpl implements FriendsService {
     }
 
     @Override
+    @Transactional
     public String save(UUID id) {
         try {
             var user = userRepository.findById(authenticatedUser().getId()).orElseThrow(RuntimeException::new);

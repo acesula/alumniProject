@@ -2,7 +2,7 @@ package com.alumni.project.controller.event;
 
 import com.alumni.project.dal.entity.Event;
 import com.alumni.project.dto.event.EventDto;
-import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.dto.error.ErrorResponse;
 import com.alumni.project.service.event.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

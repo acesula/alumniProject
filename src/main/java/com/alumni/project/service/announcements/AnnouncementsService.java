@@ -2,7 +2,7 @@ package com.alumni.project.service.announcements;
 
 import com.alumni.project.dal.entity.Announcements;
 import com.alumni.project.dto.announcements.AnnouncementsDto;
-import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.dto.error.ErrorResponse;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

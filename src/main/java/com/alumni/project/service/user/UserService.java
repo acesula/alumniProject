@@ -1,7 +1,7 @@
 package com.alumni.project.service.user;
 
 import com.alumni.project.dto.user.*;
-import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.dto.error.ErrorResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 

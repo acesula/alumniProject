@@ -5,7 +5,7 @@ import com.alumni.project.dal.entity.User;
 import com.alumni.project.dal.repository.ContactDetailsRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.user.*;
-import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.dto.error.ErrorResponse;
 import com.alumni.project.security.exception.AuthServerException;
 import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.mapping.MappingService;
@@ -19,10 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
@@ -55,6 +51,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(authenticatedUser().getId()).orElseThrow(RuntimeException::new);
     }
 
+    @Override
     public void save(RegisterDto registerDto) {
         var user = mappingService.convertToUser(registerDto);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -65,6 +62,7 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
     public ResponseEntity<ErrorResponse> register(RegisterDto registerDto) {
         try {
             if (existsByUsername(registerDto.getUsername())) {
@@ -118,6 +116,7 @@ public class UserServiceImpl implements UserService {
         return mappingService.convertToUpdatePersonalInfoDto(userRepository.save(user));
     }
 
+    @Override
     public ResponseEntity<ErrorResponse> checkPassword(String password) {
         var user = findEntity();
         if (!passwordEncoder.matches(password, user.getPassword())) {
@@ -153,18 +152,21 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
     public void updateBio(String bio) {
         var user = findEntity();
         user.setDescription(bio);
         userRepository.save(user);
     }
 
+    @Override
     public void updateUsername(String username) {
         var user = findEntity();
         user.setUsername(username);
         userRepository.save(user);
     }
 
+    @Override
     public void updateEmail(String email) {
         var user = findEntity();
         var contactDetails = contactDetailsRepository.findByUser_Id(authenticatedUser().getId()).orElseThrow(RuntimeException::new);
@@ -175,6 +177,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    @Override
     public void updatePassword(ChangePasswordDto changePasswordDto) {
         var user = findEntity();
         if (!passwordEncoder.matches(changePasswordDto.getOldPassword(), user.getPassword())) {
@@ -184,6 +187,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    @Override
     public void updatePasswordByAdmin(UUID id, String password){
         var user = userRepository.findById(id).orElseThrow(RuntimeException::new);
         user.setPassword(passwordEncoder.encode(password));

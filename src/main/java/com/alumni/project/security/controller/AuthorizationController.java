@@ -1,7 +1,7 @@
 package com.alumni.project.security.controller;
 
 import com.alumni.project.dto.user.RegisterDto;
-import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.dto.error.ErrorResponse;
 import com.alumni.project.security.dto.LoginRequestDto;
 import com.alumni.project.security.dto.TokenDto;
 import com.alumni.project.security.services.auth.AuthenticationService;

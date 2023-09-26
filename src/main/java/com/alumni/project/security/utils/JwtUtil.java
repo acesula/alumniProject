@@ -24,8 +24,6 @@ public class JwtUtil {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
     private final ApplicationProperties applicationProperties;
 
-
-
     public String getUserIdFromToken(String jwtToken) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())

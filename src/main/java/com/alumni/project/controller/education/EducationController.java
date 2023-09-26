@@ -2,7 +2,7 @@ package com.alumni.project.controller.education;
 
 import com.alumni.project.dal.entity.Education;
 import com.alumni.project.dto.education.EducationDto;
-import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.dto.error.ErrorResponse;
 import com.alumni.project.service.education.EducationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

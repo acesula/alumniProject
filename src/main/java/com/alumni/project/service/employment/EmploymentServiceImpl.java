@@ -4,7 +4,7 @@ import com.alumni.project.dal.entity.Employment;
 import com.alumni.project.dal.repository.EmploymentRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.employment.EmploymentDto;
-import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.dto.error.ErrorResponse;
 import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;

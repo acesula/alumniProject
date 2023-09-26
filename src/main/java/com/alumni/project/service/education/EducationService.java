@@ -2,7 +2,7 @@ package com.alumni.project.service.education;
 
 import com.alumni.project.dal.entity.Education;
 import com.alumni.project.dto.education.EducationDto;
-import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.dto.error.ErrorResponse;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

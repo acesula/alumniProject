@@ -2,7 +2,7 @@ package com.alumni.project.service.interests;
 
 import com.alumni.project.dal.entity.Interests;
 import com.alumni.project.dto.interests.InterestsDto;
-import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.dto.error.ErrorResponse;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

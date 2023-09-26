@@ -9,6 +9,7 @@ import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class GroupChatServiceImpl implements GroupChatService{
     }
 
     @Override
+    @Transactional
     public void createGroupChat(String name) {
         var user = userRepository.findById(authenticatedUser().getId()).orElseThrow(RuntimeException::new);
         var groupChat = new GroupChat();

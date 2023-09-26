@@ -2,7 +2,7 @@ package com.alumni.project.service.event;
 
 import com.alumni.project.dal.entity.Event;
 import com.alumni.project.dto.event.EventDto;
-import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.dto.error.ErrorResponse;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

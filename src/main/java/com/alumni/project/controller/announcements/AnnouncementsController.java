@@ -2,7 +2,7 @@ package com.alumni.project.controller.announcements;
 
 import com.alumni.project.dal.entity.Announcements;
 import com.alumni.project.dto.announcements.AnnouncementsDto;
-import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.dto.error.ErrorResponse;
 import com.alumni.project.service.announcements.AnnouncementsService;
 
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class AnnouncementsController {
     private final AnnouncementsService announcementService;
 
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<ErrorResponse> save(@RequestBody Announcements announcement) {
         return announcementService.saveAnnouncement(announcement);
     }

@@ -12,6 +12,7 @@ import com.alumni.project.service.mapping.MappingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -30,6 +31,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
+    @Transactional
     public void saveByChatRoomId(UUID chatRoomId, String message) {
         ChatRoom chatRoom = this.chatRoomService.findChatRoomById(chatRoomId);
         if (chatRoom != null) {
@@ -41,6 +43,8 @@ public class ChatServiceImpl implements ChatService {
         }
     }
 
+    @Override
+    @Transactional
     public void saveByGroupChatId(UUID groupChatId, String message) {
         var groupChat = groupChatRepository.findById(groupChatId).orElseThrow(RuntimeException::new);
         if (groupChat != null) {
@@ -82,7 +86,7 @@ public class ChatServiceImpl implements ChatService {
         if (optional.isPresent()) {
             return mappingService.convertToChatDto(optional.get());
         }
-        throw new RuntimeException("Education not found");
+        throw new RuntimeException("Chat not found");
     }
 
 

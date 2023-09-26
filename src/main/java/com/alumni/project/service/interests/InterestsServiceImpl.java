@@ -4,7 +4,7 @@ import com.alumni.project.dal.entity.Interests;
 import com.alumni.project.dal.repository.InterestsRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.interests.InterestsDto;
-import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.dto.error.ErrorResponse;
 import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;

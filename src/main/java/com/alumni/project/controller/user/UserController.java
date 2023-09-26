@@ -1,7 +1,7 @@
 package com.alumni.project.controller.user;
 
 import com.alumni.project.dto.user.*;
-import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.dto.error.ErrorResponse;
 import com.alumni.project.service.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

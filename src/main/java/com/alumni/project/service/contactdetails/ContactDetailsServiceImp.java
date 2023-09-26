@@ -26,6 +26,7 @@ public class ContactDetailsServiceImp implements ContactDetailsService {
 
 
     @Override
+    @Transactional
     public void save(ContactDetails contactDetails) {
         var user = userRepository.findById(authenticatedUser().getId()).orElseThrow(RuntimeException::new);
         contactDetails.setUser(user);

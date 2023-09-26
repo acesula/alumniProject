@@ -14,7 +14,6 @@ public interface ChatRoomService {
     ChatRoomDto findById(UUID id);
     ChatRoom findChatRoomById(UUID id);
 
-
     void delete(UUID id);
     List<GetChatRoomDto> findAllChatRoomsById();
 

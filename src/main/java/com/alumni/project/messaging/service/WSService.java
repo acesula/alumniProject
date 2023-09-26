@@ -11,12 +11,9 @@ import org.springframework.stereotype.Service;
 public class WSService {
 
     private final SimpMessagingTemplate messagingTemplate;
-    private final NotificationService notificationService;
 
     public void sendMessage(final Message message) {
-
         ResponseMessage response = new ResponseMessage(message.getSender(), message.getMessageContent());
-//        notificationService.sendGlobalNotification();
-        messagingTemplate.convertAndSend("/topic/"+message.getTopic(), response);
+        messagingTemplate.convertAndSend("/topic/" + message.getTopic(), response);
     }
 }

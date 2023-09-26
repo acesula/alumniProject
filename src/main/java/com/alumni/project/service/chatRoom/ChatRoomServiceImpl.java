@@ -10,6 +10,7 @@ import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +30,7 @@ public class ChatRoomServiceImpl implements ChatRoomService{
     }
 
     @Override
+    @Transactional
     public String save(UUID id) {
         try {
             var user = userRepository.findById(authenticatedUser().getId()).orElseThrow(RuntimeException::new);
@@ -64,7 +66,7 @@ public class ChatRoomServiceImpl implements ChatRoomService{
         if (optional.isPresent()) {
             return mappingService.convertToChatRoomDto(optional.get());
         }
-        throw new RuntimeException("No chat found");
+        throw new RuntimeException("No chat room found");
     }
 
 

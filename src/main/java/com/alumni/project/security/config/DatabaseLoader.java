@@ -1,7 +1,6 @@
 package com.alumni.project.security.config;
 
 import com.alumni.project.dto.user.RegisterDto;
-import com.alumni.project.service.mapping.MappingService;
 import com.alumni.project.service.user.UserServiceImpl;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +14,6 @@ import java.util.Arrays;
 public class DatabaseLoader {
 
     private final UserServiceImpl userService;
-    private final MappingService mappingService;
 
     @PostConstruct
     void init() {

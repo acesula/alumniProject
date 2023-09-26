@@ -2,7 +2,7 @@ package com.alumni.project.controller.skills;
 
 import com.alumni.project.dal.entity.Skills;
 import com.alumni.project.dto.skills.SkillsDto;
-import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.dto.error.ErrorResponse;
 import com.alumni.project.service.skills.SkillsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

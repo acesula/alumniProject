@@ -4,7 +4,7 @@ import com.alumni.project.dal.entity.Event;
 import com.alumni.project.dal.repository.EventRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.event.EventDto;
-import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.dto.error.ErrorResponse;
 import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;

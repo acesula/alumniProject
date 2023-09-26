@@ -33,6 +33,8 @@ public class RequestServiceImpl implements RequestService {
         return (AuthUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
+    @Override
+    @Transactional
     public void sendRequest(UUID id) {
 
         try {
@@ -59,6 +61,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
 
+    @Override
     public boolean isRequestSentBefore(UUID receiverId) {
 
         List<Request> totalListOfRequests = requestRepository.findAll();
@@ -78,7 +81,7 @@ public class RequestServiceImpl implements RequestService {
                 return result;
             }
         } catch (Exception e) {
-            System.out.println("----error in getting user info" + e.getMessage());
+            System.out.println("----error in getting request info" + e.getMessage());
         }
         return null;
     }
@@ -101,6 +104,7 @@ public class RequestServiceImpl implements RequestService {
 
 
     @Override
+    @Transactional
     public void acceptRequest(UUID id) {
         var req = requestRepository.findById(id).orElseThrow(RuntimeException::new);
         friendsService.save(req.getUser2().getId());

@@ -4,7 +4,7 @@ import com.alumni.project.dal.entity.Announcements;
 import com.alumni.project.dal.repository.AnnouncementsRepository;
 import com.alumni.project.dal.repository.UserRepository;
 import com.alumni.project.dto.announcements.AnnouncementsDto;
-import com.alumni.project.security.ErrorResponse;
+import com.alumni.project.dto.error.ErrorResponse;
 import com.alumni.project.security.model.AuthUserDetail;
 import com.alumni.project.service.mapping.MappingServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +43,6 @@ public class AnnouncementsServiceImpl implements AnnouncementsService {
                 LocalDateTime.now().getDayOfMonth(),
                 LocalDateTime.now().getHour(),
                 LocalDateTime.now().getMinute()).toString());
-
         user.getAnnouncements().add(announcement);
         announcementsRepository.save(announcement);
     }
